@@ -12,7 +12,15 @@
       "portada": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
       "link": "TU_LINK_PELICULA"
     }
+     {
+      "nombre": "Spider-Man: No Way Home",
+      "genero": "Acción • 2021",
+      "portada": "https://pics.filmaffinity.com/ready_or_not-848623092-large.jpg",
+      "link": "https://1a-1791.com/video/fww1/7b/s8/2/G/X/G/e/GXGeA.caa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=851833344-851898327"
+    },
   ],
+     
+  
   "series": [
     {
       "nombre": "Breaking Bad",
