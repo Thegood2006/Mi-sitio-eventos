@@ -4,9 +4,9 @@
       "nombre": "Real Madrid vs Barcelona",
       "liga": "Champions League",
       "reproductores": [
-        "https://wp9xqedt.fubohd.com/espn5/mono.m3u8",
-        "https://bgfuzq.fubohd.com/foxsports/mono.m3u8",
-        "https://qzv4jmsc.fubohd.com/disney8/mono.m3u8"
+        "https://wp9xqedt.fubohd.com/espn5/mono.m3u8?token=550dab74e6385b66e2d35992089eea387212432b-2a-1779429288-1779411288",
+        "https://bgfuzq.fubohd.com/foxsports/mono.m3u8?token=82796cedf2dacb11da91f79cc61e2d19124aaf43-aa-1779429327-1779411327",
+        "https://qzv4jmsc.fubohd.com/disney8/mono.m3u8?token=c49b228b9fcd3e50612a7404ac79580fe5687409-e9-1779429355-1779411355"
       ]
     },
     {
