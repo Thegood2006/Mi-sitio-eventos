@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THEY GOOD TV</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1><i class="fa-solid fa-gamepad"></i> THEY GOOD TV</h1>
+  <p>FUTURISTIC • LIVE SPORTS • GAMER STYLE</p>
+</header>
+
+<div class="container">
+
+  <!-- PLAYER -->
+  <div class="player-box">
+    <div class="video-container">
+      <video id="video" controls autoplay playsinline></video>
+      <button id="castBtn" onclick="castToTV()">
+        <i class="fa-solid fa-tv"></i>
+      </button>
+    </div>
+    <div class="controls">
+      <button onclick="fullscreenPlayer()">
+        <i class="fa-solid fa-expand"></i> FULLSCREEN
+      </button>
+      <button onclick="copyLink()">
+        <i class="fa-solid fa-link"></i> COPIAR LINK
+      </button>
+      <button onclick="shareTV()">
+        <i class="fa-solid fa-share"></i> COMPARTIR
+      </button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <h2 class="events-title">
+      <i class="fa-solid fa-trophy"></i> EVENTOS EN VIVO
+    </h2>
+
+    <!-- FÚTBOL -->
+    <div class="event-category">
+      <button class="event-btn" onclick="toggleMenu('futbolMenu')">
+        <span><i class="fa-solid fa-futbol"></i> FÚTBOL</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div id="futbolMenu" class="event-menu" style="display:none"></div>
+    </div>
+
+    <!-- CICLISMO -->
+    <div class="event-category">
+      <button class="event-btn" onclick="toggleMenu('cyclingMenu')">
+        <span><i class="fa-solid fa-person-biking"></i> CICLISMO</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div id="cyclingMenu" class="event-menu" style="display:none"></div>
+    </div>
+
+    <!-- UFC -->
+    <div class="event-category">
+      <button class="event-btn" onclick="toggleMenu('ufcMenu')">
+        <span><i class="fa-solid fa-fire"></i> UFC / MMA</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div id="ufcMenu" class="event-menu" style="display:none"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">© 2026 THEY GOOD TV</div>
+
+<script>
+
+let currentLink = "";
+let hls;
+
+/* =========================
+   CARGAR CANALES DESDE JSON
+========================= */
+
+async function cargarCanales() {
+
+  // CAMBIA ESTO por tu usuario y repo de GitHub:
+  const URL_JSON = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/canales.json";
+
+  try {
+    const res = await fetch(URL_JSON + "?nocache=" + Date.now());
+    const data = await res.json();
+
+    renderCategoria("futbolMenu", data.futbol);
+    renderCategoria("cyclingMenu", data.ciclismo);
+    renderCategoria("ufcMenu", data.ufc);
+
+  } catch(e) {
+    console.error("Error cargando canales:", e);
+  }
+}
+
+function renderCategoria(menuId, eventos) {
+  const menu = document.getElementById(menuId);
+  if(!menu || !eventos) return;
+  menu.innerHTML = "";
+
+  eventos.forEach(evento => {
+    const div = document.createElement("div");
+    div.className = "event-item";
+
+    let botonesHTML = "";
+    evento.reproductores.forEach((url, i) => {
+      botonesHTML += `
+        <button class="player-btn" onclick="loadStream('${url}')">
+          <i class="fa-solid fa-play"></i>
+          Reproductor ${i + 1}
+        </button>`;
+    });
+
+    div.innerHTML = `
+      <div class="live">● EN VIVO</div>
+      <h4>${evento.nombre}</h4>
+      <p>${evento.liga}</p>
+      <div class="player-options">${botonesHTML}</div>`;
+
+    menu.appendChild(div);
+  });
+}
+
+/* =========================
+   CARGAR STREAM
+========================= */
+
+function loadStream(url) {
+  if(!url || url.startsWith("TU_LINK")) {
+    alert("Este canal aún no tiene link para hoy");
+    return;
+  }
+
+  currentLink = url;
+  const video = document.getElementById("video");
+
+  if(hls) hls.destroy();
+
+  if(Hls.isSupported()) {
+    hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      video.play();
+    });
+  } else {
+    video.src = url;
+  }
+}
+
+/* =========================
+   FULLSCREEN
+========================= */
+
+function fullscreenPlayer() {
+  const video = document.getElementById("video");
+  if(video.requestFullscreen) video.requestFullscreen();
+}
+
+/* =========================
+   COPIAR LINK
+========================= */
+
+function copyLink() {
+  if(!currentLink) { alert("Selecciona un evento"); return; }
+  navigator.clipboard.writeText(currentLink);
+  alert("Link copiado");
+}
+
+/* =========================
+   COMPARTIR
+========================= */
+
+async function shareTV() {
+  if(!currentLink) { alert("Selecciona un evento"); return; }
+  if(navigator.share) {
+    await navigator.share({
+      title: "THEY GOOD TV",
+      text: "Mira este evento en vivo",
+      url: currentLink
+    });
+  } else {
+    navigator.clipboard.writeText(currentLink);
+    alert("Link copiado para compartir");
+  }
+}
+
+/* =========================
+   CAST A TV
+========================= */
+
+function castToTV() {
+  if(!currentLink) { alert("Selecciona un evento primero"); return; }
+  window.open(currentLink, "_blank");
+  alert("Se abrió el stream en Chrome.\nToca el ícono Cast (📺) en el video.");
+}
+
+/* =========================
+   MENÚ DESPLEGABLE
+========================= */
+
+function toggleMenu(menuId) {
+  const menu = document.getElementById(menuId);
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+/* =========================
+   INICIAR
+========================= */
+
+cargarCanales();
+
+</script>
+
+</body>
+</html>
