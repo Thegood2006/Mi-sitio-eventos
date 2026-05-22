@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>THEY GOOD TV</title>
+
+<!-- HLS -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap"
+rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+  <h1>
+    <i class="fa-solid fa-gamepad"></i>
+    THEY GOOD TV
+  </h1>
+
+  <p>
+    FUTURISTIC • LIVE SPORTS • GAMER STYLE
+  </p>
+
+</header>
+
+<div class="container">
+
+  <!-- PLAYER -->
+  <div class="player-box">
+
+    <div class="video-container">
+
+      <video
+      id="video"
+      controls
+      autoplay
+      playsinline>
+      </video>
+
+      <!-- BOTÓN CAST -->
+      <button id="castBtn" onclick="castToTV()">
+        <i class="fa-solid fa-tv"></i>
+      </button>
+
+    </div>
+
+    <!-- CONTROLES -->
+    <div class="controls">
+
+      <button onclick="fullscreenPlayer()">
+        <i class="fa-solid fa-expand"></i>
+        FULLSCREEN
+      </button>
+
+      <button onclick="copyLink()">
+        <i class="fa-solid fa-link"></i>
+        COPIAR LINK
+      </button>
+
+      <button onclick="shareTV()">
+        <i class="fa-solid fa-share"></i>
+        COMPARTIR
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <h2 class="events-title">
+      <i class="fa-solid fa-trophy"></i>
+      EVENTOS EN VIVO
+    </h2>
+
+    <!-- FÚTBOL -->
+    <div class="event-category">
+
+      <button class="event-btn"
+      onclick="toggleMenu('futbolMenu')">
+        <span>
+          <i class="fa-solid fa-futbol"></i>
+          FÚTBOL
+        </span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+
+      <div id="futbolMenu" class="event-menu">
+
+        <div class="event-item">
+
+          <div class="live">● EN VIVO</div>
+          <h4>Real Madrid vs Barcelona</h4>
+          <p>Champions League</p>
+
+          <div class="player-options">
+
+            <button class="player-btn"
+            onclick="loadStream('https://wp9xqedt.fubohd.com/espn5/mono.m3u8?token=550dab74e6385b66e2d35992089eea387212432b-2a-1779429288-1779411288')">
+              <i class="fa-solid fa-play"></i>
+              Reproductor 1
+            </button>
+
+            <button class="player-btn"
+            onclick="loadStream('https://bgfuzq.fubohd.com/foxsports/mono.m3u8?token=82796cedf2dacb11da91f79cc61e2d19124aaf43-aa-1779429327-1779411327')">
+              <i class="fa-solid fa-play"></i>
+              Reproductor 2
+            </button>
+
+            <button class="player-btn"
+            onclick="loadStream('https://qzv4jmsc.fubohd.com/disney8/mono.m3u8?token=c49b228b9fcd3e50612a7404ac79580fe5687409-e9-1779429355-1779411355')">
+              <i class="fa-solid fa-play"></i>
+              Reproductor 3
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="event-item"
+        onclick="loadStream('TU_LINK_FUTBOL_2')">
+          <div class="live">● EN VIVO</div>
+          <h4>Manchester City vs PSG</h4>
+          <p>UEFA Champions</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CICLISMO -->
+    <div class="event-category">
+
+      <button class="event-btn"
+      onclick="toggleMenu('cyclingMenu')">
+        <span>
+          <i class="fa-solid fa-person-biking"></i>
+          CICLISMO
+        </span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+
+      <div id="cyclingMenu" class="event-menu">
+
+        <div class="event-item"
+        onclick="loadStream('TU_LINK_CICLISMO')">
+          <div class="live">● EN VIVO</div>
+          <h4>Tour de Francia</h4>
+          <p>Etapa Final</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- UFC -->
+    <div class="event-category">
+
+      <button class="event-btn"
+      onclick="toggleMenu('ufcMenu')">
+        <span>
+          <i class="fa-solid fa-fire"></i>
+          UFC / MMA
+        </span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+
+      <div id="ufcMenu" class="event-menu">
+
+        <div class="event-item"
+        onclick="loadStream('TU_LINK_UFC')">
+          <div class="live">● EN VIVO</div>
+          <h4>UFC Main Event</h4>
+          <p>Fight Night</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  © 2026 THEY GOOD TV
+</div>
+
+<script>
+
+let currentLink = "";
+let hls;
+
+/* =========================
+   CARGAR STREAM
+========================= */
+
+function loadStream(url){
+
+  currentLink = url;
+
+  const video = document.getElementById("video");
+
+  if(hls){
+    hls.destroy();
+  }
+
+  if(Hls.isSupported()){
+
+    hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+
+    hls.on(Hls.Events.MANIFEST_PARSED, function(){
+      video.play();
+    });
+
+  } else {
+    video.src = url;
+  }
+
+}
+
+/* =========================
+   FULLSCREEN
+========================= */
+
+function fullscreenPlayer(){
+
+  const video = document.getElementById("video");
+
+  if(video.requestFullscreen){
+    video.requestFullscreen();
+  }
+
+}
+
+/* =========================
+   COPIAR LINK
+========================= */
+
+function copyLink(){
+
+  if(!currentLink){
+    alert("Selecciona un evento");
+    return;
+  }
+
+  navigator.clipboard.writeText(currentLink);
+  alert("Link copiado");
+
+}
+
+/* =========================
+   COMPARTIR
+========================= */
+
+async function shareTV(){
+
+  if(!currentLink){
+    alert("Selecciona un evento");
+    return;
+  }
+
+  if(navigator.share){
+    await navigator.share({
+      title: "THEY GOOD TV",
+      text: "Mira este evento en vivo",
+      url: currentLink
+    });
+  } else {
+    navigator.clipboard.writeText(currentLink);
+    alert("Link copiado para compartir");
+  }
+
+}
+
+/* =========================
+   CAST A TV
+========================= */
+
+function castToTV(){
+
+  if(!currentLink){
+    alert("Selecciona un evento primero");
+    return;
+  }
+
+  window.open(currentLink, "_blank");
+  alert("Se abrió el stream en Chrome.\nToca el ícono Cast (📺) en el video.");
+
+}
+
+/* =========================
+   MENÚ DESPLEGABLE
+========================= */
+
+function toggleMenu(menuId){
+
+  const menu = document.getElementById(menuId);
+
+  if(menu.style.display === "block"){
+    menu.style.display = "none";
+  } else {
+    menu.style.display = "block";
+  }
+
+}
+
+</script>
+
+</body>
+</html>
