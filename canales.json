@@ -1,0 +1,31 @@
+{
+  "futbol": [
+    {
+      "nombre": "Real Madrid vs Barcelona",
+      "liga": "Champions League",
+      "reproductores": [
+        "TU_LINK_HOY_1",
+        "TU_LINK_HOY_2",
+        "TU_LINK_HOY_3"
+      ]
+    }
+  ],
+  "ciclismo": [
+    {
+      "nombre": "Tour de Francia",
+      "liga": "Etapa Final",
+      "reproductores": [
+        "TU_LINK_HOY"
+      ]
+    }
+  ],
+  "ufc": [
+    {
+      "nombre": "UFC Main Event",
+      "liga": "Fight Night",
+      "reproductores": [
+        "TU_LINK_HOY"
+      ]
+    }
+  ]
+}

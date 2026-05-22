@@ -1,0 +1,30 @@
+{
+  "peliculas": [
+    {
+      "nombre": "Spider-Man: No Way Home",
+      "genero": "Acción • 2021",
+      "portada": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+      "link": "TU_LINK_PELICULA"
+    },
+    {
+      "nombre": "Avatar: El Camino del Agua",
+      "genero": "Ciencia Ficción • 2022",
+      "portada": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
+      "link": "TU_LINK_PELICULA"
+    }
+  ],
+  "series": [
+    {
+      "nombre": "Breaking Bad",
+      "genero": "Drama • Temporada 1",
+      "portada": "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+      "link": "TU_LINK_SERIE"
+    },
+    {
+      "nombre": "The Last of Us",
+      "genero": "Acción • Temporada 1",
+      "portada": "https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg",
+      "link": "TU_LINK_SERIE"
+    }
+  ]
+}
