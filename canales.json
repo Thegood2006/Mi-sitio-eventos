@@ -4,9 +4,9 @@
       "nombre": "Real Madrid vs Barcelona",
       "liga": "Champions League",
       "reproductores": [
-        "TU_LINK_HOY_1",
-        "TU_LINK_HOY_2",
-        "TU_LINK_HOY_3"
+       "https://a2vlca.fubohd.com/espn5/mono.m3u8?token=d1c7baf36fffe5acab7a555f234b1282d018e965-2c-1779431620-1779413620",
+        "https://14c51.streameasthd.net/espn5/tracks-v1a1/mono.m3u8?ip=157.100.141.252&token=890c9ea46aac7eb8bffec65065c80827b0c979d3-6f-1779460083-1779406083",
+        "https://98ca2.streameasthd.net/espn5/tracks-v1a1/mono.m3u8?ip=157.100.141.252&token=9442601563912af96bba39690daf526d2cc75fea-d6-1779460636-1779406636"
       ]
     }
   ],
