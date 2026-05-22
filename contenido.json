@@ -4,7 +4,7 @@
       "nombre": "Spider-Man: No Way Home",
       "genero": "Acción • 2021",
       "portada": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-      "link": "https://minochinos.com/dl?op=view&file_code=yugmaelilzy7&hash=41235102-1779418755-99ad82028f3da3ae11e762ea4a0bd55a&embed=1"
+      "link": "TU_LINK_PELICULA"
     },
     {
       "nombre": "Avatar: El Camino del Agua",
@@ -16,11 +16,10 @@
       "nombre": "Boda sangrienta",
       "genero": "Acción • 2021",
       "portada": "https://pics.filmaffinity.com/ready_or_not-848623092-large.jpg",
-      "link": "https://1a-1791.com/video/fww1/7b/s8/2/G/X/G/e/GXGeA.caa.tar?r_file=chunklist.m3u8"
+      "link": "TU_LINK_PELICULA"
     }
   ],
-  "series": []
-}
+  "series": [
     {
       "nombre": "Breaking Bad",
       "genero": "Drama • Temporada 1",
