@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THEY GOOD TV</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.section-title {
+  color: #00f0ff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  margin: 20px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.card {
+  background: #0a0a1a;
+  border: 1px solid #00f0ff33;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.card:hover {
+  transform: scale(1.04);
+  border-color: #00f0ff;
+}
+.card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  display: block;
+}
+.card-info {
+  padding: 8px;
+}
+.card-info h4 {
+  color: #fff;
+  font-size: 0.75rem;
+  margin: 0 0 4px;
+  font-family: 'Orbitron', sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-info p {
+  color: #00f0ff99;
+  font-size: 0.65rem;
+  margin: 0 0 6px;
+}
+.card-play {
+  background: linear-gradient(90deg, #00f0ff, #7b2fff);
+  border: none;
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  font-family: 'Orbitron', sans-serif;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><i class="fa-solid fa-gamepad"></i> THEY GOOD TV</h1>
+  <p>FUTURISTIC • LIVE SPORTS • GAMER STYLE</p>
+</header>
+
+<div class="container">
+
+  <!-- PLAYER -->
+  <div class="player-box">
+    <div class="video-container">
+      <video id="video" controls autoplay playsinline></video>
+      <button id="castBtn" onclick="castToTV()">
+        <i class="fa-solid fa-tv"></i>
+      </button>
+    </div>
+    <div class="controls">
+      <button onclick="fullscreenPlayer()">
+        <i class="fa-solid fa-expand"></i> FULLSCREEN
+      </button>
+      <button onclick="copyLink()">
+        <i class="fa-solid fa-link"></i> COPIAR LINK
+      </button>
+      <button onclick="shareTV()">
+        <i class="fa-solid fa-share"></i> COMPARTIR
+      </button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <h2 class="events-title">
+      <i class="fa-solid fa-trophy"></i> EVENTOS EN VIVO
+    </h2>
+
+    <!-- FÚTBOL -->
+    <div class="event-category">
+      <button class="event-btn" onclick="toggleMenu('futbolMenu')">
+        <span><i class="fa-solid fa-futbol"></i> FÚTBOL</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div id="futbolMenu" class="event-menu" style="display:none"></div>
+    </div>
+
+    <!-- CICLISMO -->
+    <div class="event-category">
+      <button class="event-btn" onclick="toggleMenu('cyclingMenu')">
+        <span><i class="fa-solid fa-person-biking"></i> CICLISMO</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div id="cyclingMenu" class="event-menu" style="display:none"></div>
+    </div>
+
+    <!-- UFC -->
+    <div class="event-category">
+      <button class="event-btn" onclick="toggleMenu('ufcMenu')">
+        <span><i class="fa-solid fa-fire"></i> UFC / MMA</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div id="ufcMenu" class="event-menu" style="display:none"></div>
+    </div>
+
+    <!-- ECUADOR -->
+    <div class="event-category">
+      <button class="event-btn" onclick="toggleMenu('ecuadorMenu')">
+        <span><i class="fa-solid fa-satellite-dish"></i> CANALES ECUADOR</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div id="ecuadorMenu" class="event-menu" style="display:none"></div>
+    </div>
+
+    <!-- PELÍCULAS -->
+    <div class="section-title">
+      <i class="fa-solid fa-film"></i> PELÍCULAS
+    </div>
+    <div class="cards-grid" id="peliculasGrid"></div>
+
+    <!-- SERIES -->
+    <div class="section-title">
+      <i class="fa-solid fa-tv"></i> SERIES
+    </div>
+    <div class="cards-grid" id="seriesGrid"></div>
+
+  </div>
+</div>
+
+<div class="footer">© 2026 THEY GOOD TV</div>
+
+<script>
+
+let currentLink = "";
+let hls;
+
+const URL_CANALES = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/canales.json";
+const URL_CONTENIDO = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/contenido.json";
+
+async function cargarTodo() {
+  try {
+    const [resCanales, resContenido] = await Promise.all([
+      fetch(URL_CANALES + "?nocache=" + Date.now()),
+      fetch(URL_CONTENIDO + "?nocache=" + Date.now())
+    ]);
+
+    const canales = await resCanales.json();
+    const contenido = await resContenido.json();
+
+    renderCategoria("futbolMenu", canales.futbol);
+    renderCategoria("cyclingMenu", canales.ciclismo);
+    renderCategoria("ufcMenu", canales.ufc);
+    renderCategoria("ecuadorMenu", canales.ecuador);
+    renderCards("peliculasGrid", contenido.peliculas);
+    renderCards("seriesGrid", contenido.series);
+
+  } catch(e) {
+    console.error("Error cargando datos:", e);
+  }
+}
+
+function renderCategoria(menuId, eventos) {
+  const menu = document.getElementById(menuId);
+  if(!menu || !eventos) return;
+  menu.innerHTML = "";
+  eventos.forEach(evento => {
+    const div = document.createElement("div");
+    div.className = "event-item";
+    let botonesHTML = "";
+    evento.reproductores.forEach((url, i) => {
+      botonesHTML += `<button class="player-btn" onclick="loadStream('${url}')">
+        <i class="fa-solid fa-play"></i> Reproductor ${i + 1}
+      </button>`;
+    });
+    div.innerHTML = `
+      <div class="live">● EN VIVO</div>
+      <h4>${evento.nombre}</h4>
+      <p>${evento.liga}</p>
+      <div class="player-options">${botonesHTML}</div>`;
+    menu.appendChild(div);
+  });
+}
+
+function renderCards(gridId, items) {
+  const grid = document.getElementById(gridId);
+  if(!grid || !items) return;
+  grid.innerHTML = "";
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <img src="${item.portada}" alt="${item.nombre}" onerror="this.src='https://placehold.co/130x195/0a0a1a/00f0ff?text=SIN+IMG'">
+      <div class="card-info">
+        <h4>${item.nombre}</h4>
+        <p>${item.genero}</p>
+        <button class="card-play" onclick="loadStream('${item.link}')">
+          <i class="fa-solid fa-play"></i> REPRODUCIR
+        </button>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function loadStream(url) {
+  if(!url || url.startsWith("TU_LINK")) {
+    alert("Este contenido aún no tiene link");
+    return;
+  }
+  currentLink = url;
+  const video = document.getElementById("video");
+  if(hls) hls.destroy();
+  if(Hls.isSupported()) {
+    hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() { video.play(); });
+  } else {
+    video.src = url;
+    video.play();
+  }
+}
+
+function fullscreenPlayer() {
+  const video = document.getElementById("video");
+  if(video.requestFullscreen) video.requestFullscreen();
+}
+
+function copyLink() {
+  if(!currentLink) { alert("Selecciona un evento"); return; }
+  navigator.clipboard.writeText(currentLink);
+  alert("Link copiado");
+}
+
+async function shareTV() {
+  if(!currentLink) { alert("Selecciona un evento"); return; }
+  if(navigator.share) {
+    await navigator.share({ title: "THEY GOOD TV", text: "Mira este contenido", url: currentLink });
+  } else {
+    navigator.clipboard.writeText(currentLink);
+    alert("Link copiado para compartir");
+  }
+}
+
+function castToTV() {
+  if(!currentLink) { alert("Selecciona un evento primero"); return; }
+  window.open(currentLink, "_blank");
+  alert("Se abrió en Chrome.\nToca el ícono Cast en el video.");
+}
+
+function toggleMenu(menuId) {
+  const menu = document.getElementById(menuId);
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+cargarTodo();
+</script>
+</body>
+</html>
