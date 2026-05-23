@@ -35,13 +35,6 @@
       "reproductores": [
         "https://jireh-9-hls-video-us-isp.dps.live/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisaqo/ecuavisaqo.smil/ecuavisaqo/livestream1/chunks.m3u8?ndvc=1&dpssid=r1us25386251229d3d064d55929a64968c7841dc505be&sid=ba5t1l1xb218457769406a1037f97f9b7"
       ]
-    },
-    {
-      "nombre": "tc",
-      "liga": "ecuador",
-      "reproductores": [
-        "https://live2.eu-north-1b.cf.dmcdn.net/sec2(yK578d2aaG3ycV5HyyVIJcHPXvcO53xUMOF3OXtDXbn5OrD18PIb4HINfciEubqO4tp9bPTAwTOxHPt2zg_axk1ezJh8RX2OwSXnWnoUwT2osabBHZvPLdbxe70a1sLs)/cloud/3/x7wijay/s/live-720.m3u8"
-      ]
     }
   ],
   "internacional": [
