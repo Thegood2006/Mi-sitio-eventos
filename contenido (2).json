@@ -1,0 +1,70 @@
+{
+  "peliculas": [
+    {
+      "nombre": "Spider-Man: No Way Home",
+      "genero": "Acción • 2021",
+      "portada": "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+      "link": "TU_LINK_PELICULA"
+    },
+    {
+      "nombre": "Avatar: El Camino del Agua",
+      "genero": "Ciencia Ficción • 2022",
+      "portada": "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
+      "link": "TU_LINK_PELICULA"
+    },
+    {
+      "nombre": "Boda sangrienta",
+      "genero": "Acción • 2021",
+      "portada": "https://pics.filmaffinity.com/ready_or_not-848623092-large.jpg",
+      "link": "https://1a-1791.com/video/fww1/7b/s8/2/G/X/G/e/GXGeA.caa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=851833344-851898327"
+    },
+    {
+      "nombre": "El diario de Noa",
+      "genero": "Drama romántico • 2004",
+      "portada": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLRRRkLFXbkAH0WrSRXRCBnUAQ_m6sRKLcZw&s.jpg",
+      "link": "https://1a-1791.com/video/s8/2/v/4/f/N/v4fNq.aaa.mp4"
+    },
+    {
+      "nombre": "Mortal Kombat II",
+      "genero": "Acción • 2026",
+      "portada": "https://m.media-amazon.com/images/M/MV5BNTg2YWNkN2EtMzc1Ny00ZTBhLWFmYTItMmMyNzhjNjhhNmVhXkEyXkFqcGc@._V1_.jpg",
+      "link": "https://hugh.cdn.rumble.cloud/video/fww1/33/s8/2/Q/4/-/o/Q4-oA.haa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=3268109824-3268174565"
+    }
+  ],
+  "series": [
+    {
+      "nombre": "Breaking Bad",
+      "genero": "Drama",
+      "portada": "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+      "temporadas": [
+        {
+          "nombre": "Temporada 1",
+          "episodios": [
+            { "nombre": "Piloto", "link": "TU_LINK_BB_S1E1" },
+            { "nombre": "Episodio 2", "link": "TU_LINK_BB_S1E2" }
+          ]
+        },
+        {
+          "nombre": "Temporada 2",
+          "episodios": [
+            { "nombre": "Episodio 1", "link": "TU_LINK_BB_S2E1" }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "The Last of Us",
+      "genero": "Acción / Survival",
+      "portada": "https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg",
+      "temporadas": [
+        {
+          "nombre": "Temporada 1",
+          "episodios": [
+            { "nombre": "Cuando te pierdes a la luz", "link": "TU_LINK_TLOU_S1E1" },
+            { "nombre": "Infectados", "link": "TU_LINK_TLOU_S1E2" }
+          ]
+        }
+      ]
+    }
+  ]
+}
