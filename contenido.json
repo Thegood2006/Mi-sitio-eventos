@@ -40,14 +40,23 @@
         {
           "nombre": "Temporada 1",
           "episodios": [
-            { "nombre": "Piloto", "link": "TU_LINK_BB_S1E1" },
-            { "nombre": "Episodio 2", "link": "TU_LINK_BB_S1E2" }
+            {
+              "nombre": "Piloto",
+              "link": "TU_LINK_BB_S1E1"
+            },
+            {
+              "nombre": "Episodio 2",
+              "link": "TU_LINK_BB_S1E2"
+            }
           ]
         },
         {
           "nombre": "Temporada 2",
           "episodios": [
-            { "nombre": "Episodio 1", "link": "TU_LINK_BB_S2E1" }
+            {
+              "nombre": "Episodio 1",
+              "link": "TU_LINK_BB_S2E1"
+            }
           ]
         }
       ]
@@ -60,8 +69,14 @@
         {
           "nombre": "Temporada 1",
           "episodios": [
-            { "nombre": "Cuando te pierdes a la luz", "link": "TU_LINK_TLOU_S1E1" },
-            { "nombre": "Infectados", "link": "TU_LINK_TLOU_S1E2" }
+            {
+              "nombre": "Cuando te pierdes a la luz",
+              "link": "TU_LINK_TLOU_S1E1"
+            },
+            {
+              "nombre": "Infectados",
+              "link": "TU_LINK_TLOU_S1E2"
+            }
           ]
         }
       ]
