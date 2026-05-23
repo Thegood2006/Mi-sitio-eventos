@@ -35,6 +35,13 @@
       "reproductores": [
         "https://jireh-9-hls-video-us-isp.dps.live/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisaqo/ecuavisaqo.smil/ecuavisaqo/livestream1/chunks.m3u8?ndvc=1&dpssid=r1us25386251229d3d064d55929a64968c7841dc505be&sid=ba5t1l1xb218457769406a1037f97f9b7"
       ]
+    },
+    {
+      "nombre": "tv",
+      "liga": "ecuador",
+      "reproductores": [
+        ""
+      ]
     }
   ],
   "internacional": [
