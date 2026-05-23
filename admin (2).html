@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — THEY GOOD TV</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cyan: #00f0ff;
+  --purple: #7b2fff;
+  --bg: #04040f;
+  --surface: #08081a;
+  --surface2: #0d0d22;
+  --border: #00f0ff22;
+  --border-active: #00f0ff88;
+  --text: #e0e0ff;
+  --muted: #6060a0;
+  --red: #ff3d5a;
+  --green: #00ff99;
+  --orange: #ff9f00;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Orbitron', sans-serif;
+  min-height: 100vh;
+}
+
+/* ── LOGIN ── */
+#loginScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% 40%, #0a0a2a 0%, #04040f 70%);
+}
+.login-box {
+  background: var(--surface);
+  border: 1px solid var(--border-active);
+  border-radius: 16px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 0 60px #00f0ff18;
+}
+.login-box h1 {
+  color: var(--cyan);
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+  letter-spacing: 2px;
+}
+.login-box p {
+  color: var(--muted);
+  font-size: 0.6rem;
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+.login-box input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border-active);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+.login-box input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 12px #00f0ff33; }
+.btn-login {
+  width: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--purple));
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 13px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: opacity 0.2s;
+}
+.btn-login:hover { opacity: 0.85; }
+.login-error {
+  color: var(--red);
+  font-size: 0.65rem;
+  margin-top: 10px;
+  display: none;
+}
+
+/* ── ADMIN LAYOUT ── */
+#adminPanel { display: none; }
+
+.top-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.top-bar h1 {
+  color: var(--cyan);
+  font-size: 1rem;
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+#statusMsg {
+  font-size: 0.6rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  letter-spacing: 1px;
+}
+.status-ok    { color: var(--green);  border-color: var(--green)44;  background: #00ff9911; }
+.status-err   { color: var(--red);    border-color: var(--red)44;    background: #ff3d5a11; }
+.status-info  { color: var(--orange); border-color: var(--orange)44; background: #ff9f0011; }
+
+.btn {
+  background: none;
+  border: 1px solid var(--border-active);
+  border-radius: 8px;
+  color: var(--cyan);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 7px 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  letter-spacing: 1px;
+}
+.btn:hover { background: #00f0ff18; border-color: var(--cyan); }
+.btn.primary { background: linear-gradient(90deg, var(--cyan), var(--purple)); color: #000; border: none; }
+.btn.primary:hover { opacity: 0.85; }
+.btn.danger { border-color: var(--red)66; color: var(--red); }
+.btn.danger:hover { background: #ff3d5a18; border-color: var(--red); }
+.btn.success { border-color: var(--green)66; color: var(--green); }
+.btn.success:hover { background: #00ff9918; border-color: var(--green); }
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 16px 24px 0;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+.tab-btn {
+  background: none;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  color: var(--muted);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 8px 18px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--cyan); }
+.tab-btn.active {
+  background: var(--surface2);
+  border-color: var(--border-active);
+  color: var(--cyan);
+}
+
+/* ── CONTENT AREA ── */
+.content {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── CONFIG CARD ── */
+.config-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.config-card h3 {
+  color: var(--cyan);
+  font-size: 0.75rem;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 1px;
+}
+.field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.field-row label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.field-row input, .field-row select {
+  background: var(--surface2);
+  border: 1px solid var(--border-active);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+.field-row input:focus, .field-row select:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px #00f0ff22;
+}
+.field-row input[type="password"] { letter-spacing: 3px; }
+
+/* ── SERIES EDITOR ── */
+.serie-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.serie-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.serie-header:hover { background: #00f0ff08; }
+.serie-thumb {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--border-active);
+  flex-shrink: 0;
+}
+.serie-title {
+  flex: 1;
+  min-width: 0;
+}
+.serie-title h4 {
+  color: #fff;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.serie-title p {
+  color: var(--muted);
+  font-size: 0.6rem;
+  margin-top: 3px;
+}
+.serie-body {
+  padding: 16px 18px;
+  display: none;
+}
+.serie-body.open { display: block; }
+
+/* Temporadas */
+.season-block {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.season-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.season-header span {
+  color: var(--cyan);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.season-episodes {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ep-row {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.ep-num {
+  color: var(--muted);
+  font-size: 0.6rem;
+  min-width: 28px;
+}
+.ep-row input {
+  background: #04040f;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  padding: 7px 10px;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+.ep-row input:focus {
+  outline: none;
+  border-color: var(--cyan);
+}
+.ep-row input.link-input { font-size: 0.55rem; color: var(--cyan); }
+.btn-icon {
+  background: none;
+  border: 1px solid var(--red)44;
+  border-radius: 6px;
+  color: var(--red);
+  font-size: 0.7rem;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.btn-icon:hover { background: #ff3d5a22; border-color: var(--red); }
+.btn-icon.add {
+  border-color: var(--green)44;
+  color: var(--green);
+}
+.btn-icon.add:hover { background: #00ff9922; border-color: var(--green); }
+
+.add-season-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+.add-season-row input {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border-active);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.65rem;
+  padding: 8px 12px;
+}
+.add-season-row input:focus { outline: none; border-color: var(--cyan); }
+
+/* ── PELÍCULAS ── */
+.pelicula-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.pelicula-row img {
+  width: 50px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--border-active);
+}
+.pelicula-fields { display: flex; flex-direction: column; gap: 6px; }
+.pelicula-fields input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  padding: 7px 10px;
+  width: 100%;
+}
+.pelicula-fields input:focus { outline: none; border-color: var(--cyan); }
+.pelicula-fields input.link-input { color: var(--cyan); font-size: 0.55rem; }
+.pelicula-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── CANALES ── */
+.canal-cat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.canal-cat-header {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.canal-cat-header span {
+  color: var(--cyan);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.canal-list { padding: 12px 18px; display: flex; flex-direction: column; gap: 10px; }
+.canal-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+.canal-item-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.canal-item input {
+  background: #04040f;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  padding: 7px 10px;
+  width: 100%;
+}
+.canal-item input:focus { outline: none; border-color: var(--cyan); }
+.reproductores-label {
+  font-size: 0.55rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+.rep-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+  margin-bottom: 5px;
+  align-items: center;
+}
+.rep-row input {
+  background: #04040f;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--cyan);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.55rem;
+  padding: 6px 10px;
+  width: 100%;
+}
+.rep-row input:focus { outline: none; border-color: var(--cyan); }
+
+/* ── NOTIFICACIÓN TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border-active);
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 0.7rem;
+  color: var(--cyan);
+  box-shadow: 0 0 30px #00f0ff22;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 9999;
+  pointer-events: none;
+  letter-spacing: 1px;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast.error { border-color: var(--red)88; color: var(--red); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .ep-row { grid-template-columns: auto 1fr auto; }
+  .ep-row input.link-input { grid-column: 1 / -1; }
+  .canal-item-top { grid-template-columns: 1fr auto; }
+  .canal-item-top input:nth-child(2) { grid-column: 1 / -1; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h1><i class="fa-solid fa-shield-halved"></i> ADMIN</h1>
+    <p>THEY GOOD TV — PANEL DE CONTROL</p>
+    <input type="password" id="loginPass" placeholder="CONTRASEÑA" onkeydown="if(event.key==='Enter')doLogin(event)"/>
+    <button class="btn-login" onclick="doLogin(event)">
+      <i class="fa-solid fa-right-to-bracket"></i> ENTRAR
+    </button>
+    <p class="login-error" id="loginError">
+      <i class="fa-solid fa-triangle-exclamation"></i> Contraseña incorrecta
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN PANEL ══════════════ -->
+<div id="adminPanel">
+
+  <div class="top-bar">
+    <h1><i class="fa-solid fa-gamepad"></i> THEY GOOD TV — ADMIN</h1>
+    <div class="top-bar-right">
+      <span id="statusMsg"></span>
+      <button class="btn primary" onclick="guardarTodo()">
+        <i class="fa-solid fa-cloud-arrow-up"></i> GUARDAR EN GITHUB
+      </button>
+      <button class="btn danger" onclick="cerrarSesion()">
+        <i class="fa-solid fa-right-from-bracket"></i> SALIR
+      </button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('series')">
+      <i class="fa-solid fa-tv"></i> SERIES
+    </button>
+    <button class="tab-btn" onclick="switchTab('peliculas')">
+      <i class="fa-solid fa-film"></i> PELÍCULAS
+    </button>
+    <button class="tab-btn" onclick="switchTab('canales')">
+      <i class="fa-solid fa-satellite-dish"></i> CANALES
+    </button>
+    <button class="tab-btn" onclick="switchTab('config')">
+      <i class="fa-solid fa-gear"></i> CONFIG
+    </button>
+  </div>
+
+  <div class="content">
+
+    <!-- ── SERIES ── -->
+    <div class="tab-panel active" id="tab-series">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <span style="color:var(--muted);font-size:0.6rem;letter-spacing:1px;">Haz clic en una serie para expandirla</span>
+        <button class="btn success" onclick="agregarSerie()">
+          <i class="fa-solid fa-plus"></i> NUEVA SERIE
+        </button>
+      </div>
+      <div id="seriesEditor"></div>
+    </div>
+
+    <!-- ── PELÍCULAS ── -->
+    <div class="tab-panel" id="tab-peliculas">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <span style="color:var(--muted);font-size:0.6rem;letter-spacing:1px;">Edita nombre, portada y link de cada película</span>
+        <button class="btn success" onclick="agregarPelicula()">
+          <i class="fa-solid fa-plus"></i> NUEVA PELÍCULA
+        </button>
+      </div>
+      <div id="peliculasEditor"></div>
+    </div>
+
+    <!-- ── CANALES ── -->
+    <div class="tab-panel" id="tab-canales">
+      <div style="color:var(--muted);font-size:0.6rem;letter-spacing:1px;margin-bottom:16px;">
+        Edita eventos en vivo y canales por categoría
+      </div>
+      <div id="canalesEditor"></div>
+    </div>
+
+    <!-- ── CONFIG ── -->
+    <div class="tab-panel" id="tab-config">
+      <div class="config-card">
+        <h3><i class="fa-solid fa-key"></i> CREDENCIALES GITHUB</h3>
+        <div class="field-row">
+          <label>USUARIO DE GITHUB</label>
+          <input type="text" id="cfgUser" placeholder="Thegood2006"/>
+        </div>
+        <div class="field-row">
+          <label>REPOSITORIO</label>
+          <input type="text" id="cfgRepo" placeholder="MI-sitio-eventos"/>
+        </div>
+        <div class="field-row">
+          <label>TOKEN DE ACCESO (github.com → Settings → Developer settings → Personal access tokens → Fine-grained → repo contents write)</label>
+          <input type="password" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/>
+        </div>
+        <button class="btn primary" onclick="guardarConfig()" style="margin-top:8px;">
+          <i class="fa-solid fa-floppy-disk"></i> GUARDAR CONFIG
+        </button>
+      </div>
+      <div class="config-card">
+        <h3><i class="fa-solid fa-lock"></i> CAMBIAR CONTRASEÑA</h3>
+        <div class="field-row">
+          <label>NUEVA CONTRASEÑA</label>
+          <input type="password" id="newPass1" placeholder="••••••••"/>
+        </div>
+        <div class="field-row">
+          <label>CONFIRMAR CONTRASEÑA</label>
+          <input type="password" id="newPass2" placeholder="••••••••"/>
+        </div>
+        <button class="btn primary" onclick="cambiarPass()" style="margin-top:8px;">
+          <i class="fa-solid fa-key"></i> CAMBIAR
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /adminPanel -->
+
+<div id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   CONFIGURACIÓN
+══════════════════════════════════════════ */
+const PASS_KEY    = "tgtv_admin_pass";
+const CONFIG_KEY  = "tgtv_admin_cfg";
+const DEFAULT_PASS = "admin1234"; // Cámbiala en la pestaña CONFIG
+
+let ghUser  = "";
+let ghRepo  = "";
+let ghToken = "";
+let contenidoData = { peliculas: [], series: [] };
+let canalesData   = { futbol: [], ciclismo: [], ufc: [], ecuador: [], internacional: [] };
+
+/* ══════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════ */
+function getPass() {
+  return localStorage.getItem(PASS_KEY) || DEFAULT_PASS;
+}
+
+function doLogin(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const val = document.getElementById("loginPass").value;
+  if (val === getPass()) {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("adminPanel").style.display  = "block";
+    cargarConfig();
+    cargarDatos();
+  } else {
+    document.getElementById("loginError").style.display = "block";
+    document.getElementById("loginPass").value = "";
+  }
+}
+
+document.getElementById("loginPass").addEventListener("keydown", e => {
+  if (e.key === "Enter") doLogin(e);
+});
+
+function cerrarSesion() {
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("adminPanel").style.display  = "none";
+  document.getElementById("loginPass").value = "";
+}
+
+function cambiarPass() {
+  const p1 = document.getElementById("newPass1").value.trim();
+  const p2 = document.getElementById("newPass2").value.trim();
+  if (!p1) { toast("La contraseña no puede estar vacía", true); return; }
+  if (p1 !== p2) { toast("Las contraseñas no coinciden", true); return; }
+  localStorage.setItem(PASS_KEY, p1);
+  document.getElementById("newPass1").value = "";
+  document.getElementById("newPass2").value = "";
+  toast("✓ Contraseña actualizada");
+}
+
+/* ══════════════════════════════════════════
+   CONFIG GITHUB
+══════════════════════════════════════════ */
+function cargarConfig() {
+  const cfg = JSON.parse(localStorage.getItem(CONFIG_KEY) || "{}");
+  ghUser  = cfg.user  || "Thegood2006";
+  ghRepo  = cfg.repo  || "MI-sitio-eventos";
+  ghToken = cfg.token || "";
+  document.getElementById("cfgUser").value  = ghUser;
+  document.getElementById("cfgRepo").value  = ghRepo;
+  document.getElementById("cfgToken").value = ghToken;
+}
+
+function guardarConfig() {
+  ghUser  = document.getElementById("cfgUser").value.trim();
+  ghRepo  = document.getElementById("cfgRepo").value.trim();
+  ghToken = document.getElementById("cfgToken").value.trim();
+  localStorage.setItem(CONFIG_KEY, JSON.stringify({ user: ghUser, repo: ghRepo, token: ghToken }));
+  toast("✓ Config guardada — recargando datos...");
+  setTimeout(cargarDatos, 800);
+}
+
+/* ══════════════════════════════════════════
+   CARGA DE DATOS DESDE GITHUB
+══════════════════════════════════════════ */
+async function cargarDatos() {
+  setStatus("Cargando datos...", "info");
+  try {
+    const base = `https://raw.githubusercontent.com/${ghUser}/${ghRepo}/main`;
+    const [rC, rCo] = await Promise.all([
+      fetch(base + "/canales.json?nocache="   + Date.now()),
+      fetch(base + "/contenido.json?nocache=" + Date.now())
+    ]);
+    canalesData   = await rC.json();
+    contenidoData = await rCo.json();
+
+    // Asegura que existan todas las categorías
+    ["futbol","ciclismo","ufc","ecuador","internacional"].forEach(k => {
+      if (!canalesData[k]) canalesData[k] = [];
+    });
+    if (!contenidoData.peliculas) contenidoData.peliculas = [];
+    if (!contenidoData.series)    contenidoData.series    = [];
+
+    renderSeries();
+    renderPeliculas();
+    renderCanales();
+    setStatus("✓ Datos cargados", "ok");
+  } catch(e) {
+    setStatus("Error cargando datos — revisa Config", "err");
+    console.error(e);
+  }
+}
+
+/* ══════════════════════════════════════════
+   GUARDAR EN GITHUB
+══════════════════════════════════════════ */
+async function guardarTodo() {
+  if (!ghToken) {
+    toast("⚠ Configura tu token de GitHub primero", true);
+    switchTab("config");
+    return;
+  }
+  recolectarDatos();
+  setStatus("Guardando en GitHub...", "info");
+  try {
+    await Promise.all([
+      pushFile("canales.json",   JSON.stringify(canalesData,   null, 2)),
+      pushFile("contenido.json", JSON.stringify(contenidoData, null, 2))
+    ]);
+    setStatus("✓ Guardado en GitHub", "ok");
+    toast("✓ Cambios publicados en GitHub");
+  } catch(e) {
+    setStatus("Error al guardar en GitHub", "err");
+    toast("Error: " + e.message, true);
+  }
+}
+
+async function pushFile(filename, content) {
+  const apiBase = `https://api.github.com/repos/${ghUser}/${ghRepo}/contents/${filename}`;
+
+  // Obtener SHA actual del archivo
+  const meta = await fetch(apiBase, {
+    headers: { Authorization: "token " + ghToken, Accept: "application/vnd.github.v3+json" }
+  });
+  const metaJson = await meta.json();
+  const sha = metaJson.sha;
+
+  // Subir contenido en base64
+  const encoded = btoa(unescape(encodeURIComponent(content)));
+  const res = await fetch(apiBase, {
+    method: "PUT",
+    headers: {
+      Authorization: "token " + ghToken,
+      Accept: "application/vnd.github.v3+json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: "Admin update: " + filename,
+      content: encoded,
+      sha: sha
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || res.statusText);
+  }
+}
+
+/* ══════════════════════════════════════════
+   RECOLECTAR DATOS DEL DOM
+══════════════════════════════════════════ */
+function recolectarDatos() {
+  // Series
+  contenidoData.series = [];
+  document.querySelectorAll(".serie-block[data-idx]").forEach(block => {
+    const idx = parseInt(block.dataset.idx);
+    const orig = contenidoData.series[idx] || {};
+    const nombre  = block.querySelector(".inp-serie-nombre")?.value.trim()  || orig.nombre  || "";
+    const genero  = block.querySelector(".inp-serie-genero")?.value.trim()  || orig.genero  || "";
+    const portada = block.querySelector(".inp-serie-portada")?.value.trim() || orig.portada || "";
+    const temporadas = [];
+    block.querySelectorAll(".season-block[data-sidx]").forEach(sb => {
+      const snombre = sb.querySelector(".inp-season-nombre")?.value.trim() || "";
+      const episodios = [];
+      sb.querySelectorAll(".ep-row").forEach(row => {
+        const en = row.querySelector(".ep-nombre")?.value.trim() || "";
+        const el = row.querySelector(".ep-link")?.value.trim()   || "";
+        if (en || el) episodios.push({ nombre: en, link: el });
+      });
+      temporadas.push({ nombre: snombre, episodios });
+    });
+    contenidoData.series.push({ nombre, genero, portada, temporadas });
+  });
+
+  // Películas
+  contenidoData.peliculas = [];
+  document.querySelectorAll(".pelicula-row[data-idx]").forEach(row => {
+    const nombre  = row.querySelector(".inp-pel-nombre")?.value.trim()  || "";
+    const genero  = row.querySelector(".inp-pel-genero")?.value.trim()  || "";
+    const portada = row.querySelector(".inp-pel-portada")?.value.trim() || "";
+    const link    = row.querySelector(".inp-pel-link")?.value.trim()    || "";
+    contenidoData.peliculas.push({ nombre, genero, portada, link });
+  });
+
+  // Canales
+  ["futbol","ciclismo","ufc","ecuador","internacional"].forEach(cat => {
+    canalesData[cat] = [];
+    document.querySelectorAll(`.canal-item[data-cat="${cat}"]`).forEach(item => {
+      const nombre = item.querySelector(".inp-canal-nombre")?.value.trim() || "";
+      const liga   = item.querySelector(".inp-canal-liga")?.value.trim()   || "";
+      const reproductores = [];
+      item.querySelectorAll(".rep-input").forEach(inp => {
+        const v = inp.value.trim();
+        if (v) reproductores.push(v);
+      });
+      canalesData[cat].push({ nombre, liga, reproductores });
+    });
+  });
+}
+
+/* ══════════════════════════════════════════
+   RENDER SERIES
+══════════════════════════════════════════ */
+function renderSeries() {
+  const ed = document.getElementById("seriesEditor");
+  ed.innerHTML = "";
+  contenidoData.series.forEach((serie, idx) => {
+    ed.appendChild(buildSerieBlock(serie, idx));
+  });
+}
+
+function buildSerieBlock(serie, idx) {
+  const block = document.createElement("div");
+  block.className = "serie-block";
+  block.dataset.idx = idx;
+
+  const temporadasHTML = (serie.temporadas || []).map((temp, si) =>
+    buildSeasonHTML(temp, si)
+  ).join("");
+
+  block.innerHTML = `
+    <div class="serie-header" onclick="toggleSerieBody(this)">
+      <img class="serie-thumb" src="${serie.portada || ''}"
+           onerror="this.src='https://placehold.co/40x60/0a0a1a/00f0ff?text=?'">
+      <div class="serie-title">
+        <h4>${serie.nombre || "Nueva serie"}</h4>
+        <p>${serie.genero || "—"} · ${(serie.temporadas||[]).length} temporada(s)</p>
+      </div>
+      <button class="btn danger" style="margin-left:auto" onclick="event.stopPropagation();eliminarSerie(${idx})">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+      <i class="fa-solid fa-chevron-down" style="color:var(--muted);font-size:0.7rem;margin-left:8px;"></i>
+    </div>
+    <div class="serie-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div class="field-row" style="margin:0">
+          <label>NOMBRE</label>
+          <input class="inp-serie-nombre" type="text" value="${serie.nombre||''}" placeholder="Nombre de la serie">
+        </div>
+        <div class="field-row" style="margin:0">
+          <label>GÉNERO</label>
+          <input class="inp-serie-genero" type="text" value="${serie.genero||''}" placeholder="Drama, Acción...">
+        </div>
+      </div>
+      <div class="field-row" style="margin-bottom:14px;">
+        <label>URL PORTADA</label>
+        <input class="inp-serie-portada" type="text" value="${serie.portada||''}" placeholder="https://...">
+      </div>
+      <div class="seasons-container">${temporadasHTML}</div>
+      <div class="add-season-row">
+        <input type="text" placeholder="Nombre de la nueva temporada (ej: Temporada 3)" class="new-season-input">
+        <button class="btn success" onclick="agregarTemporada(this, ${idx})">
+          <i class="fa-solid fa-plus"></i> TEMPORADA
+        </button>
+      </div>
+    </div>`;
+
+  return block;
+}
+
+function buildSeasonHTML(temp, si) {
+  const episodiosHTML = (temp.episodios || []).map((ep, ei) => `
+    <div class="ep-row">
+      <span class="ep-num">EP${ei+1}</span>
+      <input class="ep-nombre" type="text" value="${ep.nombre||''}" placeholder="Nombre del episodio">
+      <input class="ep-link link-input" type="text" value="${ep.link||''}" placeholder="https://... (.m3u8 o .mp4)">
+      <button class="btn-icon" onclick="eliminarEpisodio(this)"><i class="fa-solid fa-xmark"></i></button>
+    </div>`).join("");
+
+  return `
+    <div class="season-block" data-sidx="${si}">
+      <div class="season-header">
+        <input class="inp-season-nombre" type="text" value="${temp.nombre||'Temporada '+(si+1)}"
+               style="background:none;border:none;color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:1px;width:auto;">
+        <div style="display:flex;gap:6px;">
+          <button class="btn-icon add" onclick="agregarEpisodio(this)"><i class="fa-solid fa-plus"></i></button>
+          <button class="btn-icon" onclick="eliminarTemporada(this)"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>
+      <div class="season-episodes">${episodiosHTML}</div>
+    </div>`;
+}
+
+function toggleSerieBody(header) {
+  const body = header.nextElementSibling;
+  body.classList.toggle("open");
+  const icon = header.querySelector(".fa-chevron-down");
+  if (icon) icon.style.transform = body.classList.contains("open") ? "rotate(180deg)" : "";
+}
+
+function agregarSerie() {
+  contenidoData.series.push({
+    nombre: "", genero: "", portada: "",
+    temporadas: [{ nombre: "Temporada 1", episodios: [] }]
+  });
+  renderSeries();
+  // Abrir el último
+  const blocks = document.querySelectorAll(".serie-block");
+  if (blocks.length) toggleSerieBody(blocks[blocks.length-1].querySelector(".serie-header"));
+  toast("✓ Serie agregada — completa los datos");
+}
+
+function eliminarSerie(idx) {
+  if (!confirm("¿Eliminar esta serie?")) return;
+  contenidoData.series.splice(idx, 1);
+  renderSeries();
+  toast("Serie eliminada");
+}
+
+function agregarTemporada(btn, serieIdx) {
+  const input = btn.previousElementSibling;
+  const nombre = input.value.trim() || `Temporada ${(contenidoData.series[serieIdx].temporadas||[]).length + 1}`;
+  if (!contenidoData.series[serieIdx].temporadas) contenidoData.series[serieIdx].temporadas = [];
+  contenidoData.series[serieIdx].temporadas.push({ nombre, episodios: [] });
+  input.value = "";
+  const container = btn.closest(".serie-body").querySelector(".seasons-container");
+  const si = contenidoData.series[serieIdx].temporadas.length - 1;
+  const temp = contenidoData.series[serieIdx].temporadas[si];
+  container.insertAdjacentHTML("beforeend", buildSeasonHTML(temp, si));
+  toast(`✓ ${nombre} agregada`);
+}
+
+function eliminarTemporada(btn) {
+  if (!confirm("¿Eliminar esta temporada y sus episodios?")) return;
+  btn.closest(".season-block").remove();
+  toast("Temporada eliminada");
+}
+
+function agregarEpisodio(btn) {
+  const list = btn.closest(".season-block").querySelector(".season-episodes");
+  const count = list.querySelectorAll(".ep-row").length + 1;
+  list.insertAdjacentHTML("beforeend", `
+    <div class="ep-row">
+      <span class="ep-num">EP${count}</span>
+      <input class="ep-nombre" type="text" value="" placeholder="Nombre del episodio">
+      <input class="ep-link link-input" type="text" value="" placeholder="https://...">
+      <button class="btn-icon" onclick="eliminarEpisodio(this)"><i class="fa-solid fa-xmark"></i></button>
+    </div>`);
+}
+
+function eliminarEpisodio(btn) {
+  btn.closest(".ep-row").remove();
+}
+
+/* ══════════════════════════════════════════
+   RENDER PELÍCULAS
+══════════════════════════════════════════ */
+function renderPeliculas() {
+  const ed = document.getElementById("peliculasEditor");
+  ed.innerHTML = "";
+  contenidoData.peliculas.forEach((p, idx) => {
+    const row = document.createElement("div");
+    row.className = "pelicula-row";
+    row.dataset.idx = idx;
+    row.innerHTML = `
+      <img src="${p.portada||''}" onerror="this.src='https://placehold.co/50x75/0a0a1a/00f0ff?text=?'">
+      <div class="pelicula-fields">
+        <input class="inp-pel-nombre" type="text" value="${p.nombre||''}" placeholder="Nombre">
+        <input class="inp-pel-genero" type="text" value="${p.genero||''}" placeholder="Género • Año">
+        <input class="inp-pel-portada" type="text" value="${p.portada||''}" placeholder="URL portada">
+        <input class="inp-pel-link link-input" type="text" value="${p.link||''}" placeholder="https://... (.m3u8 o .mp4)">
+      </div>
+      <div class="pelicula-actions">
+        <button class="btn danger" onclick="eliminarPelicula(${idx})">
+          <i class="fa-solid fa-trash"></i> ELIMINAR
+        </button>
+      </div>`;
+    ed.appendChild(row);
+  });
+}
+
+function agregarPelicula() {
+  contenidoData.peliculas.push({ nombre: "", genero: "", portada: "", link: "" });
+  renderPeliculas();
+  const rows = document.querySelectorAll(".pelicula-row");
+  rows[rows.length-1]?.querySelector("input")?.focus();
+  toast("✓ Película agregada");
+}
+
+function eliminarPelicula(idx) {
+  if (!confirm("¿Eliminar esta película?")) return;
+  contenidoData.peliculas.splice(idx, 1);
+  renderPeliculas();
+  toast("Película eliminada");
+}
+
+/* ══════════════════════════════════════════
+   RENDER CANALES
+══════════════════════════════════════════ */
+const CAT_LABELS = {
+  futbol: "⚽ FÚTBOL",
+  ciclismo: "🚴 CICLISMO",
+  ufc: "🔥 UFC / MMA",
+  ecuador: "📡 CANALES ECUADOR",
+  internacional: "🌍 CANALES INTERNACIONALES"
+};
+
+function renderCanales() {
+  const ed = document.getElementById("canalesEditor");
+  ed.innerHTML = "";
+  Object.keys(CAT_LABELS).forEach(cat => {
+    const block = document.createElement("div");
+    block.className = "canal-cat";
+    const items = (canalesData[cat] || []).map((c, i) => buildCanalItem(cat, c, i)).join("");
+    block.innerHTML = `
+      <div class="canal-cat-header">
+        <span>${CAT_LABELS[cat]}</span>
+        <button class="btn success" onclick="agregarCanal('${cat}')">
+          <i class="fa-solid fa-plus"></i> AGREGAR
+        </button>
+      </div>
+      <div class="canal-list" id="list-${cat}">${items}</div>`;
+    ed.appendChild(block);
+  });
+}
+
+function buildCanalItem(cat, canal, idx) {
+  const repsHTML = (canal.reproductores || [""]).map(r => `
+    <div class="rep-row">
+      <input class="rep-input" type="text" value="${r}" placeholder="https://... (.m3u8)">
+      <button class="btn-icon" onclick="eliminarReproductor(this)"><i class="fa-solid fa-xmark"></i></button>
+    </div>`).join("");
+
+  return `
+    <div class="canal-item" data-cat="${cat}" data-idx="${idx}">
+      <div class="canal-item-top">
+        <input class="inp-canal-nombre" type="text" value="${canal.nombre||''}" placeholder="Nombre del evento">
+        <input class="inp-canal-liga"   type="text" value="${canal.liga||''}"   placeholder="Liga / País">
+        <button class="btn-icon" onclick="eliminarCanal(this)"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      <div class="reproductores-label">LINKS DE REPRODUCCIÓN</div>
+      <div class="rep-list">${repsHTML}</div>
+      <button class="btn-icon add" style="margin-top:6px;" onclick="agregarReproductor(this)">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>`;
+}
+
+function agregarCanal(cat) {
+  const list = document.getElementById("list-" + cat);
+  const idx = list.querySelectorAll(".canal-item").length;
+  list.insertAdjacentHTML("beforeend", buildCanalItem(cat, { nombre:"", liga:"", reproductores:[""] }, idx));
+  list.lastElementChild.querySelector("input")?.focus();
+}
+
+function eliminarCanal(btn) {
+  if (!confirm("¿Eliminar este canal/evento?")) return;
+  btn.closest(".canal-item").remove();
+  toast("Eliminado");
+}
+
+function agregarReproductor(btn) {
+  const list = btn.previousElementSibling;
+  list.insertAdjacentHTML("beforeend", `
+    <div class="rep-row">
+      <input class="rep-input" type="text" value="" placeholder="https://...">
+      <button class="btn-icon" onclick="eliminarReproductor(this)"><i class="fa-solid fa-xmark"></i></button>
+    </div>`);
+}
+
+function eliminarReproductor(btn) {
+  btn.closest(".rep-row").remove();
+}
+
+/* ══════════════════════════════════════════
+   TABS / UI HELPERS
+══════════════════════════════════════════ */
+function switchTab(name) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + name).classList.add("active");
+  event.currentTarget.classList.add("active");
+}
+
+function setStatus(msg, type) {
+  const el = document.getElementById("statusMsg");
+  el.textContent = msg;
+  el.className = type === "ok" ? "status-ok" : type === "err" ? "status-err" : "status-info";
+}
+
+let toastTimer;
+function toast(msg, isError = false) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "show" + (isError ? " error" : "");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = "", 3000);
+}
+</script>
+</body>
+</html>
