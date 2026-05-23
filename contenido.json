@@ -32,17 +32,21 @@
     }
   ],
   "series": [
+   {
+  "nombre": "Breaking Bad",
+  "genero": "Drama",
+  "portada": "URL_PORTADA",
+  "temporadas": [
     {
-      "nombre": "Breaking Bad",
-      "genero": "Drama • Temporada 1",
-      "portada": "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
-      "link": "TU_LINK_SERIE"
+      "nombre": "Temporada 1",
+      "episodios": [
+        { "nombre": "Piloto", "link": "https://..." },
+        { "nombre": "Episodio 2", "link": "https://..." }
+      ]
     },
     {
-      "nombre": "The Last of Us",
-      "genero": "Acción • Temporada 1",
-      "portada": "https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg",
-      "link": "TU_LINK_SERIE"
+      "nombre": "Temporada 2",
+      "episodios": [...]
     }
   ]
 }
