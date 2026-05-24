@@ -42,6 +42,13 @@
       "reproductores": [
         "https://d2qsan2ut81n2k.cloudfront.net/live/19e86940-42cc-485e-80f4-89ae27c69f1b/medialist_15609871089997455276_hls.m3u8"
       ]
+    },
+    {
+      "nombre": "TELEAMAZONAS",
+      "liga": "ECUADOR",
+      "reproductores": [
+        "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/fd4ab346-b4e3-4628-abf0-b5a1bc192428.m3u8"
+      ]
     }
   ],
   "internacional": [
