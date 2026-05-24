@@ -76,6 +76,15 @@
               "link": "TU_LINK_BB_S2E1"
             }
           ]
+        },
+        {
+          "nombre": "Temporada 3",
+          "episodios": [
+            {
+              "nombre": "Episodio",
+              "link": ""
+            }
+          ]
         }
       ]
     },
@@ -94,6 +103,30 @@
             {
               "nombre": "Infectados",
               "link": "TU_LINK_TLOU_S1E2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "euphoria ",
+      "genero": "",
+      "portada": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbFE-5Y2n5i_D4AT6ehNWYWd76H5RXWPfQ6g&s",
+      "temporadas": [
+        {
+          "nombre": "Temporada 1",
+          "episodios": []
+        },
+        {
+          "nombre": "Temporada 2",
+          "episodios": []
+        },
+        {
+          "nombre": "Temporada 3",
+          "episodios": [
+            {
+              "nombre": "Episodio 1",
+              "link": "https://zonaaps.com/stream.php?token=UmwzbWpZc3lWQ001em9rMHdJWXdDMnJXRFdwclVqc0NFVnlmcWVKU0tPRDhJZ1lxeUxlYlJkeEFSZzlKRUZjQkxhZU41V0RIaVZVUkFRQjZhSmtUTFNPMXJFNzRpcTZ3bjcrMEp3TTlIdzZlZ3g1aXkvMGNWVmMrVmV5VXNlMEhiUU5zWm8wRWhKWFF6Zzhtd0JCUWFnPT0%3D"
             }
           ]
         }
