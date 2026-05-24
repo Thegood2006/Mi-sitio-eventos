@@ -37,13 +37,6 @@
       ]
     },
     {
-      "nombre": "TCTELEVISION",
-      "liga": "ecuador",
-      "reproductores": [
-        "https://live2.eu-north-1b.cf.dmcdn.net/sec2(yK578d2aaG3ycV5HyyVIJcHPXvcO53xUMOF3OXtDXbn5OrD18PIb4HINfciEubqO4tp9bPTAwTOxHPt2zg_axk1ezJh8RX2OwSXnWnoUwT2osabBHZvPLdbxe70a1sLs)/cloud/3/x7wijay/s/live-720.m3u8"
-      ]
-    },
-    {
       "nombre": "TVC",
       "liga": "ECUADOR",
       "reproductores": [
