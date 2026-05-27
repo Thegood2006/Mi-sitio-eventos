@@ -853,45 +853,84 @@ function closeSeriesModal() {
    CARGAR STREAM
    ============================================= */
 function loadStream(url) {
-  if (!url || url.startsWith("TU_LINK")) { alert("Este contenido aún no tiene link"); return; }
-  currentLink = url;
-  const video = document.getElementById("video");
-  if (hls) { hls.destroy(); hls = null; }
 
-  if (url.includes(".mp4")) {
-    video.src = url;
-    video.load();
-    video.play().catch(() => {});
-    if (tvMode) setTimeout(() => fullscreenPlayer(), 1000);
+  currentLink = url;
+
+  const container = document.getElementById("videoContainer");
+
+  // LIMPIAR CONTENIDO
+  container.innerHTML = "";
+
+  // =========================
+  // SI ES EMBED / IFRAME
+  // =========================
+  if (
+    url.includes("embed") ||
+    url.includes("fastream") ||
+    url.includes(".html")
+  ) {
+
+    container.innerHTML = `
+      <iframe
+        src="${url}"
+        width="100%"
+        height="100%"
+        frameborder="0"
+        allowfullscreen
+        allow="autoplay; encrypted-media"
+        style="border:none;border-radius:10px;">
+      </iframe>
+    `;
+
     return;
   }
 
-  if (Hls.isSupported()) {
-    hls = new Hls({ enableWorker: true });
-    hls.loadSource(url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      video.play().catch(() => {});
-      if (tvMode) setTimeout(() => fullscreenPlayer(), 1000);
+  // =========================
+  // CREAR VIDEO NORMAL
+  // =========================
+  const video = document.createElement("video");
+
+  video.id = "video";
+  video.controls = true;
+  video.autoplay = true;
+  video.playsInline = true;
+  video.style.width = "100%";
+  video.style.height = "100%";
+
+  container.appendChild(video);
+
+  // =========================
+  // HLS
+  // =========================
+  if (Hls.isSupported() && url.includes(".m3u8")) {
+
+    if (window.hls) {
+      window.hls.destroy();
+    }
+
+    window.hls = new Hls();
+
+    window.hls.loadSource(url);
+
+    window.hls.attachMedia(video);
+
+    window.hls.on(Hls.Events.MANIFEST_PARSED, function () {
+      video.play();
     });
-    hls.on(Hls.Events.ERROR, (event, data) => {
-      if (data.fatal) {
-        hls.destroy(); hls = null;
-        video.src = url;
-        video.load();
-        video.play().catch(() => {});
-      }
-    });
-  } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-    video.src = url;
-    video.load();
-    video.play().catch(() => {});
-    if (tvMode) setTimeout(() => fullscreenPlayer(), 1000);
-  } else {
-    video.src = url;
-    video.load();
-    video.play().catch(() => {});
+
   }
+
+  // =========================
+  // MP4 NORMAL
+  // =========================
+  else {
+
+    video.src = url;
+
+    video.play();
+
+  }
+
 }
 
 /* =============================================
