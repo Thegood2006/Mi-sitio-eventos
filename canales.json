@@ -61,7 +61,7 @@
     },
     {
       "nombre": "RTV",
-      "liga": "",
+      "liga": "ecuador",
       "tipo": "m3u8",
       "reproductores": [
         "https://sv72.ecuaradiotv.net/rtvhd/live/manifest.m3u8"
