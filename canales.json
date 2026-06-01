@@ -37,24 +37,10 @@
       ]
     },
     {
-      "nombre": "TVC",
-      "liga": "ECUADOR",
-      "reproductores": [
-        "https://d2qsan2ut81n2k.cloudfront.net/live/19e86940-42cc-485e-80f4-89ae27c69f1b/medialist_15609871089997455276_hls.m3u8"
-      ]
-    },
-    {
       "nombre": "TELEAMAZONAS",
       "liga": "ECUADOR",
       "reproductores": [
         "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/fd4ab346-b4e3-4628-abf0-b5a1bc192428.m3u8"
-      ]
-    },
-    {
-      "nombre": "tc television",
-      "liga": "",
-      "reproductores": [
-        "https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec=hOQQir82ypRmAY1JTisYD1AyStaMTS_9TOZn8TwbuZN0893kgjub4snqUQyK-rDt9X0Tqj636hLzYUVlHYbPQI-NHQaf_xHVm0YkLi-lBKw&dmTs=71389&dmV1st=16923b6e-b4e3-1b3f-2b27-5e2f2e41e8ca"
       ]
     },
     {
