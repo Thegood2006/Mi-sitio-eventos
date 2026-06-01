@@ -56,6 +56,14 @@
       "reproductores": [
         "https://cdndirector.dailymotion.com/cdn/live/video/x7wijay.m3u8?sec=hOQQir82ypRmAY1JTisYD1AyStaMTS_9TOZn8TwbuZN0893kgjub4snqUQyK-rDt9X0Tqj636hLzYUVlHYbPQI-NHQaf_xHVm0YkLi-lBKw&dmTs=71389&dmV1st=16923b6e-b4e3-1b3f-2b27-5e2f2e41e8ca"
       ]
+    },
+    {
+      "nombre": "america esterio",
+      "liga": "Ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://video.makrodigital.com/americaestereoguayaquil/americaestereoguayaquil/playlist.m3u8"
+      ]
     }
   ],
   "internacional": [
