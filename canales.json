@@ -60,11 +60,27 @@
       ]
     },
     {
-      "nombre": "RTV",
+      "nombre": "RTV-2",
       "liga": "ecuador",
       "tipo": "m3u8",
       "reproductores": [
         "https://sv72.ecuaradiotv.net/rtvhd/live/manifest.m3u8"
+      ]
+    },
+    {
+      "nombre": "ondaas ecuador",
+      "liga": "ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://stmv6.voxtvhd.com.br/radiosuprema/radiosuprema/playlist.m3u8?hls_ctx=666g000n"
+      ]
+    },
+    {
+      "nombre": "mel radip",
+      "liga": "ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://eu1.servers10.com:8081/8334/tracks-v1a1/mono.m3u8"
       ]
     }
   ],
