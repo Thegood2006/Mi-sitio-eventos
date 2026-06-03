@@ -68,14 +68,6 @@
       ]
     },
     {
-      "nombre": "ondaas ecuador",
-      "liga": "ecuador",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://stmv6.voxtvhd.com.br/radiosuprema/radiosuprema/playlist.m3u8?hls_ctx=666g000n"
-      ]
-    },
-    {
       "nombre": "mel radip",
       "liga": "ecuador",
       "tipo": "m3u8",
