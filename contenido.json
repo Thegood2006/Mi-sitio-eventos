@@ -279,6 +279,87 @@
           ]
         }
       ]
+    },
+    {
+      "nombre": "Devil May Cry",
+      "genero": "Acción, Aventura, Drama, Fantasía urbana",
+      "portada": "https://wikimedia.org",
+      "temporadas": [
+        {
+          "nombre": "Temporada 1",
+          "episodios": [
+            {
+              "nombre": "Episodio 1",
+              "link": "https://hugh.cdn.rumble.cloud/video/fww1/92/s8/2/O/S/B/n/OSBnA.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=480935424-480953432"
+            },
+            {
+              "nombre": "Episodio 2",
+              "link": "https://1a-1791.com/video/fww1/35/s8/2/_/o/_/y/_o_yy.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=479837184-479851324"
+            },
+            {
+              "nombre": "Episodio 3",
+              "link": "https://1a-1791.com/video/fww1/5f/s8/2/l/p/_/y/lp_yy.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=476534784-476548758"
+            },
+            {
+              "nombre": "Episodio 4",
+              "link": "https://1a-1791.com/video/fww1/60/s8/2/v/p/_/y/vp_yy.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=497993728-498008416"
+            },
+            {
+              "nombre": "Episodio 5",
+              "link": "https://1a-1791.com/video/fww1/e8/s8/2/n/T/_/y/nT_yy.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=485948928-485963223"
+            },
+            {
+              "nombre": "Episodio 6",
+              "link": "https://1a-1791.com/video/fww1/06/s8/2/v/Q/_/y/vQ_yy.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=352960000-352970377"
+            },
+            {
+              "nombre": "Episodio 7",
+              "link": "https://1a-1791.com/video/fww1/88/s8/2/P/T/_/y/PT_yy.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=490211328-490225767"
+            },
+            {
+              "nombre": "Episodio 8",
+              "link": "https://1a-1791.com/video/fww1/61/s8/2/b/U/_/y/bU_yy.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=516945920-516961148"
+            }
+          ]
+        },
+        {
+          "nombre": "Temporada 2",
+          "episodios": [
+            {
+              "nombre": "Episodio 1",
+              "link": "https://hugh.cdn.rumble.cloud/video/fww1/f2/s8/2/2/y/q/n/2yqnA.haa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=1215856128-1215880001"
+            },
+            {
+              "nombre": "Episodio 2",
+              "link": "https://hugh.cdn.rumble.cloud/video/fww1/39/s8/2/S/x/q/n/SxqnA.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=537857536-537877761"
+            },
+            {
+              "nombre": "Episodio 3",
+              "link": "https://hugh.cdn.rumble.cloud/video/fww1/57/s8/2/0/w/q/n/0wqnA.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=494034432-494052951"
+            },
+            {
+              "nombre": "Episodio 4",
+              "link": "https://hugh.cdn.rumble.cloud/video/fwe2/f9/s8/2/s/z/q/n/szqnA.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=633048064-633071816"
+            },
+            {
+              "nombre": "Episodio 5",
+              "link": "https://hugh.cdn.rumble.cloud/video/fww1/c0/s8/2/c/y/q/n/cyqnA.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=523157504-523177128"
+            },
+            {
+              "nombre": "Episodio 6",
+              "link": "https://hugh.cdn.rumble.cloud/video/fww1/37/s8/2/q/z/q/n/qzqnA.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=622422016-622445449"
+            },
+            {
+              "nombre": "Episodio 7",
+              "link": "https://hugh.cdn.rumble.cloud/video/fwe2/78/s8/2/E/T/y/n/ETynA.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=596035072-596057416"
+            },
+            {
+              "nombre": "Episodio 8",
+              "link": "https://hugh.cdn.rumble.cloud/video/fww1/ae/s8/2/G/T/y/n/GTynA.gaa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=548541440-548562060"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
