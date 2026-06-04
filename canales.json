@@ -8,6 +8,14 @@
         "https://14c51.streameasthd.net/espn5/tracks-v1a1/mono.m3u8?ip=157.100.141.252&token=890c9ea46aac7eb8bffec65065c80827b0c979d3-6f-1779460083-1779406083",
         "https://98ca2.streameasthd.net/espn5/tracks-v1a1/mono.m3u8?ip=157.100.141.252&token=9442601563912af96bba39690daf526d2cc75fea-d6-1779460636-1779406636"
       ]
+    },
+    {
+      "nombre": "rtv",
+      "liga": "ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://sv72.ecuaradiotv.net/rtvhd/live/manifest.m3u8"
+      ]
     }
   ],
   "ciclismo": [
@@ -57,14 +65,6 @@
       "tipo": "m3u8",
       "reproductores": [
         "https://video2.lhdserver.es/pjtv/live.m3u8"
-      ]
-    },
-    {
-      "nombre": "RTV-2",
-      "liga": "ecuador",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://sv72.ecuaradiotv.net/rtvhd/live/manifest.m3u8"
       ]
     },
     {
