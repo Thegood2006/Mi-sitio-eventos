@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THEY GOOD TV</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+ <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -1274,29 +1275,57 @@ async function shareTV() {
   }
 }
 
-function castToTV() {
-  if (!currentLink) {
-    mostrarToast("Selecciona un canal o película primero");
-    return;
-  }
+let castContext;
+let castSession;
 
-  // Intentar Remote Playback API (Chromecast nativo)
-  const video = document.getElementById("video");
-  if (video && video.remote) {
-    video.remote.prompt().then(() => {
-      mostrarToast("✅ Conectado a TV");
-    }).catch(() => {
-      // Fallback: abrir en nueva pestaña para Cast manual
-      abrirParaCast();
+window.__onGCastApiAvailable = function(isAvailable) {
+  if (isAvailable) {
+    castContext = cast.framework.CastContext.getInstance();
+
+    castContext.setOptions({
+      receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+      autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
     });
+  }
+};
+
+async function castToTV() {
+
+  if (!currentLink) {
+    mostrarToast("Selecciona un canal primero");
     return;
   }
 
-  // Fallback para navegadores sin Remote Playback
-  abrirParaCast();
-}
+  try {
 
-function abrirParaCast() {
+    castSession = castContext.getCurrentSession();
+
+    if (!castSession) {
+      await castContext.requestSession();
+      castSession = castContext.getCurrentSession();
+    }
+
+    const mediaInfo = new chrome.cast.media.MediaInfo(
+      currentLink,
+      "application/x-mpegURL"
+    );
+
+    const request =
+      new chrome.cast.media.LoadRequest(mediaInfo);
+
+    castSession.loadMedia(request);
+
+    mostrarToast("📺 Chromecast conectado");
+
+  } catch (err) {
+
+    console.error(err);
+
+    mostrarToast("❌ No se pudo conectar al Chromecast");
+
+  }
+}
+  function abrirParaCast() {
   window.open(currentLink, "_blank");
   mostrarToast("🖥️ Abierto en nueva pestaña\nUsa el ícono Cast de Chrome para transmitir");
 }
@@ -1309,24 +1338,7 @@ function mostrarToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 4000);
 }
 
-// Detectar si Chromecast está disponible
-function detectarCast() {
-  const video = document.getElementById("video");
-  if (!video || !video.remote) return;
-  
-  video.remote.watchAvailability(available => {
-    const btn = document.getElementById("castBtn");
-    if (btn) {
-      if (available) {
-        btn.classList.add("cast-available");
-        btn.title = "Chromecast disponible - Click para transmitir";
-      } else {
-        btn.classList.remove("cast-available");
-        btn.title = "Cast a TV";
-      }
-    }
-  }).catch(() => {});
-}
+
 
 function toggleMenu(menuId) {
   const menu = document.getElementById(menuId);
@@ -1458,7 +1470,6 @@ function cerrarTMDb() {
 let contenidoGlobal = { peliculas: [], series: [] };
 
 detectarDispositivo();
-detectarCast();
 cargarTodo();
 </script>
 
