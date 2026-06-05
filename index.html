@@ -773,16 +773,22 @@ function renderCategoria(menuId, eventos) {
     const tipoEvento = evento.tipo || 'm3u8';
     const urls = evento.reproductores;
 
-    let botonesHTML = "";
-    urls.forEach((url, i) => {
-      const estaActivo = evento.estados ? evento.estados[i] : true;
-      const claseBtn = estaActivo === false ? "player-btn caido" : "player-btn";
-      const icono = tipoEvento === 'iframe' ? 'window-restore' : 'play';
-      botonesHTML += `<button class="${claseBtn}" id="repro-${menuId}-${eventos.indexOf(evento)}-${i}"
-        onclick="reproducirConFallback(${JSON.stringify(urls)}, ${i}, '${tipoEvento}', '${menuId}-${eventos.indexOf(evento)}')">
-        <i class="fa-solid fa-${icono}"></i> Servidor ${i + 1}
-      </button>`;
-    });
+   let botonesHTML = "";
+
+urls.forEach((url, i) => {
+  const estaActivo = evento.estados ? evento.estados[i] : true;
+  const claseBtn = estaActivo === false ? "player-btn caido" : "player-btn";
+  const icono = tipoEvento === "iframe" ? "window-restore" : "play";
+
+  botonesHTML += `
+    <button
+      class="${claseBtn}"
+      onclick="loadStream('${url}','${tipoEvento}')">
+      <i class="fa-solid fa-${icono}"></i>
+      Servidor ${i + 1}
+    </button>
+  `;
+});
 
     div.innerHTML = `
       <div class="live">● EN VIVO</div>
