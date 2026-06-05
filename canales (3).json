@@ -1,0 +1,139 @@
+{
+  "futbol": [
+    {
+      "nombre": "Partido en Vivo",
+      "liga": "LigaPro Ecuador",
+      "reproductores": [
+        "TU_LINK_HOY_1",
+        "TU_LINK_HOY_2",
+        "TU_LINK_HOY_3"
+      ]
+    }
+  ],
+  "ciclismo": [
+    {
+      "nombre": "Tour de Francia",
+      "liga": "Etapa Final",
+      "reproductores": [
+        "TU_LINK_HOY"
+      ]
+    }
+  ],
+  "ufc": [
+    {
+      "nombre": "UFC Main Event",
+      "liga": "Fight Night",
+      "reproductores": [
+        "TU_LINK_HOY"
+      ]
+    }
+  ],
+  "ecuador": [
+    {
+      "nombre": "Ecuavisa",
+      "liga": "Canal Ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://jireh-9-hls-video-us-isp.dps.live/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisaqo/ecuavisaqo.smil/ecuavisaqo/livestream1/chunks.m3u8"
+      ]
+    },
+    {
+      "nombre": "Teleamazonas",
+      "liga": "Canal Ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/fd4ab346-b4e3-4628-abf0-b5a1bc192428.m3u8"
+      ]
+    },
+    {
+      "nombre": "TVC",
+      "liga": "Canal Ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://d2qsan2ut81n2k.cloudfront.net/live/19e86940-42cc-485e-80f4-89ae27c69f1b/medialist_15609871089997455276_hls.m3u8"
+      ]
+    },
+    {
+      "nombre": "América Estéreo",
+      "liga": "Ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://video.makrodigital.com/americaestereoguayaquil/americaestereoguayaquil/playlist.m3u8"
+      ]
+    },
+    {
+      "nombre": "RTV Ecuador",
+      "liga": "Ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://sv72.ecuaradiotv.net/rtvhd/live/manifest.m3u8"
+      ]
+    },
+    {
+      "nombre": "Zaracay TV",
+      "liga": "Ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://video2.makrodigital.com/zaracay/zaracay/playlist.m3u8"
+      ]
+    },
+    {
+      "nombre": "Curiquingue",
+      "liga": "Ecuador",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://video2.lhdserver.es/pjtv/live.m3u8"
+      ]
+    }
+  ],
+  "internacional": [
+    {
+      "nombre": "DW Español",
+      "liga": "Internacional",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://dwamdstream104.akamaized.net/hls/live/2015530/dwstream104/index.m3u8"
+      ]
+    },
+    {
+      "nombre": "France 24 Español",
+      "liga": "Internacional",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://stream.france24.com/hls/live/2037193/F24_ES_LO_HLS/master.m3u8"
+      ]
+    },
+    {
+      "nombre": "Euronews Español",
+      "liga": "Internacional",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://rakuten-euronews-1-es.samsung.wurl.tv/manifest/playlist.m3u8"
+      ]
+    },
+    {
+      "nombre": "NASA TV",
+      "liga": "Internacional",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-AK/master.m3u8"
+      ]
+    },
+    {
+      "nombre": "ESPN USA",
+      "liga": "Estados Unidos",
+      "tipo": "m3u8",
+      "reproductores": [
+        "TU_LINK_ESPN_HOY"
+      ]
+    },
+    {
+      "nombre": "Fox Sports México",
+      "liga": "México",
+      "tipo": "m3u8",
+      "reproductores": [
+        "TU_LINK_FOX_MX"
+      ]
+    }
+  ]
+}
