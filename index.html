@@ -2107,9 +2107,7 @@ function mostrarModalCast() {
   }
 
   // Copiar link al portapapeles
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(currentLink).catch(() => {});
-  }
+  
 
   document.getElementById("castModalTitulo").textContent = titulo;
   document.getElementById("castModalInstrucciones").innerHTML = instrucciones;
