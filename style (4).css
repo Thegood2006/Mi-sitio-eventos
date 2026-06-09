@@ -1,0 +1,422 @@
+/* =========================
+   RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Orbitron', sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at top, #14143b, #050510 70%);
+  color: white;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a1a; }
+::-webkit-scrollbar-thumb { background: linear-gradient(#00e1ff, #8b00ff); border-radius: 10px; }
+
+/* =========================
+   HEADER
+========================= */
+header {
+  background: linear-gradient(90deg, #00e1ff, #0011ff, #8b00ff);
+  padding: 20px 30px;
+  text-align: center;
+  box-shadow: 0 0 30px #00e1ff88, 0 0 60px #0011ff44;
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 100%);
+}
+
+header h1 {
+  font-size: 36px;
+  font-weight: 900;
+  text-shadow: 0 0 10px #fff, 0 0 30px #00e1ff;
+  position: relative;
+}
+
+header p {
+  margin-top: 6px;
+  color: rgba(255,255,255,.8);
+  letter-spacing: 4px;
+  font-size: 0.65rem;
+  position: relative;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* =========================
+   PLAYER BOX
+========================= */
+.player-box {
+  background: linear-gradient(145deg, #111827, #0f172a);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(0,225,255,.2);
+  box-shadow: 0 0 30px rgba(0,225,255,.1), inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.video-container {
+  position: relative;
+  background: #000;
+}
+
+video {
+  width: 100%;
+  height: 70vh;
+  background: #000;
+  display: block;
+}
+
+/* =========================
+   CAST BUTTON — estilo heredado del <style> interno de index.html
+========================= */
+
+/* =========================
+   CONTROLS
+========================= */
+.controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px 20px;
+  background: rgba(0,0,0,.3);
+  border-top: 1px solid rgba(0,225,255,.1);
+}
+
+.controls button {
+  background: linear-gradient(135deg, #00e1ff22, #0011ff22);
+  border: 1px solid rgba(0,225,255,.3);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .3s;
+  font-weight: bold;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.controls button:hover {
+  background: linear-gradient(135deg, #00e1ff44, #0011ff44);
+  border-color: #00e1ff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0,225,255,.3);
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+.sidebar {
+  background: linear-gradient(145deg, #111827, #0f172a);
+  border-radius: 20px;
+  padding: 18px;
+  border: 1px solid rgba(0,225,255,.15);
+  box-shadow: 0 0 20px rgba(0,225,255,.08);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #00e1ff44 transparent;
+  position: sticky;
+  top: 20px;
+}
+
+/* =========================
+   EVENTOS TITLE
+========================= */
+.events-title {
+  color: #00e1ff;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,225,255,.2);
+  text-shadow: 0 0 10px #00e1ff88;
+}
+
+/* =========================
+   EVENT CATEGORY
+========================= */
+.event-category {
+  margin-bottom: 10px;
+}
+
+.event-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #0011ff22, #00e1ff22);
+  border: 1px solid rgba(0,225,255,.25);
+  color: white;
+  padding: 13px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.75rem;
+  transition: .3s;
+  letter-spacing: 1px;
+}
+
+.event-btn:hover {
+  background: linear-gradient(135deg, #0011ff44, #00e1ff44);
+  border-color: #00e1ff;
+  box-shadow: 0 0 15px rgba(0,225,255,.2);
+  transform: translateX(2px);
+}
+
+.event-btn span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =========================
+   EVENT MENU
+========================= */
+.event-menu {
+  display: none;
+  margin-top: 8px;
+  padding-left: 4px;
+}
+
+.event-item {
+  background: rgba(255,255,255,.03);
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(0,225,255,.1);
+  transition: .3s;
+}
+
+.event-item:hover {
+  border-color: rgba(0,225,255,.4);
+  background: rgba(0,225,255,.05);
+  transform: translateX(4px);
+  box-shadow: 0 0 15px rgba(0,225,255,.1);
+}
+
+.event-item h4 {
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+.event-item p {
+  color: #94a3b8;
+  font-size: 0.65rem;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   LIVE INDICATOR
+========================= */
+.live {
+  color: #ff4444;
+  font-size: 0.65rem;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+
+/* =========================
+   PLAYER BUTTONS
+========================= */
+.player-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.player-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #00e1ff, #0011ff);
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: bold;
+  transition: .3s;
+  box-shadow: 0 0 10px rgba(0,225,255,.2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+
+.player-btn:hover {
+  transform: translateX(4px);
+  box-shadow: 0 0 20px rgba(0,225,255,.5);
+}
+
+/* =========================
+   SECTION TITLES
+========================= */
+.section-title {
+  color: #00e1ff;
+  font-size: 0.9rem;
+  margin: 20px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,225,255,.15);
+  text-shadow: 0 0 8px #00e1ff88;
+}
+
+/* =========================
+   CARDS GRID
+========================= */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: linear-gradient(145deg, #0d1117, #0a0a1e);
+  border: 1px solid rgba(0,225,255,.15);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.card:hover {
+  transform: scale(1.05) translateY(-2px);
+  border-color: #00e1ff;
+  box-shadow: 0 8px 25px rgba(0,225,255,.2);
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  display: block;
+}
+
+.card-info {
+  padding: 8px;
+}
+
+.card-info h4 {
+  color: #fff;
+  font-size: 0.65rem;
+  margin: 0 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-info p {
+  color: rgba(0,225,255,.6);
+  font-size: 0.55rem;
+  margin: 0 0 6px;
+}
+
+.card-play {
+  background: linear-gradient(90deg, #00e1ff, #8b00ff);
+  border: none;
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: bold;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  font-family: 'Orbitron', sans-serif;
+  transition: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.card-play:hover {
+  opacity: .85;
+  transform: scale(1.03);
+}
+
+/* =========================
+   FOOTER
+========================= */
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: rgba(148,163,184,.5);
+  letter-spacing: 3px;
+  font-size: 0.65rem;
+  border-top: 1px solid rgba(0,225,255,.08);
+  margin-top: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  video { height: 45vw; min-height: 200px; }
+
+  header h1 { font-size: 24px; }
+  header p { font-size: 0.55rem; letter-spacing: 2px; }
+
+  .sidebar {
+    max-height: none;
+    position: static;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+@media(max-width: 480px) {
+  header h1 { font-size: 18px; }
+  .controls button { padding: 8px 12px; font-size: 0.6rem; }
+  .event-btn { font-size: 0.65rem; padding: 11px 12px; }
+}
