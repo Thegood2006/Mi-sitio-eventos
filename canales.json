@@ -94,6 +94,14 @@
       "reproductores": [
         "https://video2.lhdserver.es/pjtv/live.m3u8"
       ]
+    },
+    {
+      "nombre": "tc television",
+      "liga": "ecua",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://live2.eu-north-1a.cf.dmcdn.net/sec2(LTs5S_08bdFHRPlNBFWG2MdtDGtMIhiM1VQcTEquJz52MFbbGCHM3NaaFD4GHF727JHS9bbdLV853PpKhJQeLfnsoYum3RlrcIgoPOYH_pQJGqq2ixiOc5prATwf2Vyy)/cloud/3/x7wijay/s/live-480.m3u8#cell=lcf2-eu-north-1a"
+      ]
     }
   ],
   "internacional": [
