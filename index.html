@@ -1938,7 +1938,9 @@ async function finalizarCast() {
 }
 
 /* =============================================
-   CAST A TV — versión corregida laptop + móvil
+   CAST A TV — máxima compatibilidad móvil
+   Soporta m3u8, mp4 e iframe/embed
+   Si ya hay cast activo, simplemente carga el nuevo medio
    ============================================= */
 async function castToTV() {
   if (!currentLink) {
@@ -1946,14 +1948,12 @@ async function castToTV() {
     return;
   }
 
-  const ua = navigator.userAgent;
-  const esMovil = /android|iphone|ipad|ipod/i.test(ua);
-  const esChrome = /chrome|chromium/i.test(ua) && !/edg|opr|brave/i.test(ua);
-
-  // Detectar si es iframe/embed — solo modal
+  // Detectar si es iframe/embed
   const esIframe =
-    currentLink.includes("fastream") || currentLink.includes("embed") ||
-    currentLink.includes("vidsrc") || currentLink.includes("2embed") ||
+    currentLink.includes("fastream") ||
+    currentLink.includes("embed") ||
+    currentLink.includes("vidsrc") ||
+    currentLink.includes("2embed") ||
     currentLink.includes("dood") ||
     (currentLink.includes(".html") && !currentLink.includes(".m3u8"));
 
@@ -1962,11 +1962,10 @@ async function castToTV() {
     return;
   }
 
-  // ── 1. Chromecast SDK — solo si hay sesión existente o dispositivo detectado ──
+  // ── Si ya hay sesión Chromecast activa → solo cargar nuevo medio ──────
   if (typeof cast !== 'undefined' && castContext) {
     const session = castContext.getCurrentSession();
     if (session) {
-      // Ya hay sesión activa → solo cargar el nuevo medio
       try {
         const esM3U8 = currentLink.includes(".m3u8") || currentLink.includes("chunklist");
         const mimeType = esM3U8 ? "application/x-mpegURL" : "video/mp4";
@@ -1978,73 +1977,65 @@ async function castToTV() {
         mostrarToast("📺 Nuevo contenido enviado a TV ✓");
         return;
       } catch(err) {
-        console.warn("Error cargando en sesión existente:", err);
-      }
-    }
-
-    // Verificar si hay dispositivos disponibles antes de intentar conectar
-    const castState = castContext.getCastState();
-    const hayDispositivosCast =
-      castState === cast.framework.CastState.NOT_CONNECTED ||
-      castState === cast.framework.CastState.CONNECTING ||
-      castState === cast.framework.CastState.CONNECTED;
-
-    // Solo intentar el SDK si Chrome detectó dispositivos Chromecast en la red
-    if (hayDispositivosCast && castState !== cast.framework.CastState.NO_DEVICES_AVAILABLE) {
-      try {
-        await castContext.requestSession();
-        castSession = castContext.getCurrentSession();
-        if (castSession) {
-          const esM3U8 = currentLink.includes(".m3u8") || currentLink.includes("chunklist");
-          const mimeType = esM3U8 ? "application/x-mpegURL" : "video/mp4";
-          const mediaInfo = new chrome.cast.media.MediaInfo(currentLink, mimeType);
-          const request   = new chrome.cast.media.LoadRequest(mediaInfo);
-          await castSession.loadMedia(request);
-          setCastingState(true);
-          mostrarToast("📺 Chromecast conectado ✓");
-          return;
-        }
-      } catch (err) {
-        // Usuario canceló el diálogo o falló → no rompemos, seguimos al fallback
-        console.warn("Chromecast SDK cancelado/error:", err);
+        console.error("loadMedia en sesión existente:", err);
       }
     }
   }
 
-  // ── 2. Remote Playback API (Chrome Android — el que ya te funciona) ──
-  if (esMovil) {
-    const videoEl = document.querySelector("#videoContainer video");
-    if (videoEl && videoEl.remote && typeof videoEl.remote.prompt === "function") {
-      try {
+  const videoEl = document.querySelector("#videoContainer video");
+
+  // ── 1. Remote Playback API (Chrome Android) ──────────────────────────
+  if (videoEl && videoEl.remote && typeof videoEl.remote.prompt === "function") {
+    try {
+      const available = await new Promise((resolve) => {
+        const timeout = setTimeout(() => resolve(false), 1500);
+        videoEl.remote.watchAvailability(a => {
+          clearTimeout(timeout);
+          resolve(a);
+        }).catch(() => { clearTimeout(timeout); resolve(false); });
+      });
+      if (available) {
         await videoEl.remote.prompt();
         setCastingState(true);
         mostrarToast("📺 Conectando a TV...");
         return;
-      } catch (err) {
-        if (err.name !== "NotSupportedError" && err.name !== "InvalidStateError") {
-          mostrarModalCast();
-          return;
-        }
       }
+    } catch (err) {
+      if (err.name !== "NotSupportedError" && err.name !== "InvalidStateError") return;
     }
-    // Móvil sin Remote Playback → modal con instrucciones de duplicación
-    mostrarModalCast();
-    return;
   }
 
-  // ── 3. PC / Laptop: abrir menú Cast de Chrome via atajo si es posible ──
+  // ── 2. Chromecast SDK — nueva sesión ─────────────────────────────────
+  if (typeof cast !== 'undefined' && castContext) {
+    try {
+      await castContext.requestSession();
+      castSession = castContext.getCurrentSession();
+      if (castSession) {
+        const esM3U8 = currentLink.includes(".m3u8") || currentLink.includes("chunklist");
+        const mimeType = esM3U8 ? "application/x-mpegURL" : "video/mp4";
+        const mediaInfo = new chrome.cast.media.MediaInfo(currentLink, mimeType);
+        const request   = new chrome.cast.media.LoadRequest(mediaInfo);
+        await castSession.loadMedia(request);
+        setCastingState(true);
+        mostrarToast("📺 Chromecast conectado ✓");
+        return;
+      }
+    } catch (err) {
+      console.error("Chromecast SDK error:", err);
+    }
+  }
+
+  // ── 3. Modal guía (móvil y cualquier otro caso) ───────────────────────
   mostrarModalCast();
 }
 
-/* =============================================
-   MODAL CAST MEJORADO
-   ============================================= */
+
+
 function mostrarModalCast() {
   const ua = navigator.userAgent;
   const esAndroid = /android/i.test(ua);
   const esIOS = /iphone|ipad|ipod/i.test(ua);
   const esSamsung = /samsungbrowser/i.test(ua);
-  const esMovil = esAndroid || esIOS || esSamsung;
 
   let titulo = "";
   let instrucciones = "";
@@ -2062,78 +2053,67 @@ function mostrarModalCast() {
       <div class="cast-method">
         <div class="cast-method-title"><i class="fa-solid fa-mobile-screen" style="color:#00e1ff"></i> OPCIÓN 2 — Duplicar pantalla</div>
         <div class="cast-step"><span class="cast-num">1</span>Baja la <strong>barra de notificaciones</strong></div>
-        <div class="cast-step"><span class="cast-num">2</span>Toca <strong>"Transmitir"</strong>, <strong>"Smart View"</strong> o <strong>"Screen Mirroring"</strong></div>
+        <div class="cast-step"><span class="cast-num">2</span>Toca <strong>"Transmitir"</strong> o <strong>"Smart View"</strong> o <strong>"Screen Mirroring"</strong></div>
         <div class="cast-step"><span class="cast-num">3</span>Elige tu TV de la lista</div>
+        <div class="cast-step"><span class="cast-num">4</span>Vuelve aquí y reproduce</div>
       </div>`;
   } else if (esIOS) {
     titulo = "📱 Transmitir desde iPhone/iPad";
     instrucciones = `
       <div class="cast-method">
         <div class="cast-method-title"><i class="fa-brands fa-apple" style="color:#00e1ff"></i> AIRPLAY</div>
-        <div class="cast-step"><span class="cast-num">1</span>Desliza desde la esquina superior derecha</div>
+        <div class="cast-step"><span class="cast-num">1</span>Desliza hacia abajo desde la esquina superior derecha</div>
         <div class="cast-step"><span class="cast-num">2</span>Toca <strong>"Duplicar pantalla"</strong></div>
         <div class="cast-step"><span class="cast-num">3</span>Elige tu Apple TV o TV compatible</div>
+        <div class="cast-step"><span class="cast-num">4</span>Vuelve aquí y reproduce</div>
       </div>`;
   } else {
-    // ── PC / LAPTOP — instrucciones claras + botón directo ──
-    titulo = "🖥️ Transmitir desde tu PC";
+    titulo = "🖥️ Transmitir desde PC";
     instrucciones = `
       <div class="cast-method">
-        <div class="cast-method-title"><i class="fa-brands fa-chrome" style="color:#00e1ff"></i> CHROME — Método más fácil</div>
-        <div class="cast-step"><span class="cast-num">1</span>Asegúrate de que tu <strong>TV o Chromecast esté encendido y en la misma red WiFi</strong> que tu PC</div>
-        <div class="cast-step"><span class="cast-num">2</span>Haz clic en el botón de abajo — se abrirá el menú de transmisión de Chrome</div>
-        <div class="cast-step"><span class="cast-num">3</span>Elige tu TV o Chromecast de la lista</div>
-        <div class="cast-step"><span class="cast-num">4</span>Selecciona <strong>"Transmitir pestaña"</strong> o <strong>"Transmitir escritorio"</strong></div>
-      </div>
-      <button onclick="abrirCastChrome()" style="
-        width:100%; margin: 14px 0 0;
-        background: linear-gradient(90deg,#00e1ff,#7b2fff);
-        border:none; border-radius:10px; padding:13px;
-        color:#000; font-family:'Orbitron',sans-serif;
-        font-size:0.75rem; font-weight:900; cursor:pointer;
-        letter-spacing:1px; transition:.2s;
-        display:flex; align-items:center; justify-content:center; gap:8px;">
-        <i class="fa-solid fa-tv"></i> ABRIR MENÚ DE TRANSMISIÓN
-      </button>
-      <div class="cast-method" style="margin-top:14px;">
-        <div class="cast-method-title"><i class="fa-solid fa-display" style="color:#00e1ff"></i> SIN CHROMECAST — HDMI directo</div>
-        <div class="cast-step"><span class="cast-num">1</span>Conecta tu laptop a la TV con un cable <strong>HDMI</strong></div>
-        <div class="cast-step"><span class="cast-num">2</span>En Windows: <strong>Win + P → Duplicar</strong></div>
-        <div class="cast-step"><span class="cast-num">3</span>En Mac: <strong>Ajustes del Sistema → Pantallas → Duplicar</strong></div>
-      </div>
-      <div style="color:rgba(255,255,255,.35);font-size:0.58rem;text-align:center;margin-top:10px;letter-spacing:1px;">
-        ⚠️ Si no ves tu TV en el menú de Chrome, verifica que ambos dispositivos estén en el mismo WiFi
+        <div class="cast-method-title"><i class="fa-solid fa-chrome" style="color:#00e1ff"></i> CHROME</div>
+        <div class="cast-step"><span class="cast-num">1</span>Menú <strong>⋮ → Guardar y compartir → Transmitir</strong></div>
+        <div class="cast-step"><span class="cast-num">2</span>Elige tu Chromecast o Smart TV</div>
+        <div class="cast-step"><span class="cast-num">3</span>Selecciona <strong>"Transmitir pestaña"</strong></div>
+        <div class="cast-step"><span class="cast-num">4</span>Reproduce el canal aquí</div>
       </div>`;
   }
 
-  // Copiar link al portapapeles
-  
+  // Copiar link al portapapeles como extra
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(currentLink).catch(() => {});
+  }
 
   document.getElementById("castModalTitulo").textContent = titulo;
   document.getElementById("castModalInstrucciones").innerHTML = instrucciones;
   document.getElementById("castModal").classList.add("open");
 
-  if (esMovil) setCastingState(true);
+  // En móvil activar el estado de cast apenas se muestra la guía
+  // así el botón FINALIZAR CAST aparece de inmediato
+  setCastingState(true);
 }
 
-/* Abre el diálogo nativo de Cast en Chrome desktop */
-function abrirCastChrome() {
-  // Chrome expone un endpoint especial para abrir el popup de cast
-  // Funciona en Chrome 72+ en desktop cuando hay dispositivos en la red
-  if (typeof chrome !== 'undefined' && chrome.cast) {
-    // Ya lo maneja el SDK de Chromecast
-    castContext && castContext.requestSession().catch(() => {});
-    cerrarCastModal();
-    return;
-  }
-  // Fallback: abrir la página de configuración de Cast de Chrome
-  // El usuario tiene que usar el menú manualmente
-  mostrarToast("Abre el menú ⋮ de Chrome → Guardar y compartir → Transmitir");
-  cerrarCastModal();
-}
- function cerrarCastModal() {
+function cerrarCastModal() {
   document.getElementById("castModal").classList.remove("open");
+  // El botón FINALIZAR CAST queda visible para que el usuario pueda terminar
+  // cuando quiera, sin necesidad de recargar la página
 }
+
+function mostrarToast(msg) {
+  const toast = document.getElementById("castToast");
+  if (!toast) return;
+  toast.innerHTML = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 4000);
+}
+
+
+
+function toggleMenu(menuId) {
+  const menu = document.getElementById(menuId);
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
 
 /* =============================================
    TMDB API
