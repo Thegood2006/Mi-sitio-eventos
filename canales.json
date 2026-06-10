@@ -8,6 +8,16 @@
         "https://anvtcax.fubohd.com/foxsports2_usa/mono.m3u8?token=4d1b1f8ffd2a0d29bb9a3962a72904907523b279-45-1780639218-1780621218",
         "TU_LINK_HOY_3"
       ]
+    },
+    {
+      "nombre": "Amistoso: Argentina vs Islandia",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://b2zmawnpyww.fubo18.com/espndeportes/mono.m3u8?token=ee7ae2011fa66775a7022a8584cba5562f68d3ef-eb-1781061398-1781043398",
+        "https://yxdlc29tzq.fubo18.com/dsports/mono.m3u8?token=231fb220f516f7357df45b1e9df0bef14b0230a9-f2-1781068317-1781050317",
+        "https://c2nvdxq.fubo18.com/espndeportes/mono.m3u8?token=adbcabc28fdd1e485ea4c4583e74d5cb67324e0c-a6-1781068381-1781050381"
+      ]
     }
   ],
   "ciclismo": [
@@ -48,7 +58,7 @@
     {
       "nombre": "TVC",
       "liga": "Canal Ecuador",
-      "tipo": "iframe",
+      "tipo": "m3u8",
       "reproductores": [
         "https://d2qsan2ut81n2k.cloudfront.net/live/19e86940-42cc-485e-80f4-89ae27c69f1b/medialist_15609871089997455276_hls.m3u8"
       ]
