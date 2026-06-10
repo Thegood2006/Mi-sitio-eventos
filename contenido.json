@@ -374,6 +374,38 @@
           ]
         }
       ]
+    },
+    {
+      "nombre": "Among Us",
+      "genero": "Comedia negra, misterio, suspenso y ciencia ficción animada.",
+      "portada": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyHqf-aSJ6G_i_6DczK7dmC0WsVZVgR0VGtg&s",
+      "temporadas": [
+        {
+          "nombre": "Temporada 1",
+          "episodios": [
+            {
+              "nombre": "Episodio 1",
+              "link": "https://s1.vimeos.net/hls2/02/00010/kuapcxq3eygc_h/index-v1-a1.m3u8?t=NS0Nlsr_yux3qjQNmeScZiVdExf3k2EJGZklMbaY1Pw&s=1781052604&e=43200&v=258402835&i=0.0&sp=0&fr=kuapcxq3eygc&r=e"
+            },
+            {
+              "nombre": "Episodio 2",
+              "link": "https://vidsrc.to/embed/tv/tt12345678/1/2"
+            },
+            {
+              "nombre": "Episodio 3",
+              "link": "https://vidsrc.to/embed/tv/tt12345678/1/3"
+            },
+            {
+              "nombre": "Episodio 4",
+              "link": "https://vidsrc.to/embed/tv/tt12345678/1/4"
+            },
+            {
+              "nombre": "Episodio 5",
+              "link": "https://vidsrc.to/embed/tv/tt12345678/1/5"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
