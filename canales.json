@@ -105,7 +105,7 @@
     },
     {
       "nombre": "Latacungatv",
-      "liga": "",
+      "liga": "cece",
       "tipo": "m3u8",
       "reproductores": [
         "https://stmv1.voxtvhd.com.br/latacungatv/latacungatv/playlist.m3u8?hls_ctx=8r842444"
@@ -113,7 +113,7 @@
     },
     {
       "nombre": "mel radio",
-      "liga": "",
+      "liga": "ec",
       "tipo": "m3u8",
       "reproductores": [
         "https://eu1.servers10.com:8081/8334/tracks-v1a1/mono.m3u8"
@@ -121,7 +121,7 @@
     },
     {
       "nombre": "planetachanel",
-      "liga": "ec",
+      "liga": "ecec",
       "tipo": "m3u8",
       "reproductores": [
         "https://vs20.live.opencaster.com/planetachannel_089eff6d/index.m3u8?token=Q4wQ0beqanPJlyAnfylYqsTDM6G6h1n6I9508x3wZgg%3D"
@@ -129,7 +129,7 @@
     },
     {
       "nombre": "tvcisne",
-      "liga": "",
+      "liga": "ec",
       "tipo": "m3u8",
       "reproductores": [
         "https://video2.lhdserver.es/tvcisne/live.m3u8"
