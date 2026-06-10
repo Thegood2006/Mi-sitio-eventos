@@ -393,23 +393,43 @@
           "episodios": [
             {
               "nombre": "Episodio 1",
-              "link": "https://s1.vimeos.net/hls2/02/00010/kuapcxq3eygc_h/index-v1-a1.m3u8?t=NS0Nlsr_yux3qjQNmeScZiVdExf3k2EJGZklMbaY1Pw&s=1781052604&e=43200&v=258402835&i=0.0&sp=0&fr=kuapcxq3eygc&r=e"
+              "link": "https://fastream.to/embed-gabc3227ylmo.html"
             },
             {
               "nombre": "Episodio 2",
-              "link": "https://s1.vimeos.net/hls2/02/00010/otmmyzc4jxje_,n,h,.urlset/master.m3u8?t=acd4sffvuxqx7_RcW6EzR6vI4FkGhSGWlFOUELmRMS0&s=1781053668&e=43200&v=258408664&i=0.0&sp=0&fr=otmmyzc4jxje&r=e"
+              "link": "https://fastream.to/embed-8ffn7feaxqh1.html"
             },
             {
               "nombre": "Episodio 3",
-              "link": "https://p4.vimeos.zip/hls2/03/00010/89fb3hh21js8_h/index-v1-a1.m3u8?t=Ey0KhPtgqvsVXk3MO8XZChHafP6OPwG0SoQm0-LuiGE&s=1781053736&e=43200&v=258426589&srv=s1&i=0.0&sp=0&fr=89fb3hh21js8&r=e"
+              "link": "https://fastream.to/embed-wldanema6g6e.html"
             },
             {
               "nombre": "Episodio 4",
-              "link": "https://s1.vimeos.net/hls2/03/00010/t9jsuvfc5r3p_h/index-v1-a1.m3u8?t=8kKlAn_NT2scbQfAAtwAprLLc-7QoE0kJLseKCiK4SM&s=1781053763&e=43200&v=258427036&i=0.0&sp=0&fr=t9jsuvfc5r3p&r=e"
+              "link": "https://fastream.to/embed-1ue6u29tsfzo.html"
             },
             {
               "nombre": "Episodio 5",
-              "link": "https://p4.vimeos.zip/hls2/02/00010/5css3lmrmxrb_h/index-v1-a1.m3u8?t=Gv9jBIWQTzspKzwryNCVNKf_mjnjP9TuObBhIaVMze8&s=1781053787&e=43200&v=258427459&srv=s1&i=0.0&sp=0&fr=5css3lmrmxrb&r=e"
+              "link": "https://fastream.to/embed-vjl81ukt4oq2.html"
+            },
+            {
+              "nombre": "Episodio 6",
+              "link": "https://fastream.to/embed-exda68ptlvg7.html"
+            },
+            {
+              "nombre": "Episodio 7",
+              "link": "https://fastream.to/embed-cx1wj39fh72x.html"
+            },
+            {
+              "nombre": "Episodio 8",
+              "link": "https://fastream.to/embed-q8ez5q8p63z2.html"
+            },
+            {
+              "nombre": "Episodio 9",
+              "link": "https://fastream.to/embed-ae2xfc3nuoyu.html"
+            },
+            {
+              "nombre": "Episodio 10",
+              "link": "https://fastream.to/embed-l5rsp0av15wo.html"
             }
           ]
         }
