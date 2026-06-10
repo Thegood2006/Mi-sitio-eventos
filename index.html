@@ -2131,6 +2131,9 @@ function abrirCastChrome() {
   mostrarToast("Abre el menú ⋮ de Chrome → Guardar y compartir → Transmitir");
   cerrarCastModal();
 }
+ function cerrarCastModal() {
+  document.getElementById("castModal").classList.remove("open");
+}
 
 /* =============================================
    TMDB API
