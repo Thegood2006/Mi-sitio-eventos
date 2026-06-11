@@ -81,6 +81,13 @@
       "portada": "https://all.web.img.acsta.net/img/3e/0d/3e0df751e6cd3da4a21e40e9d1ac8963.jpeg",
       "tipo": "iframe",
       "link": "https://fastream.to/embed-xezh4x7ppiz1.html"
+    },
+    {
+      "nombre": "Nueva película",
+      "genero": "",
+      "portada": "",
+      "tipo": "m3u8",
+      "link": ""
     }
   ],
   "series": [
