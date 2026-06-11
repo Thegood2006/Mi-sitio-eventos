@@ -142,14 +142,6 @@
       "reproductores": [
         "https://d2qsan2ut81n2k.cloudfront.net/live/19e86940-42cc-485e-80f4-89ae27c69f1b/medialist_15609871089997455276_hls.m3u8"
       ]
-    },
-    {
-      "nombre": "Nuevo evento",
-      "liga": "",
-      "tipo": "m3u8",
-      "reproductores": [
-        ""
-      ]
     }
   ],
   "internacional": [
@@ -203,6 +195,30 @@
     }
   ],
   "undefined": [
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
     {
       "nombre": "Nuevo evento",
       "liga": "",
