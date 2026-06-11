@@ -10,13 +10,22 @@
       ]
     },
     {
-      "nombre": "Amistoso: Argentina vs Islandia",
+      "nombre": "Copa del Mundo: Corea del Sur vs República Checa",
       "liga": "",
       "tipo": "m3u8",
       "reproductores": [
-        "https://b2zmawnpyww.fubo18.com/espndeportes/mono.m3u8?token=ee7ae2011fa66775a7022a8584cba5562f68d3ef-eb-1781061398-1781043398",
-        "https://yxdlc29tzq.fubo18.com/dsports/mono.m3u8?token=231fb220f516f7357df45b1e9df0bef14b0230a9-f2-1781068317-1781050317",
-        "https://c2nvdxq.fubo18.com/espndeportes/mono.m3u8?token=adbcabc28fdd1e485ea4c4583e74d5cb67324e0c-a6-1781068381-1781050381"
+        "https://tyg2mnl9.fubo18.com/dsports/mono.m3u8?token=0323b46896dcdc04da24b7e65146dc52704dba1a-bd-1781234845-1781216845",
+        "https://c2f2zq.fubo18.com/tycsports/mono.m3u8?token=df600e704251ac66c5ca4c2e950eca9f44f0a598-c5-1781234872-1781216872",
+        "https://rm8zcvk3.fubo18.com/winsports/mono.m3u8?token=e007bceb333a815486280d453d0ac157e1b5b02a-64-1781234891-1781216891",
+        "https://bgfuzq.fubo18.com/winsportsplus/mono.m3u8?token=020e79e9415102d33e96a089667f227f790dca10-b8-1781234910-1781216910"
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
       ]
     }
   ],
@@ -195,6 +204,142 @@
     }
   ],
   "undefined": [
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
     {
       "nombre": "Nuevo evento",
       "liga": "",
