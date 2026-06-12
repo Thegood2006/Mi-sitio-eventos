@@ -108,22 +108,6 @@
       "liga": "ecu",
       "tipo": "m3u8",
       "reproductores": [
-        "https://d2qsan2ut81n2k.cloudfront.net/live/19e86940-42cc-485e-80f4-89ae27c69f1b/medialist_15609871089997455276_hls.m3u8"
-      ]
-    },
-    {
-      "nombre": "tvc",
-      "liga": "ecu",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://library-getafix.fireclip.tv/56e2d24bfdcf13ab4a321867/live/live_1.m3u8"
-      ]
-    },
-    {
-      "nombre": "ecuaador tv",
-      "liga": "rec",
-      "tipo": "m3u8",
-      "reproductores": [
         "https://samson.streamerr.co:8081/shogun/index.m3u8"
       ]
     }
