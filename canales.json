@@ -48,27 +48,11 @@
       ]
     },
     {
-      "nombre": "TVC",
-      "liga": "Canal Ecuador",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://d2qsan2ut81n2k.cloudfront.net/live/19e86940-42cc-485e-80f4-89ae27c69f1b/medialist_15609871089997455276_hls.m3u8"
-      ]
-    },
-    {
       "nombre": "América Estéreo",
       "liga": "Ecuador",
       "tipo": "m3u8",
       "reproductores": [
         "https://video.makrodigital.com/americaestereoguayaquil/americaestereoguayaquil/playlist.m3u8"
-      ]
-    },
-    {
-      "nombre": "RTV Ecuador",
-      "liga": "Ecuador",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://sv72.ecuaradiotv.net/rtvhd/live/manifest.m3u8"
       ]
     },
     {
@@ -88,19 +72,11 @@
       ]
     },
     {
-      "nombre": "tc television",
-      "liga": "ecua",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://live2.eu-north-1a.cf.dmcdn.net/sec2(LTs5S_08bdFHRPlNBFWG2MdtDGtMIhiM1VQcTEquJz52MFbbGCHM3NaaFD4GHF727JHS9bbdLV853PpKhJQeLfnsoYum3RlrcIgoPOYH_pQJGqq2ixiOc5prATwf2Vyy)/cloud/3/x7wijay/s/live-480.m3u8#cell=lcf2-eu-north-1a"
-      ]
-    },
-    {
       "nombre": "Latacungatv",
       "liga": "cece",
       "tipo": "m3u8",
       "reproductores": [
-        "https://stmv1.voxtvhd.com.br/latacungatv/latacungatv/playlist.m3u8?hls_ctx=8r842444"
+        "https://stmv1.voxtvhd.com.br/latacungatv/latacungatv/playlist.m3u8"
       ]
     },
     {
@@ -133,6 +109,14 @@
       "tipo": "m3u8",
       "reproductores": [
         "https://d2qsan2ut81n2k.cloudfront.net/live/19e86940-42cc-485e-80f4-89ae27c69f1b/medialist_15609871089997455276_hls.m3u8"
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
       ]
     }
   ],
