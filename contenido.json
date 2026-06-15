@@ -434,6 +434,58 @@
           ]
         }
       ]
+    },
+    {
+      "nombre": "Así aprenderás",
+      "genero": "Action & Adventure, Comedia, Drama",
+      "portada": "https://image.tmdb.org/t/p/w185/lG83nWVT7cHl3nSxonaYhOjqyWH.jpg",
+      "temporadas": [
+        {
+          "nombre": "Temporada 1",
+          "episodios": [
+            {
+              "nombre": "Episodio 1",
+              "link": "https://fastream.to/embed-54wbp6lqv4qh.html"
+            },
+            {
+              "nombre": "Episodio 2",
+              "link": "https://fastream.to/embed-i60vd5b2k302.html"
+            },
+            {
+              "nombre": "Episodio 3",
+              "link": "https://fastream.to/embed-ukual66gjyng.html"
+            },
+            {
+              "nombre": "Episodio 4",
+              "link": "https://fastream.to/embed-uvlsgek3qxne.html"
+            },
+            {
+              "nombre": "Episodio 5",
+              "link": "https://fastream.to/embed-q3xnl3yeev17.html"
+            },
+            {
+              "nombre": "Episodio 6",
+              "link": "https://fastream.to/embed-crclgd3w7lly.html"
+            },
+            {
+              "nombre": "Episodio 7",
+              "link": "https://fastream.to/embed-gsoxjq44vi88.html"
+            },
+            {
+              "nombre": "Episodio 8",
+              "link": "https://fastream.to/embed-f82usvd61aax.html"
+            },
+            {
+              "nombre": "Episodio 9",
+              "link": "https://fastream.to/embed-519q5o8gl93y.html"
+            },
+            {
+              "nombre": "Episodio 10",
+              "link": "https://fastream.to/embed-q87php9o4coh.html"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
