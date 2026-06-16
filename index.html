@@ -2827,28 +2827,32 @@ async function cargarProximosEventos() {
 
     // Función helper — usa TheSportsDB v2 (free, sin key) con fallback a v1 legacy
    async function fetchLiga(liga) {
-    try {
-        const res = await fetch(
-            `https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${liga.id}`
-        );
+  try {
+    const res = await fetch(
+      `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=2026`,
+      {
+        headers: {
+          "x-apisports-key": "c7ac3c8a9376c3813bf128410f3c8d04"
+        }
+      }
+    );
 
-        const data = await res.json();
+    const data = await res.json();
 
-        if (!data.events) return [];
+    if (!data.response) return [];
 
-        return data.events.map(ev => ({
-            idEvent: ev.idEvent,
-            strEvent: ev.strEvent,
-            strHomeTeam: ev.strHomeTeam,
-            strAwayTeam: ev.strAwayTeam,
-            dateEvent: ev.dateEvent,
-            strTime: ev.strTime || "00:00:00",
-        }));
+    return data.response.map(ev => ({
+      idEvent: ev.fixture.id,
+      strHomeTeam: ev.teams.home.name,
+      strAwayTeam: ev.teams.away.name,
+      dateEvent: ev.fixture.date.split("T")[0],
+      strTime: ev.fixture.date.split("T")[1]?.slice(0,5) || "00:00"
+    }));
 
-    } catch (e) {
-        console.error("Error liga:", liga.nombre, e);
-        return [];
-    }
+  } catch (e) {
+    console.error(e);
+    return [];
+  }
 }
 
     let todosEventos = [];
