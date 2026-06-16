@@ -2817,59 +2817,39 @@ async function cargarProximosEventos() {
       }
     } catch(e) { console.warn("canales.json no disponible:", e); }
 
-    const ligas = [
-      { id: "4335", nombre: "LigaPro Ecuador" },
-      { id: "4328", nombre: "Premier League" },
-      { id: "4331", nombre: "Bundesliga" },
-      { id: "4480", nombre: "Liga MX" },
-      { id: "4329", nombre: "La Liga" },
-    ];
+   const ligas = [
+  { id: "4328", nombre: "Premier League" },
+  { id: "4335", nombre: "La Liga" },
+  { id: "4331", nombre: "Bundesliga" },
+  { id: "4332", nombre: "Serie A" },
+  { id: "4387", nombre: "Liga MX" },
+];
 
     // Función helper — usa TheSportsDB v2 (free, sin key) con fallback a v1 legacy
-    async function fetchLiga(liga) {
-      // Calcular rango de fechas: hoy hasta +30 días
-      const hoy = new Date();
-      const fin  = new Date(hoy); fin.setDate(fin.getDate() + 30);
-      const fmt  = d => d.toISOString().slice(0, 10);
+   async function fetchLiga(liga) {
+    try {
+        const res = await fetch(
+            `https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${liga.id}`
+        );
 
-      const urls = [
-        // endpoint gratuito actual: eventos por liga y temporada (no requiere key de pago)
-        `https://www.thesportsdb.com/api/v2/json/3/schedule/league/${liga.id}/next`,
-        // fallback: mismo endpoint rama v1 con rango de fechas
-        `https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=${liga.id}&s=2025-2026`,
-        `https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=${liga.id}&s=2024-2025`,
-      ];
+        const data = await res.json();
 
-      for (const url of urls) {
-        try {
-          const controller = new AbortController();
-          const tid = setTimeout(() => controller.abort(), 6000);
-          const res = await fetch(url, { signal: controller.signal });
-          clearTimeout(tid);
-          if (!res.ok) continue;
-          const data = await res.json();
-          // v2 usa data.schedule, v1 usa data.events
-          let eventos = data.schedule || data.events || [];
-          if (!Array.isArray(eventos) || eventos.length === 0) continue;
-          // Filtrar solo los próximos (fecha >= hoy)
-          const proximos = eventos.filter(ev => {
-            if (!ev.dateEvent && !ev.strDate) return false;
-            const fecha = new Date((ev.dateEvent || ev.strDate) + "T00:00:00Z");
-            return fecha >= hoy;
-          });
-          // Normalizar campos si vienen de v2 (pueden tener nombres distintos)
-          return proximos.map(ev => ({
-            idEvent:      ev.idEvent      || ev.id       || "",
-            strEvent:     ev.strEvent     || ev.name     || "",
-            strHomeTeam:  ev.strHomeTeam  || ev.home     || "",
-            strAwayTeam:  ev.strAwayTeam  || ev.away     || "",
-            dateEvent:    ev.dateEvent    || ev.strDate  || "",
-            strTime:      ev.strTime      || ev.time     || "00:00:00",
-          }));
-        } catch(e) { /* intentar siguiente URL */ }
-      }
-      return [];
+        if (!data.events) return [];
+
+        return data.events.map(ev => ({
+            idEvent: ev.idEvent,
+            strEvent: ev.strEvent,
+            strHomeTeam: ev.strHomeTeam,
+            strAwayTeam: ev.strAwayTeam,
+            dateEvent: ev.dateEvent,
+            strTime: ev.strTime || "00:00:00",
+        }));
+
+    } catch (e) {
+        console.error("Error liga:", liga.nombre, e);
+        return [];
     }
+}
 
     let todosEventos = [];
     const results = await Promise.allSettled(ligas.map(async liga => {
