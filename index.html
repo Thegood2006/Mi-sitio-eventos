@@ -2817,19 +2817,19 @@ async function cargarProximosEventos() {
       }
     } catch(e) { console.warn("canales.json no disponible:", e); }
 
-   const ligas = [
-  { id: "4328", nombre: "Premier League" },
-  { id: "4335", nombre: "La Liga" },
-  { id: "4331", nombre: "Bundesliga" },
-  { id: "4332", nombre: "Serie A" },
-  { id: "4387", nombre: "Liga MX" },
+  const ligas = [
+  { id: "39", nombre: "Premier League" },
+  { id: "140", nombre: "La Liga" },
+  { id: "78", nombre: "Bundesliga" },
+  { id: "135", nombre: "Serie A" },
+  { id: "262", nombre: "Liga MX" },
 ];
 
     // Función helper — usa TheSportsDB v2 (free, sin key) con fallback a v1 legacy
    async function fetchLiga(liga) {
   try {
     const res = await fetch(
-      `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=2026`,
+      `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=2025`,
       {
         headers: {
           "x-apisports-key": "c7ac3c8a9376c3813bf128410f3c8d04"
@@ -2854,7 +2854,6 @@ async function cargarProximosEventos() {
     return [];
   }
 }
-
     let todosEventos = [];
     const results = await Promise.allSettled(ligas.map(async liga => {
       const events = await fetchLiga(liga);
