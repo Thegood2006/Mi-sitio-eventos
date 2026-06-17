@@ -122,14 +122,6 @@
       ]
     },
     {
-      "nombre": "24/7",
-      "liga": "anme",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://edge1-waw-sprintcdn.r66nv9ed.com/hls2/05/10962/hc99odgm5h5c_x/master.m3u8?t=asEpvEpyMhBYx6_WFqXtCtGwRhL5aEKN4eH2Wz9Mr08&s=1781287064&e=10800&f=54811524&srv=1075&asn=27947&sp=5500&p=0"
-      ]
-    },
-    {
       "nombre": "tc",
       "liga": "",
       "tipo": "iframe",
@@ -152,7 +144,7 @@
       "liga": "Internacional",
       "tipo": "iframe",
       "reproductores": [
-        "<iframe src=\"https://moviedays.top/embed-live1.php?v=pasiones\" allowfullscreen allow=\"autoplay; encrypted-media\"></iframe>"
+        "https://moviedays.top/embed-live1.php?v=pasiones"
       ]
     },
     {
