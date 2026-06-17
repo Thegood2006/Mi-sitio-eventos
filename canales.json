@@ -148,11 +148,11 @@
       ]
     },
     {
-      "nombre": "France 24 Español",
+      "nombre": "paiones",
       "liga": "Internacional",
-      "tipo": "m3u8",
+      "tipo": "iframe",
       "reproductores": [
-        "https://stream.france24.com/hls/live/2037193/F24_ES_LO_HLS/master.m3u8"
+        "<iframe src=\"https://moviedays.top/embed-live1.php?v=pasiones\" allowfullscreen allow=\"autoplay; encrypted-media\"></iframe>"
       ]
     },
     {
@@ -185,6 +185,14 @@
       "tipo": "m3u8",
       "reproductores": [
         "TU_LINK_FOX_MX"
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
       ]
     }
   ],
