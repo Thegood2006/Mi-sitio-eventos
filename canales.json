@@ -1,14 +1,15 @@
 {
   "futbol": [
     {
-      "nombre": "Copa del Mundo: Corea del Sur vs República Checa",
+      "nombre": "Copa del Mundo: Argentina vs Argelia",
       "liga": "",
       "tipo": "m3u8",
       "reproductores": [
-        "https://tyg2mnl9.fubo18.com/dsports/mono.m3u8?token=0323b46896dcdc04da24b7e65146dc52704dba1a-bd-1781234845-1781216845",
-        "https://c2f2zq.fubo18.com/tycsports/mono.m3u8?token=df600e704251ac66c5ca4c2e950eca9f44f0a598-c5-1781234872-1781216872",
-        "https://rm8zcvk3.fubo18.com/winsports/mono.m3u8?token=e007bceb333a815486280d453d0ac157e1b5b02a-64-1781234891-1781216891",
-        "https://bgfuzq.fubo18.com/winsportsplus/mono.m3u8?token=020e79e9415102d33e96a089667f227f790dca10-b8-1781234910-1781216910"
+        "https://cxm3.futbolonlinehd.com/telefe/mono.m3u8?token=f9d89480961f587add368ee744b6ca61a40e0e14-c7-1781676013-1781658013",
+        "https://cgxheq.fubo18.com/dsports/mono.m3u8?token=a1fee4dae94e58dae2e6a0d71797ba12765fca16-29-1781676032-1781658032",
+        "https://a2vlca.fubo18.com/caracol/mono.m3u8?token=b8bf2acb8d3f9ca4fa556e0c8edf51ba36dbd5ce-c8-1781676063-1781658063",
+        "https://bmf0aw9u.fubo18.com/disney1/mono.m3u8?token=482114ff407fb6daf572147fcbd9cb2933249215-a-1781676086-1781658086",
+        "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/fd4ab346-b4e3-4628-abf0-b5a1bc192428.m3u8"
       ]
     }
   ],
@@ -118,6 +119,14 @@
       "reproductores": [
         "https://edge1-waw-sprintcdn.r66nv9ed.com/hls2/05/10962/hc99odgm5h5c_x/master.m3u8?t=asEpvEpyMhBYx6_WFqXtCtGwRhL5aEKN4eH2Wz9Mr08&s=1781287064&e=10800&f=54811524&srv=1075&asn=27947&sp=5500&p=0"
       ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
     }
   ],
   "internacional": [
@@ -171,6 +180,22 @@
     }
   ],
   "undefined": [
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
     {
       "nombre": "Nuevo evento",
       "liga": "",
