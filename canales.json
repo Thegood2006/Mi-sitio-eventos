@@ -2,7 +2,7 @@
   "futbol": [
     {
       "nombre": "Copa del Mundo: Argentina vs Argelia",
-      "liga": "",
+      "liga": "20:00",
       "tipo": "m3u8",
       "reproductores": [
         "https://cxm3.futbolonlinehd.com/telefe/mono.m3u8?token=f9d89480961f587add368ee744b6ca61a40e0e14-c7-1781676013-1781658013",
@@ -10,6 +10,14 @@
         "https://a2vlca.fubo18.com/caracol/mono.m3u8?token=b8bf2acb8d3f9ca4fa556e0c8edf51ba36dbd5ce-c8-1781676063-1781658063",
         "https://bmf0aw9u.fubo18.com/disney1/mono.m3u8?token=482114ff407fb6daf572147fcbd9cb2933249215-a-1781676086-1781658086",
         "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/fd4ab346-b4e3-4628-abf0-b5a1bc192428.m3u8"
+      ]
+    },
+    {
+      "nombre": "Copa del Mundo: Austria vs Jordania",
+      "liga": "23:00",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://x4bnd7lq.fubo18.com/dsports/mono.m3u8?token=29c2e921bb902cedff0bc971d3b2551555540289-56-1781676179-1781658179"
       ]
     }
   ],
