@@ -122,11 +122,11 @@
       ]
     },
     {
-      "nombre": "tc",
+      "nombre": "tctelevison",
       "liga": "",
       "tipo": "iframe",
       "reproductores": [
-        "https://theygoodtv-server.onrender.com/tc-live"
+        "https://tctelevision.com/envivo/"
       ]
     }
   ],
