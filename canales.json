@@ -16,9 +16,9 @@
     {
       "nombre": "Copa del Mundo: Austria vs Jordania",
       "liga": "23:00",
-      "tipo": "m3u8",
+      "tipo": "iframe",
       "reproductores": [
-        "https://x4bnd7lq.fubo18.com/dsports/mono.m3u8?token=29c2e921bb902cedff0bc971d3b2551555540289-56-1781676179-1781658179"
+        "https://www.canalrcn.com/ec/tv-en-vivo"
       ]
     }
   ],
