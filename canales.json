@@ -5,7 +5,8 @@
       "liga": "23:00",
       "tipo": "iframe",
       "reproductores": [
-        "https://www.canalrcn.com/ec/tv-en-vivo"
+        "https://www.canalrcn.com/ec/tv-en-vivo",
+        "https://deportelibree.com/disney.php"
       ]
     }
   ],
