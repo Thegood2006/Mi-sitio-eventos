@@ -10,30 +10,14 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: radial-gradient(circle at top, #14143b, #050510 70%); color: #e0e0ff; font-family: 'Orbitron', sans-serif; min-height: 100vh; }
 
-/* LOGIN */
 #login { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-.login-box {
-  background: linear-gradient(145deg, #111827, #0f172a);
-  border: 1px solid rgba(0,255,255,.3);
-  border-radius: 20px; padding: 40px; width: 100%; max-width: 380px;
-  text-align: center; box-shadow: 0 0 30px rgba(0,225,255,.2);
-}
+.login-box { background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid rgba(0,255,255,.3); border-radius: 20px; padding: 40px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 30px rgba(0,225,255,.2); }
 .login-box h1 { color: #00e1ff; font-size: 1.6rem; margin-bottom: 6px; text-shadow: 0 0 15px #00e1ff; }
 .login-box p { color: #94a3b8; font-size: 0.6rem; letter-spacing: 2px; margin-bottom: 24px; }
-.login-box input {
-  width: 100%; background: #0d1117; border: 1px solid rgba(0,255,255,.3);
-  border-radius: 10px; color: #fff; font-family: 'Orbitron', sans-serif;
-  font-size: 0.75rem; padding: 14px; margin-bottom: 14px; letter-spacing: 3px; outline: none; transition: .3s;
-}
+.login-box input { width: 100%; background: #0d1117; border: 1px solid rgba(0,255,255,.3); border-radius: 10px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; padding: 14px; margin-bottom: 14px; letter-spacing: 3px; outline: none; transition: .3s; }
 .login-box input:focus { border-color: #00e1ff; box-shadow: 0 0 10px rgba(0,225,255,.3); }
 
-/* BUTTONS */
-.btn {
-  background: linear-gradient(135deg, #00e1ff, #0011ff); border: none; border-radius: 10px;
-  color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 700;
-  padding: 13px 20px; cursor: pointer; width: 100%; margin-bottom: 8px; transition: .3s;
-  box-shadow: 0 0 15px rgba(0,225,255,.3);
-}
+.btn { background: linear-gradient(135deg, #00e1ff, #0011ff); border: none; border-radius: 10px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 700; padding: 13px 20px; cursor: pointer; width: 100%; margin-bottom: 8px; transition: .3s; box-shadow: 0 0 15px rgba(0,225,255,.3); }
 .btn:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(0,225,255,.5); }
 .btn-red { background: linear-gradient(135deg, #ff3d5a, #cc0022); box-shadow: 0 0 15px rgba(255,61,90,.3); }
 .btn-green { background: linear-gradient(135deg, #00ff99, #00cc77); color: #000; box-shadow: 0 0 15px rgba(0,255,153,.3); }
@@ -41,82 +25,45 @@ body { background: radial-gradient(circle at top, #14143b, #050510 70%); color: 
 .btn-orange { background: linear-gradient(135deg, #ff8800, #cc5500); box-shadow: 0 0 15px rgba(255,136,0,.3); }
 .err-msg { color: #ff3d5a; font-size: 0.65rem; margin-top: 8px; }
 
-/* HEADER */
-.admin-header {
-  background: linear-gradient(90deg, #00e1ff, #0011ff, #8b00ff); padding: 16px 20px;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
-  box-shadow: 0 0 25px #00e1ff, 0 0 50px #0011ff;
-}
+.admin-header { background: linear-gradient(90deg, #00e1ff, #0011ff, #8b00ff); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 0 25px #00e1ff, 0 0 50px #0011ff; }
 .admin-header h1 { color: #fff; font-size: 1rem; text-shadow: 0 0 10px #fff; }
 .header-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 
-/* PANEL */
 #panel { display: none; }
 .panel-body { padding: 16px; max-width: 900px; margin: 0 auto; }
 
-/* TABS */
 .tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-.tab {
-  background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid rgba(0,255,255,.2);
-  border-radius: 10px; color: #6060a0; font-family: 'Orbitron', sans-serif;
-  font-size: 0.65rem; padding: 10px 16px; cursor: pointer; transition: .3s;
-}
+.tab { background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid rgba(0,255,255,.2); border-radius: 10px; color: #6060a0; font-family: 'Orbitron', sans-serif; font-size: 0.65rem; padding: 10px 16px; cursor: pointer; transition: .3s; }
 .tab:hover { border-color: #00e1ff88; color: #00e1ff88; }
 .tab.active { border-color: #00e1ff; color: #00e1ff; box-shadow: 0 0 10px rgba(0,225,255,.2); }
 .section { display: none; }
 .section.active { display: block; }
 
-/* CARDS */
-.card {
-  background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid rgba(0,255,255,.15);
-  border-radius: 16px; padding: 18px; margin-bottom: 14px; box-shadow: 0 0 10px rgba(0,225,255,.05);
-}
+.card { background: linear-gradient(145deg, #111827, #0f172a); border: 1px solid rgba(0,255,255,.15); border-radius: 16px; padding: 18px; margin-bottom: 14px; box-shadow: 0 0 10px rgba(0,225,255,.05); }
 .card-title { color: #00e1ff; font-size: 0.8rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 
-/* FORM */
 label { display: block; color: #00e1ff; font-size: 0.6rem; margin-bottom: 4px; margin-top: 12px; letter-spacing: 1px; }
-input[type=text], input[type=password], input[type=number], textarea, select {
-  width: 100%; background: #0d1117; border: 1px solid rgba(0,255,255,.2);
-  border-radius: 8px; color: #fff; font-family: 'Orbitron', sans-serif;
-  font-size: 0.7rem; padding: 10px 12px; outline: none; transition: .3s;
-}
-input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus {
-  border-color: #00e1ff; box-shadow: 0 0 8px rgba(0,225,255,.2);
-}
+input[type=text], input[type=password], input[type=number], textarea, select { width: 100%; background: #0d1117; border: 1px solid rgba(0,255,255,.2); border-radius: 8px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; padding: 10px 12px; outline: none; transition: .3s; }
+input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus { border-color: #00e1ff; box-shadow: 0 0 8px rgba(0,225,255,.2); }
 textarea { height: 80px; resize: vertical; }
 
-/* MSG */
 .msg { padding: 12px; border-radius: 10px; font-size: 0.7rem; margin-bottom: 14px; display: none; }
 .msg.ok { background: rgba(0,255,153,.1); border: 1px solid #00ff99; color: #00ff99; }
 .msg.err { background: rgba(255,61,90,.1); border: 1px solid #ff3d5a; color: #ff3d5a; }
 
-/* EVENTO CARD */
-.evento-card {
-  background: #0d1117; border: 1px solid rgba(0,255,255,.15); border-radius: 10px;
-  padding: 14px; margin-bottom: 10px;
-}
+.evento-card { background: #0d1117; border: 1px solid rgba(0,255,255,.15); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
 .evento-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .evento-num { color: #00e1ff; font-size: 0.7rem; }
-.del-btn {
-  background: linear-gradient(135deg, #ff3d5a, #cc0022); border: none; border-radius: 6px;
-  color: #fff; cursor: pointer; padding: 6px 12px; font-size: 0.65rem;
-  font-family: 'Orbitron', sans-serif; transition: .3s;
-}
+.del-btn { background: linear-gradient(135deg, #ff3d5a, #cc0022); border: none; border-radius: 6px; color: #fff; cursor: pointer; padding: 6px 12px; font-size: 0.65rem; font-family: 'Orbitron', sans-serif; transition: .3s; }
 .del-btn:hover { transform: scale(1.05); box-shadow: 0 0 10px rgba(255,61,90,.4); }
-.add-btn {
-  background: rgba(0,225,255,.1); border: 1px solid #00e1ff; border-radius: 8px;
-  color: #00e1ff; cursor: pointer; padding: 10px 16px; font-size: 0.65rem;
-  font-family: 'Orbitron', sans-serif; margin-top: 8px; transition: .3s; width: 100%;
-}
+.add-btn { background: rgba(0,225,255,.1); border: 1px solid #00e1ff; border-radius: 8px; color: #00e1ff; cursor: pointer; padding: 10px 16px; font-size: 0.65rem; font-family: 'Orbitron', sans-serif; margin-top: 8px; transition: .3s; width: 100%; }
 .add-btn:hover { background: rgba(0,225,255,.2); box-shadow: 0 0 10px rgba(0,225,255,.2); }
 
-/* SERIE */
 .serie-block { background: #0a0a1e; border: 1px solid rgba(0,255,255,.2); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
 .temp-block { background: #0d1117; border: 1px solid rgba(0,255,255,.1); border-radius: 8px; padding: 10px; margin-bottom: 8px; margin-top: 8px; }
 .ep-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
 .ep-row input { flex: 1; }
 
-/* GENERADOR */
 .gen-box { background: linear-gradient(145deg, #0a1628, #0d1f3c); border: 1px solid rgba(0,225,255,.3); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
 .gen-box-title { color: #00e1ff; font-size: 0.75rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 .gen-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
@@ -127,39 +74,34 @@ textarea { height: 80px; resize: vertical; }
 .btn-purple-full:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(123,47,255,.5); }
 .gen-preview { background: #020208; border: 1px solid rgba(0,255,255,.15); border-radius: 8px; padding: 12px; font-size: 0.65rem; color: #00e1ff; margin-top: 10px; display: none; }
 
-/* =====================
-   SERVIDOR TAB
-   ===================== */
-.server-url-bar {
-  display: flex; gap: 8px; align-items: center; margin-bottom: 16px;
-  background: #0d1117; border: 1px solid rgba(0,225,255,.25);
-  border-radius: 10px; padding: 10px 14px;
-}
+/* ── SERVIDOR ── */
+.server-url-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; background: #0d1117; border: 1px solid rgba(0,225,255,.25); border-radius: 10px; padding: 10px 14px; }
 .server-url-bar span { color: rgba(0,225,255,.5); font-size: 0.6rem; white-space: nowrap; }
 .server-url-bar input { flex: 1; background: transparent; border: none; padding: 0; font-size: 0.75rem; }
 .server-url-bar input:focus { box-shadow: none; }
 
-.canal-server-card {
-  background: #0d1117; border: 1px solid rgba(0,255,255,.15);
-  border-radius: 12px; padding: 14px; margin-bottom: 10px;
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-}
+.server-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.stat-card { background: #0d1117; border: 1px solid rgba(0,225,255,.15); border-radius: 10px; padding: 14px; text-align: center; }
+.stat-num { color: #00e1ff; font-size: 1.4rem; font-weight: 900; }
+.stat-label { color: rgba(255,255,255,.4); font-size: 0.55rem; letter-spacing: 1px; margin-top: 4px; }
+
+.canal-server-card { background: #0d1117; border: 1px solid rgba(0,255,255,.15); border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .canal-server-info { flex: 1; min-width: 0; }
 .canal-server-id { color: #00e1ff; font-size: 0.75rem; font-weight: bold; }
 .canal-server-nombre { color: rgba(255,255,255,.6); font-size: 0.6rem; margin-top: 2px; }
-.canal-server-url { color: rgba(0,225,255,.4); font-size: 0.55rem; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
+.canal-server-badge { font-size: 0.55rem; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 4px; }
+.badge-m3u8 { background: rgba(0,255,153,.15); border: 1px solid rgba(0,255,153,.4); color: #00ff99; }
+.badge-iframe { background: rgba(0,225,255,.15); border: 1px solid rgba(0,225,255,.4); color: #00e1ff; }
+.badge-dinamico { background: rgba(255,200,0,.15); border: 1px solid rgba(255,200,0,.4); color: #ffc800; }
 .canal-server-btns { display: flex; gap: 6px; flex-shrink: 0; flex-wrap: wrap; }
-.btn-sm {
-  background: rgba(0,225,255,.1); border: 1px solid rgba(0,225,255,.3);
-  color: #00e1ff; border-radius: 8px; padding: 7px 12px;
-  font-family: 'Orbitron', sans-serif; font-size: 0.6rem; cursor: pointer; transition: .2s;
-  white-space: nowrap;
-}
+
+.btn-sm { background: rgba(0,225,255,.1); border: 1px solid rgba(0,225,255,.3); color: #00e1ff; border-radius: 8px; padding: 7px 12px; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; cursor: pointer; transition: .2s; white-space: nowrap; }
 .btn-sm:hover { background: rgba(0,225,255,.2); border-color: #00e1ff; }
 .btn-sm.red { background: rgba(255,61,90,.1); border-color: rgba(255,61,90,.3); color: #ff3d5a; }
 .btn-sm.red:hover { background: rgba(255,61,90,.2); }
 .btn-sm.green { background: rgba(0,255,153,.1); border-color: rgba(0,255,153,.3); color: #00ff99; }
 .btn-sm.green:hover { background: rgba(0,255,153,.2); }
+.btn-sm.orange { background: rgba(255,136,0,.1); border-color: rgba(255,136,0,.3); color: #ff8800; }
 
 .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .status-dot.ok { background: #00ff99; box-shadow: 0 0 6px #00ff99; }
@@ -167,37 +109,42 @@ textarea { height: 80px; resize: vertical; }
 .status-dot.checking { background: #ffc800; animation: blink2 .8s infinite; }
 @keyframes blink2 { 0%,100%{opacity:1} 50%{opacity:.2} }
 
-.add-canal-form {
-  background: linear-gradient(145deg, #0a1628, #0d1f3c);
-  border: 1px solid rgba(0,225,255,.3); border-radius: 14px; padding: 18px; margin-bottom: 16px;
-}
-.add-canal-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+/* ── FORMULARIO AGREGAR CANAL MEJORADO ── */
+.add-canal-form { background: linear-gradient(145deg, #0a1628, #0d1f3c); border: 1px solid rgba(0,225,255,.3); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+.add-canal-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.add-canal-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.tipo-selector { display: flex; gap: 8px; margin-top: 8px; }
+.tipo-btn { flex: 1; background: #0d1117; border: 1px solid rgba(0,255,255,.2); border-radius: 8px; color: #6060a0; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; padding: 10px; cursor: pointer; text-align: center; transition: .3s; }
+.tipo-btn.active { border-color: #00e1ff; color: #00e1ff; background: rgba(0,225,255,.1); }
+.embed-section { margin-top: 10px; display: none; }
+.embed-section.visible { display: block; }
+.tip-mini { color: rgba(0,225,255,.6); font-size: 0.58rem; margin-top: 6px; line-height: 1.6; }
+.tip-mini code { background: rgba(0,225,255,.12); padding: 1px 5px; border-radius: 3px; color: #00e1ff; }
 
-.preview-iframe-wrap {
-  background: #000; border: 1px solid rgba(0,225,255,.2); border-radius: 10px;
-  overflow: hidden; margin-top: 10px; display: none;
-}
-.preview-iframe-wrap iframe { width: 100%; height: 220px; border: none; display: block; }
+.add-canal-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.add-canal-actions button { flex: 1; }
 
-.server-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
-.stat-card {
-  background: #0d1117; border: 1px solid rgba(0,225,255,.15); border-radius: 10px;
-  padding: 14px; text-align: center;
-}
-.stat-num { color: #00e1ff; font-size: 1.4rem; font-weight: 900; }
-.stat-label { color: rgba(255,255,255,.4); font-size: 0.55rem; letter-spacing: 1px; margin-top: 4px; }
+#addCanalMsg { display:none; margin-top:10px; padding:10px; border-radius:8px; font-size:0.68rem; }
 
-.tip-box {
-  background: rgba(0,225,255,.05); border: 1px solid rgba(0,225,255,.2);
-  border-radius: 10px; padding: 12px 14px; font-size: 0.65rem;
-  color: rgba(0,225,255,.7); line-height: 1.8; margin-bottom: 14px;
-}
+/* ── EDITOR DE SERVER.JS ── */
+.serverjs-editor { background: linear-gradient(145deg, #0a1e0a, #0d2a0d); border: 1px solid rgba(0,255,153,.3); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+.serverjs-editor-title { color: #00ff99; font-size: 0.75rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.canal-editor-list { max-height: 400px; overflow-y: auto; margin-bottom: 12px; }
+.canal-editor-item { background: #0a0a1e; border: 1px solid rgba(0,255,255,.12); border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+.canal-editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.canal-editor-id { color: #00e1ff; font-size: 0.7rem; font-weight: bold; }
+.canal-editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.canal-editor-full { grid-column: 1 / -1; }
+.save-server-btn { background: linear-gradient(135deg, #00ff99, #00cc77); border: none; border-radius: 10px; color: #000; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 700; padding: 13px 20px; cursor: pointer; width: 100%; transition: .3s; box-shadow: 0 0 15px rgba(0,255,153,.3); }
+.save-server-btn:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(0,255,153,.5); }
+
+.tip-box { background: rgba(0,225,255,.05); border: 1px solid rgba(0,225,255,.2); border-radius: 10px; padding: 12px 14px; font-size: 0.65rem; color: rgba(0,225,255,.7); line-height: 1.8; margin-bottom: 14px; }
 .tip-box code { background: rgba(0,225,255,.12); padding: 2px 6px; border-radius: 4px; color: #00e1ff; }
 
 @media(max-width:600px) {
   .admin-header h1 { font-size: 0.8rem; }
   .tab { font-size: 0.55rem; padding: 8px 10px; }
-  .gen-row, .add-canal-grid { grid-template-columns: 1fr; }
+  .gen-row, .add-canal-grid3, .add-canal-grid2, .canal-editor-grid { grid-template-columns: 1fr; }
   .server-stats { grid-template-columns: 1fr 1fr; }
 }
 </style>
@@ -239,38 +186,18 @@ textarea { height: 80px; resize: vertical; }
 
     <!-- CANALES -->
     <div id="tab-canales" class="section active">
-      <div class="card">
-        <div class="card-title"><i class="fa-solid fa-futbol"></i> FÚTBOL</div>
-        <div id="futbol-list"></div>
-        <button class="add-btn" onclick="addEvento('futbol')"><i class="fa-solid fa-plus"></i> AGREGAR PARTIDO</button>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="fa-solid fa-person-biking"></i> CICLISMO</div>
-        <div id="ciclismo-list"></div>
-        <button class="add-btn" onclick="addEvento('ciclismo')"><i class="fa-solid fa-plus"></i> AGREGAR EVENTO</button>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="fa-solid fa-fire"></i> UFC / MMA</div>
-        <div id="ufc-list"></div>
-        <button class="add-btn" onclick="addEvento('ufc')"><i class="fa-solid fa-plus"></i> AGREGAR EVENTO</button>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="fa-solid fa-satellite-dish"></i> CANALES ECUADOR</div>
-        <div id="ecuador-list"></div>
-        <button class="add-btn" onclick="addEvento('ecuador')"><i class="fa-solid fa-plus"></i> AGREGAR CANAL</button>
-      </div>
-      <div class="card">
-        <div class="card-title"><i class="fa-solid fa-globe"></i> CANALES INTERNACIONALES</div>
-        <div id="internacional-list"></div>
-        <button class="add-btn" onclick="addEvento('internacional')"><i class="fa-solid fa-plus"></i> AGREGAR CANAL</button>
-      </div>
+      <div class="card"><div class="card-title"><i class="fa-solid fa-futbol"></i> FÚTBOL</div><div id="futbol-list"></div><button class="add-btn" onclick="addEvento('futbol')"><i class="fa-solid fa-plus"></i> AGREGAR PARTIDO</button></div>
+      <div class="card"><div class="card-title"><i class="fa-solid fa-person-biking"></i> CICLISMO</div><div id="ciclismo-list"></div><button class="add-btn" onclick="addEvento('ciclismo')"><i class="fa-solid fa-plus"></i> AGREGAR EVENTO</button></div>
+      <div class="card"><div class="card-title"><i class="fa-solid fa-fire"></i> UFC / MMA</div><div id="ufc-list"></div><button class="add-btn" onclick="addEvento('ufc')"><i class="fa-solid fa-plus"></i> AGREGAR EVENTO</button></div>
+      <div class="card"><div class="card-title"><i class="fa-solid fa-satellite-dish"></i> CANALES ECUADOR</div><div id="ecuador-list"></div><button class="add-btn" onclick="addEvento('ecuador')"><i class="fa-solid fa-plus"></i> AGREGAR CANAL</button></div>
+      <div class="card"><div class="card-title"><i class="fa-solid fa-globe"></i> CANALES INTERNACIONALES</div><div id="internacional-list"></div><button class="add-btn" onclick="addEvento('internacional')"><i class="fa-solid fa-plus"></i> AGREGAR CANAL</button></div>
     </div>
 
-    <!-- EVENTOS CON LINKS -->
+    <!-- EVENTOS -->
     <div id="tab-eventos" class="section">
       <div class="card">
         <div class="card-title"><i class="fa-solid fa-calendar-days"></i> EVENTOS CON LINKS</div>
-        <p style="color:rgba(255,255,255,.5);font-size:0.65rem;margin-bottom:14px;">Agrega aquí los links de partidos específicos. Aparecerán con botón VER en la sección "Próximos Eventos" de tu web.</p>
+        <p style="color:rgba(255,255,255,.5);font-size:0.65rem;margin-bottom:14px;">Links de partidos específicos con botón VER.</p>
         <div id="eventos-list"></div>
         <button class="add-btn" onclick="addEventoLink()"><i class="fa-solid fa-plus"></i> AGREGAR EVENTO</button>
       </div>
@@ -298,14 +225,7 @@ textarea { height: 80px; resize: vertical; }
           <div><label>URL PORTADA (opcional)</label><input type="text" id="genPortada" placeholder="https://image.tmdb.org/..."/></div>
         </div>
         <div class="gen-row">
-          <div>
-            <label>REPRODUCTOR</label>
-            <select id="genPlayer">
-              <option value="https://vidsrc.to/embed/tv/{id}/{t}/{e}">vidsrc.to</option>
-              <option value="https://vidsrc.me/embed/tv?imdb={id}&season={t}&episode={e}">vidsrc.me</option>
-              <option value="https://2embed.cc/embedtv/{id}&s={t}&e={e}">2embed.cc</option>
-            </select>
-          </div>
+          <div><label>REPRODUCTOR</label><select id="genPlayer"><option value="https://vidsrc.to/embed/tv/{id}/{t}/{e}">vidsrc.to</option><option value="https://vidsrc.me/embed/tv?imdb={id}&season={t}&episode={e}">vidsrc.me</option><option value="https://2embed.cc/embedtv/{id}&s={t}&e={e}">2embed.cc</option></select></div>
           <div><label>N° DE TEMPORADAS</label><input type="number" id="genNumTemp" min="1" max="20" value="1" oninput="actualizarFilasTemp()"/></div>
         </div>
         <label>EPISODIOS POR TEMPORADA</label>
@@ -320,98 +240,117 @@ textarea { height: 80px; resize: vertical; }
       </div>
     </div>
 
-    <!-- ============================
-         PESTAÑA SERVIDOR
-         ============================ -->
+    <!-- ══════════════════════════════════════
+         PESTAÑA SERVIDOR — VERSIÓN MEJORADA
+         ══════════════════════════════════════ -->
     <div id="tab-servidor" class="section">
 
-      <!-- URL del servidor -->
+      <!-- URL servidor -->
       <div class="server-url-bar">
         <span>🖥 SERVIDOR:</span>
-        <input type="text" id="serverUrlInput" value="https://theygoodtv-server.onrender.com" placeholder="https://tuservidor.onrender.com"/>
+        <input type="text" id="serverUrlInput" value="https://theygoodtv-server.onrender.com"/>
         <button class="btn-sm green" onclick="cargarCanalesServidor()"><i class="fa-solid fa-rotate"></i> CONECTAR</button>
       </div>
 
       <!-- Stats -->
       <div class="server-stats">
-        <div class="stat-card">
-          <div class="stat-num" id="statTotal">—</div>
-          <div class="stat-label">CANALES</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="statEstado" style="color:#ffc800">—</div>
-          <div class="stat-label">ESTADO</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="statUptime" style="font-size:0.85rem">—</div>
-          <div class="stat-label">UPTIME</div>
-        </div>
+        <div class="stat-card"><div class="stat-num" id="statTotal">—</div><div class="stat-label">CANALES</div></div>
+        <div class="stat-card"><div class="stat-num" id="statEstado" style="color:#ffc800">—</div><div class="stat-label">ESTADO</div></div>
+        <div class="stat-card"><div class="stat-num" id="statUptime" style="font-size:0.85rem">—</div><div class="stat-label">UPTIME</div></div>
       </div>
 
-      <!-- Tip de uso -->
-      <div class="tip-box">
-        <i class="fa-solid fa-lightbulb"></i> <strong>Cómo usar en canales.json:</strong><br>
-        En <strong>CANALES → Ecuador/Internacional</strong>, pon como reproductor:<br>
-        <code>https://theygoodtv-server.onrender.com/live/tc/player</code><br>
-        con tipo <code>iframe</code> — el servidor extrae el stream limpio automáticamente.
-      </div>
+      <!-- ════════════════════════════════
+           EDITOR DE CANALES DEL SERVIDOR
+           Escribe directo al server.js en GitHub
+           ════════════════════════════════ -->
+      <div class="serverjs-editor">
+        <div class="serverjs-editor-title">
+          <i class="fa-solid fa-code"></i> EDITOR DE CANALES DEL SERVIDOR (server.js en GitHub)
+        </div>
 
-      <!-- Formulario agregar canal -->
-      <div class="add-canal-form">
-        <div class="gen-box-title"><i class="fa-solid fa-plus-circle"></i> AGREGAR CANAL AL SERVIDOR</div>
-        <div class="add-canal-grid">
-          <div>
-            <label>ID DEL CANAL (sin espacios)</label>
-            <input type="text" id="newCanalId" placeholder="Ej: tc  ecuavisa  rts"/>
-          </div>
-          <div>
-            <label>NOMBRE</label>
-            <input type="text" id="newCanalNombre" placeholder="Ej: TC Televisión"/>
-          </div>
-          <div>
-            <label>URL DE LA PÁGINA EN VIVO</label>
-            <input type="text" id="newCanalUrl" placeholder="https://tctelevision.com/envivo/"/>
-          </div>
+        <div class="tip-box">
+          <i class="fa-solid fa-lightbulb"></i> Estos canales se guardan <strong>directamente en tu server.js de GitHub</strong>.<br>
+          Render redeploya automáticamente y el cambio es <strong>permanente</strong>. Cada canal con embed directo funciona siempre aunque el servidor se reinicie.
         </div>
-        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-          <button class="btn-sm green" style="flex:1;" onclick="agregarCanalServidor()">
-            <i class="fa-solid fa-plus"></i> AGREGAR AL SERVIDOR
-          </button>
-          <button class="btn-sm" style="flex:1;" onclick="probarCanalNuevo()">
-            <i class="fa-solid fa-play"></i> PROBAR ANTES DE AGREGAR
-          </button>
-        </div>
-        <div class="preview-iframe-wrap" id="previewWrap">
-          <iframe id="previewIframe" src=""></iframe>
-        </div>
-        <div id="addCanalMsg" style="display:none;margin-top:10px;padding:10px;border-radius:8px;font-size:0.68rem;"></div>
-      </div>
 
-      <!-- Lista de canales del servidor -->
-      <div class="card">
-        <div class="card-title"><i class="fa-solid fa-list"></i> CANALES EN EL SERVIDOR</div>
-        <div id="serverCanalesList">
+        <!-- Lista editable de canales del servidor -->
+        <div class="canal-editor-list" id="canalEditorList">
           <p style="color:rgba(255,255,255,.4);font-size:0.65rem;text-align:center;padding:20px;">
             <i class="fa-solid fa-arrow-up"></i> Haz clic en CONECTAR para cargar los canales
           </p>
         </div>
+
+        <!-- Botón guardar cambios en GitHub -->
+        <button class="save-server-btn" id="saveServerBtn" onclick="guardarServerJs()" style="display:none;">
+          <i class="fa-brands fa-github"></i> GUARDAR CAMBIOS EN GITHUB (server.js)
+        </button>
       </div>
 
-      <!-- Copiar link rápido -->
-      <div class="card">
-        <div class="card-title"><i class="fa-solid fa-copy"></i> GENERAR LINK RÁPIDO</div>
-        <p style="color:rgba(255,255,255,.5);font-size:0.65rem;margin-bottom:12px;">Genera el link listo para pegar en canales.json</p>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <select id="quickCanalSelect" style="flex:1;min-width:150px;">
-            <option value="">— Selecciona un canal —</option>
-          </select>
-          <select id="quickTipo" style="flex:1;min-width:120px;">
-            <option value="player">🖥 Solo Player</option>
-            <option value="info">📋 Info JSON</option>
-          </select>
-          <button class="btn-sm green" onclick="generarLinkRapido()"><i class="fa-solid fa-copy"></i> COPIAR LINK</button>
+      <!-- ════════════════════════════════
+           FORMULARIO AGREGAR NUEVO CANAL
+           Con soporte para embed directo
+           ════════════════════════════════ -->
+      <div class="add-canal-form">
+        <div class="gen-box-title"><i class="fa-solid fa-circle-plus"></i> AGREGAR NUEVO CANAL AL SERVIDOR</div>
+
+        <div class="add-canal-grid3">
+          <div>
+            <label>ID DEL CANAL (sin espacios)</label>
+            <input type="text" id="newCanalId" placeholder="Ej: tvc  canal-uno"/>
+          </div>
+          <div>
+            <label>NOMBRE</label>
+            <input type="text" id="newCanalNombre" placeholder="Ej: TVC Ecuador"/>
+          </div>
+          <div>
+            <label>URL PÁGINA OFICIAL</label>
+            <input type="text" id="newCanalUrl" placeholder="https://tvc.com.ec/envivo/"/>
+          </div>
         </div>
-        <div id="quickLinkResult" style="display:none;margin-top:10px;background:#020208;border:1px solid rgba(0,225,255,.2);border-radius:8px;padding:10px;font-size:0.7rem;color:#00e1ff;word-break:break-all;"></div>
+
+        <label>TIPO DE STREAM</label>
+        <div class="tipo-selector">
+          <div class="tipo-btn active" id="tipoM3u8Btn" onclick="setTipo('m3u8')">
+            <i class="fa-solid fa-play"></i> M3U8<br><span style="font-size:0.5rem;color:rgba(0,225,255,.6)">Stream directo HLS</span>
+          </div>
+          <div class="tipo-btn" id="tipoIframeBtn" onclick="setTipo('iframe')">
+            <i class="fa-solid fa-window-restore"></i> iFrame<br><span style="font-size:0.5rem;color:rgba(0,225,255,.6)">Embed / reproductor</span>
+          </div>
+          <div class="tipo-btn" id="tipoDinamicoBtn" onclick="setTipo('dinamico')">
+            <i class="fa-solid fa-robot"></i> Dinámico<br><span style="font-size:0.5rem;color:rgba(0,225,255,.6)">Extraer automático</span>
+          </div>
+        </div>
+
+        <div class="embed-section visible" id="embedSection">
+          <label>LINK DEL STREAM / EMBED DIRECTO</label>
+          <input type="text" id="newCanalEmbed" placeholder="https://....m3u8  o  https://player.../embed/..."/>
+          <p class="tip-mini">
+            💡 Para M3U8 pon la URL que termina en <code>.m3u8</code><br>
+            💡 Para iFrame pon la URL del reproductor embebido<br>
+            💡 Cómo encontrarlo: F12 en Chrome → Network → filtra por <code>.m3u8</code> o <code>embed</code>
+          </p>
+        </div>
+
+        <div id="addCanalMsg"></div>
+
+        <div class="add-canal-actions">
+          <button class="btn btn-green" style="margin:0;" onclick="agregarCanalAServerJs()">
+            <i class="fa-brands fa-github"></i> AGREGAR Y GUARDAR EN GITHUB
+          </button>
+          <button class="btn" style="margin:0;width:auto;padding:10px 16px;" onclick="probarEmbedNuevo()">
+            <i class="fa-solid fa-play"></i> PROBAR LINK
+          </button>
+        </div>
+      </div>
+
+      <!-- Lista canales en el servidor (solo lectura / acciones) -->
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-list"></i> CANALES EN EL SERVIDOR</div>
+        <div id="serverCanalesList">
+          <p style="color:rgba(255,255,255,.4);font-size:0.65rem;text-align:center;padding:20px;">
+            <i class="fa-solid fa-arrow-up"></i> Haz clic en CONECTAR para cargar
+          </p>
+        </div>
       </div>
 
     </div>
@@ -420,21 +359,17 @@ textarea { height: 80px; resize: vertical; }
     <div id="tab-config" class="section">
       <div class="card">
         <div class="card-title"><i class="fa-solid fa-key"></i> CREDENCIALES GITHUB</div>
-        <label>USUARIO DE GITHUB</label>
-        <input type="text" id="cfgUser" value="Thegood2006"/>
-        <label>REPOSITORIO</label>
-        <input type="text" id="cfgRepo" value="MI-sitio-eventos"/>
-        <label>TOKEN CLASSIC</label>
-        <input type="text" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+        <label>USUARIO DE GITHUB</label><input type="text" id="cfgUser" value="Thegood2006"/>
+        <label>REPOSITORIO (canales/contenido)</label><input type="text" id="cfgRepo" value="MI-sitio-eventos"/>
+        <label>REPOSITORIO DEL SERVIDOR (server.js)</label><input type="text" id="cfgRepoServer" value="theygoodtv-server"/>
+        <label>TOKEN CLASSIC</label><input type="text" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
         <p style="color:#6060a0;font-size:0.6rem;margin-top:8px;"><i class="fa-solid fa-lock"></i> El token se guarda solo en este navegador</p>
         <button class="btn" style="margin-top:14px;" onclick="guardarConfig()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR CONFIG</button>
       </div>
       <div class="card">
         <div class="card-title"><i class="fa-solid fa-lock"></i> CAMBIAR CONTRASEÑA</div>
-        <label>NUEVA CONTRASEÑA</label>
-        <input type="password" id="newPass" placeholder="••••••••"/>
-        <label>CONFIRMAR</label>
-        <input type="password" id="newPass2" placeholder="••••••••"/>
+        <label>NUEVA CONTRASEÑA</label><input type="password" id="newPass" placeholder="••••••••"/>
+        <label>CONFIRMAR</label><input type="password" id="newPass2" placeholder="••••••••"/>
         <button class="btn" style="margin-top:14px;" onclick="cambiarPass()"><i class="fa-solid fa-key"></i> CAMBIAR CONTRASEÑA</button>
       </div>
     </div>
@@ -442,19 +377,22 @@ textarea { height: 80px; resize: vertical; }
 </div>
 
 <script>
-const PASS_KEY  = "tgtv_pass";
-const TOKEN_KEY = "tgtv_token";
+const PASS_KEY   = "tgtv_pass";
+const TOKEN_KEY  = "tgtv_token";
 const DEFAULT_PASS = "admin1234";
 
-let ghUser  = "Thegood2006";
-let ghRepo  = "MI-sitio-eventos";
-let ghToken = "";
-let canales  = { futbol:[], ciclismo:[], ufc:[], ecuador:[], internacional:[] };
-let contenido = { peliculas:[], series:[] };
-let eventos  = [];
+let ghUser       = "Thegood2006";
+let ghRepo       = "MI-sitio-eventos";
+let ghRepoServer = "theygoodtv-server";
+let ghToken      = "";
+let canales      = { futbol:[], ciclismo:[], ufc:[], ecuador:[], internacional:[] };
+let contenido    = { peliculas:[], series:[] };
+let eventos      = [];
 let serverCanales = [];
+let serverJs     = "";   // contenido actual del server.js
+let tipoActual   = "m3u8";
 
-/* ─────────────────── LOGIN ─────────────────── */
+/* ─── LOGIN ─── */
 function doLogin() {
   const pass  = document.getElementById("passInput").value;
   const saved = localStorage.getItem(PASS_KEY) || DEFAULT_PASS;
@@ -468,577 +406,540 @@ function doLogin() {
   }
 }
 document.getElementById("passInput").addEventListener("keydown", e => { if(e.key==="Enter") doLogin(); });
-
-function salir() {
-  document.getElementById("login").style.display = "flex";
-  document.getElementById("panel").style.display = "none";
-  document.getElementById("passInput").value = "";
-}
-
+function salir() { document.getElementById("login").style.display="flex"; document.getElementById("panel").style.display="none"; document.getElementById("passInput").value=""; }
 function cambiarPass() {
-  const p1 = document.getElementById("newPass").value.trim();
-  const p2 = document.getElementById("newPass2").value.trim();
-  if (!p1) { showMsg("La contraseña no puede estar vacía", true); return; }
-  if (p1 !== p2) { showMsg("Las contraseñas no coinciden", true); return; }
-  localStorage.setItem(PASS_KEY, p1);
-  showMsg("✓ Contraseña cambiada");
+  const p1=document.getElementById("newPass").value.trim(), p2=document.getElementById("newPass2").value.trim();
+  if(!p1){showMsg("La contraseña no puede estar vacía",true);return;}
+  if(p1!==p2){showMsg("Las contraseñas no coinciden",true);return;}
+  localStorage.setItem(PASS_KEY,p1); showMsg("✓ Contraseña cambiada");
 }
 
-/* ─────────────────── CONFIG ─────────────────── */
+/* ─── CONFIG ─── */
 function cargarConfig() {
   ghToken = localStorage.getItem(TOKEN_KEY) || "";
+  ghRepoServer = localStorage.getItem("tgtv_repo_server") || "theygoodtv-server";
   document.getElementById("cfgUser").value  = ghUser;
   document.getElementById("cfgRepo").value  = ghRepo;
+  document.getElementById("cfgRepoServer").value = ghRepoServer;
   document.getElementById("cfgToken").value = ghToken;
 }
-
 function guardarConfig() {
   ghUser  = document.getElementById("cfgUser").value.trim();
   ghRepo  = document.getElementById("cfgRepo").value.trim();
+  ghRepoServer = document.getElementById("cfgRepoServer").value.trim();
   ghToken = document.getElementById("cfgToken").value.trim();
   localStorage.setItem(TOKEN_KEY, ghToken);
+  localStorage.setItem("tgtv_repo_server", ghRepoServer);
   showMsg("✓ Config guardada");
 }
 
-/* ─────────────────── TABS ─────────────────── */
+/* ─── TABS ─── */
 function switchTab(tab, el) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   el.classList.add("active");
-  document.getElementById("tab-" + tab).classList.add("active");
-  if (tab === "servidor") cargarCanalesServidor();
+  document.getElementById("tab-"+tab).classList.add("active");
+  if(tab==="servidor") cargarCanalesServidor();
 }
 
-/* ─────────────────── DATOS GITHUB ─────────────────── */
+/* ─── DATOS GITHUB (canales.json / contenido.json) ─── */
 async function cargarDatos() {
   const base = `https://raw.githubusercontent.com/${ghUser}/${ghRepo}/main`;
   try {
     const [rc, rco] = await Promise.all([
-      fetch(base + "/canales.json?nocache=" + Date.now()),
-      fetch(base + "/contenido.json?nocache=" + Date.now())
+      fetch(base+"/canales.json?nocache="+Date.now()),
+      fetch(base+"/contenido.json?nocache="+Date.now())
     ]);
     canales   = await rc.json();
     contenido = await rco.json();
-    if (!canales.internacional) canales.internacional = [];
+    if (!canales.internacional) canales.internacional=[];
     eventos = canales.eventos || [];
-    renderEventos();
-    renderTodo();
-  } catch(e) {
-    showMsg("Error cargando datos: " + e.message, true);
-  }
+    renderEventos(); renderTodo();
+  } catch(e) { showMsg("Error cargando datos: "+e.message,true); }
 }
 
-/* ─────────────────── RENDER ─────────────────── */
-function renderTodo() {
-  renderCanales("futbol");
-  renderCanales("ciclismo");
-  renderCanales("ufc");
-  renderCanales("ecuador");
-  renderCanales("internacional");
-  renderPeliculas();
-  renderSeries();
-}
-
+/* ─── RENDER CANALES ─── */
+function renderTodo() { ["futbol","ciclismo","ufc","ecuador","internacional"].forEach(renderCanales); renderPeliculas(); renderSeries(); }
 function renderCanales(cat) {
-  const list = document.getElementById(cat + "-list");
-  if (!list) return;
-  list.innerHTML = "";
-  (canales[cat] || []).forEach((ev, i) => {
-    const div = document.createElement("div");
-    div.className = "evento-card";
-    div.innerHTML = `
-      <div class="evento-header">
-        <span class="evento-num"><i class="fa-solid fa-circle-dot" style="color:#00e1ff"></i> Evento ${i+1}</span>
-        <button class="del-btn" onclick="delEvento('${cat}',${i})"><i class="fa-solid fa-trash"></i> Borrar</button>
-      </div>
-      <label>NOMBRE</label>
-      <input type="text" value="${ev.nombre}" onchange="canales['${cat}'][${i}].nombre=this.value"/>
-      <label>LIGA / DESCRIPCIÓN</label>
-      <input type="text" value="${ev.liga}" onchange="canales['${cat}'][${i}].liga=this.value"/>
-      <label>TIPO DE REPRODUCTOR</label>
-      <select onchange="canales['${cat}'][${i}].tipo=this.value" style="margin-bottom:8px;">
-        <option value="m3u8" ${(ev.tipo||'m3u8')==='m3u8'?'selected':''}>🎬 M3U8 / MP4 (stream directo)</option>
-        <option value="iframe" ${ev.tipo==='iframe'?'selected':''}>🖥️ iFrame / Embed</option>
-      </select>
-      <label>LINKS (uno por línea)</label>
-      <textarea onchange="canales['${cat}'][${i}].reproductores=this.value.split('\\n').filter(l=>l.trim())">${(ev.reproductores||[]).join('\n')}</textarea>
-      <p style="color:rgba(0,225,255,.5);font-size:0.6rem;margin-top:4px;">💡 Para canal del servidor: https://theygoodtv-server.onrender.com/live/ID/player</p>
-    `;
+  const list=document.getElementById(cat+"-list"); if(!list)return; list.innerHTML="";
+  (canales[cat]||[]).forEach((ev,i)=>{
+    const div=document.createElement("div"); div.className="evento-card";
+    div.innerHTML=`<div class="evento-header"><span class="evento-num"><i class="fa-solid fa-circle-dot" style="color:#00e1ff"></i> Evento ${i+1}</span><button class="del-btn" onclick="delEvento('${cat}',${i})"><i class="fa-solid fa-trash"></i> Borrar</button></div>
+    <label>NOMBRE</label><input type="text" value="${ev.nombre}" onchange="canales['${cat}'][${i}].nombre=this.value"/>
+    <label>LIGA / DESCRIPCIÓN</label><input type="text" value="${ev.liga}" onchange="canales['${cat}'][${i}].liga=this.value"/>
+    <label>TIPO DE REPRODUCTOR</label>
+    <select onchange="canales['${cat}'][${i}].tipo=this.value" style="margin-bottom:8px;">
+      <option value="m3u8" ${(ev.tipo||'m3u8')==='m3u8'?'selected':''}>🎬 M3U8 / MP4</option>
+      <option value="iframe" ${ev.tipo==='iframe'?'selected':''}>🖥️ iFrame / Embed</option>
+    </select>
+    <label>LINKS (uno por línea)</label>
+    <textarea onchange="canales['${cat}'][${i}].reproductores=this.value.split('\\n').filter(l=>l.trim())">${(ev.reproductores||[]).join('\n')}</textarea>`;
     list.appendChild(div);
   });
 }
+function addEvento(cat) { if(!canales[cat])canales[cat]=[]; canales[cat].push({nombre:"Nuevo evento",liga:"",tipo:"m3u8",reproductores:[""]}); renderCanales(cat); }
+function delEvento(cat,i) { canales[cat].splice(i,1); renderCanales(cat); }
 
-function addEvento(cat) {
-  if (!canales[cat]) canales[cat] = [];
-  canales[cat].push({ nombre: "Nuevo evento", liga: "", tipo: "m3u8", reproductores: [""] });
-  renderCanales(cat);
-}
-
-function delEvento(cat, i) {
-  canales[cat].splice(i, 1);
-  renderCanales(cat);
-}
-
-/* ─── Eventos con links ─── */
-let eventosList = [];
+/* Eventos con links */
+let eventosList=[];
 function renderEventos() {
-  eventosList = canales.eventos || [];
-  const list = document.getElementById("eventos-list");
-  if (!list) return;
-  list.innerHTML = "";
-  eventosList.forEach((ev, i) => {
-    const div = document.createElement("div");
-    div.className = "evento-card";
-    div.innerHTML = `
-      <div class="evento-header">
-        <span class="evento-num"><i class="fa-solid fa-calendar" style="color:#00e1ff"></i> Evento ${i+1}</span>
-        <button class="del-btn" onclick="delEventoLink(${i})"><i class="fa-solid fa-trash"></i></button>
-      </div>
-      <label>NOMBRE DEL PARTIDO</label>
-      <input type="text" value="${ev.nombre||''}" onchange="eventosList[${i}].nombre=this.value"/>
-      <label>LINK DEL STREAM</label>
-      <input type="text" value="${(ev.reproductores||[''])[0]}" onchange="eventosList[${i}].reproductores=[this.value]"/>
-    `;
+  eventosList=canales.eventos||[];
+  const list=document.getElementById("eventos-list"); if(!list)return; list.innerHTML="";
+  eventosList.forEach((ev,i)=>{
+    const div=document.createElement("div"); div.className="evento-card";
+    div.innerHTML=`<div class="evento-header"><span class="evento-num"><i class="fa-solid fa-calendar" style="color:#00e1ff"></i> Evento ${i+1}</span><button class="del-btn" onclick="delEventoLink(${i})"><i class="fa-solid fa-trash"></i></button></div>
+    <label>NOMBRE DEL PARTIDO</label><input type="text" value="${ev.nombre||''}" onchange="eventosList[${i}].nombre=this.value"/>
+    <label>LINK DEL STREAM</label><input type="text" value="${(ev.reproductores||[''])[0]}" onchange="eventosList[${i}].reproductores=[this.value]"/>`;
     list.appendChild(div);
   });
 }
-function addEventoLink() {
-  eventosList.push({ nombre: "Nuevo partido", reproductores: [""] });
-  canales.eventos = eventosList;
-  renderEventos();
-}
-function delEventoLink(i) {
-  eventosList.splice(i, 1);
-  canales.eventos = eventosList;
-  renderEventos();
-}
+function addEventoLink() { eventosList.push({nombre:"Nuevo partido",reproductores:[""]}); canales.eventos=eventosList; renderEventos(); }
+function delEventoLink(i) { eventosList.splice(i,1); canales.eventos=eventosList; renderEventos(); }
 
-/* ─── Películas ─── */
+/* Películas */
 function renderPeliculas() {
-  const list = document.getElementById("peliculas-list");
-  list.innerHTML = "";
-  (contenido.peliculas || []).forEach((p, i) => {
-    const div = document.createElement("div");
-    div.className = "evento-card";
-    div.innerHTML = `
-      <div class="evento-header">
-        <span class="evento-num"><i class="fa-solid fa-film" style="color:#00e1ff"></i> ${p.nombre||'Película '+(i+1)}</span>
-        <button class="del-btn" onclick="delPelicula(${i})"><i class="fa-solid fa-trash"></i></button>
-      </div>
-      <label>NOMBRE</label><input type="text" value="${p.nombre}" onchange="contenido.peliculas[${i}].nombre=this.value"/>
-      <label>GÉNERO • AÑO</label><input type="text" value="${p.genero}" onchange="contenido.peliculas[${i}].genero=this.value"/>
-      <label>URL PORTADA</label><input type="text" value="${p.portada||''}" onchange="contenido.peliculas[${i}].portada=this.value"/>
-      <label>TIPO</label>
-      <select onchange="contenido.peliculas[${i}].tipo=this.value" style="margin-bottom:8px;">
-        <option value="m3u8" ${(p.tipo||'m3u8')==='m3u8'?'selected':''}>🎬 M3U8 / MP4</option>
-        <option value="iframe" ${p.tipo==='iframe'?'selected':''}>🖥️ iFrame</option>
-      </select>
-      <label>LINK</label><input type="text" value="${p.link||''}" onchange="contenido.peliculas[${i}].link=this.value"/>
-    `;
+  const list=document.getElementById("peliculas-list"); list.innerHTML="";
+  (contenido.peliculas||[]).forEach((p,i)=>{
+    const div=document.createElement("div"); div.className="evento-card";
+    div.innerHTML=`<div class="evento-header"><span class="evento-num"><i class="fa-solid fa-film" style="color:#00e1ff"></i> ${p.nombre||'Película '+(i+1)}</span><button class="del-btn" onclick="delPelicula(${i})"><i class="fa-solid fa-trash"></i></button></div>
+    <label>NOMBRE</label><input type="text" value="${p.nombre}" onchange="contenido.peliculas[${i}].nombre=this.value"/>
+    <label>GÉNERO • AÑO</label><input type="text" value="${p.genero}" onchange="contenido.peliculas[${i}].genero=this.value"/>
+    <label>URL PORTADA</label><input type="text" value="${p.portada||''}" onchange="contenido.peliculas[${i}].portada=this.value"/>
+    <label>TIPO</label><select onchange="contenido.peliculas[${i}].tipo=this.value" style="margin-bottom:8px;"><option value="m3u8" ${(p.tipo||'m3u8')==='m3u8'?'selected':''}>🎬 M3U8</option><option value="iframe" ${p.tipo==='iframe'?'selected':''}>🖥️ iFrame</option></select>
+    <label>LINK</label><input type="text" value="${p.link||''}" onchange="contenido.peliculas[${i}].link=this.value"/>`;
     list.appendChild(div);
   });
 }
-function addPelicula() {
-  if (!contenido.peliculas) contenido.peliculas = [];
-  contenido.peliculas.push({ nombre: "Nueva película", genero: "", portada: "", tipo: "m3u8", link: "" });
-  renderPeliculas();
-}
+function addPelicula() { if(!contenido.peliculas)contenido.peliculas=[]; contenido.peliculas.push({nombre:"Nueva película",genero:"",portada:"",tipo:"m3u8",link:""}); renderPeliculas(); }
 function delPelicula(i) { contenido.peliculas.splice(i,1); renderPeliculas(); }
 
-/* ─── Series ─── */
+/* Series */
 function renderSeries() {
-  const list = document.getElementById("series-list");
-  list.innerHTML = "";
-  (contenido.series || []).forEach((s, i) => {
-    const div = document.createElement("div");
-    div.className = "serie-block";
-    let tempHTML = "";
-    (s.temporadas||[]).forEach((t, ti) => {
-      let epHTML = "";
-      (t.episodios||[]).forEach((ep, ei) => {
-        epHTML += `<div class="ep-row">
-          <input type="text" value="${ep.nombre}" placeholder="Nombre" onchange="contenido.series[${i}].temporadas[${ti}].episodios[${ei}].nombre=this.value"/>
-          <input type="text" value="${ep.link}" placeholder="Link" onchange="contenido.series[${i}].temporadas[${ti}].episodios[${ei}].link=this.value"/>
-          <button class="del-btn" onclick="delEpisodio(${i},${ti},${ei})"><i class="fa-solid fa-trash"></i></button>
-        </div>`;
+  const list=document.getElementById("series-list"); list.innerHTML="";
+  (contenido.series||[]).forEach((s,i)=>{
+    const div=document.createElement("div"); div.className="serie-block";
+    let tempHTML="";
+    (s.temporadas||[]).forEach((t,ti)=>{
+      let epHTML="";
+      (t.episodios||[]).forEach((ep,ei)=>{
+        epHTML+=`<div class="ep-row"><input type="text" value="${ep.nombre}" placeholder="Nombre" onchange="contenido.series[${i}].temporadas[${ti}].episodios[${ei}].nombre=this.value"/><input type="text" value="${ep.link}" placeholder="Link" onchange="contenido.series[${i}].temporadas[${ti}].episodios[${ei}].link=this.value"/><button class="del-btn" onclick="delEpisodio(${i},${ti},${ei})"><i class="fa-solid fa-trash"></i></button></div>`;
       });
-      tempHTML += `<div class="temp-block">
-        <label>TEMPORADA</label>
-        <input type="text" value="${t.nombre}" onchange="contenido.series[${i}].temporadas[${ti}].nombre=this.value"/>
-        <label style="margin-top:10px;">EPISODIOS</label>${epHTML}
-        <button class="add-btn" onclick="addEpisodio(${i},${ti})" style="margin-top:6px;"><i class="fa-solid fa-plus"></i> Episodio</button>
-      </div>`;
+      tempHTML+=`<div class="temp-block"><label>TEMPORADA</label><input type="text" value="${t.nombre}" onchange="contenido.series[${i}].temporadas[${ti}].nombre=this.value"/><label style="margin-top:10px;">EPISODIOS</label>${epHTML}<button class="add-btn" onclick="addEpisodio(${i},${ti})" style="margin-top:6px;"><i class="fa-solid fa-plus"></i> Episodio</button></div>`;
     });
-    div.innerHTML = `
-      <div class="evento-header">
-        <span class="evento-num"><i class="fa-solid fa-tv" style="color:#00e1ff"></i> ${s.nombre||'Serie '+(i+1)}</span>
-        <button class="del-btn" onclick="delSerie(${i})"><i class="fa-solid fa-trash"></i></button>
-      </div>
-      <label>NOMBRE</label><input type="text" value="${s.nombre}" onchange="contenido.series[${i}].nombre=this.value"/>
-      <label>GÉNERO</label><input type="text" value="${s.genero||''}" onchange="contenido.series[${i}].genero=this.value"/>
-      <label>PORTADA</label><input type="text" value="${s.portada||''}" onchange="contenido.series[${i}].portada=this.value"/>
-      <label>TEMPORADAS</label>${tempHTML}
-      <button class="add-btn" onclick="addTemporada(${i})"><i class="fa-solid fa-plus"></i> Temporada</button>
-    `;
+    div.innerHTML=`<div class="evento-header"><span class="evento-num"><i class="fa-solid fa-tv" style="color:#00e1ff"></i> ${s.nombre||'Serie '+(i+1)}</span><button class="del-btn" onclick="delSerie(${i})"><i class="fa-solid fa-trash"></i></button></div>
+    <label>NOMBRE</label><input type="text" value="${s.nombre}" onchange="contenido.series[${i}].nombre=this.value"/>
+    <label>GÉNERO</label><input type="text" value="${s.genero||''}" onchange="contenido.series[${i}].genero=this.value"/>
+    <label>PORTADA</label><input type="text" value="${s.portada||''}" onchange="contenido.series[${i}].portada=this.value"/>
+    <label>TEMPORADAS</label>${tempHTML}
+    <button class="add-btn" onclick="addTemporada(${i})"><i class="fa-solid fa-plus"></i> Temporada</button>`;
     list.appendChild(div);
   });
 }
-function addSerie() {
-  if (!contenido.series) contenido.series = [];
-  contenido.series.push({ nombre: "Nueva serie", genero: "", portada: "", temporadas: [] });
-  renderSeries();
-}
+function addSerie() { if(!contenido.series)contenido.series=[]; contenido.series.push({nombre:"Nueva serie",genero:"",portada:"",temporadas:[]}); renderSeries(); }
 function delSerie(i) { contenido.series.splice(i,1); renderSeries(); }
-function addTemporada(si) {
-  if (!contenido.series[si].temporadas) contenido.series[si].temporadas = [];
-  contenido.series[si].temporadas.push({ nombre: "Temporada 1", episodios: [] });
-  renderSeries();
-}
-function addEpisodio(si,ti) {
-  contenido.series[si].temporadas[ti].episodios.push({ nombre: "Episodio", link: "" });
-  renderSeries();
-}
-function delEpisodio(si,ti,ei) {
-  contenido.series[si].temporadas[ti].episodios.splice(ei,1);
-  renderSeries();
+function addTemporada(si) { if(!contenido.series[si].temporadas)contenido.series[si].temporadas=[]; contenido.series[si].temporadas.push({nombre:"Temporada 1",episodios:[]}); renderSeries(); }
+function addEpisodio(si,ti) { contenido.series[si].temporadas[ti].episodios.push({nombre:"Episodio",link:""}); renderSeries(); }
+function delEpisodio(si,ti,ei) { contenido.series[si].temporadas[ti].episodios.splice(ei,1); renderSeries(); }
+
+/* ════════════════════════════════════════
+   PESTAÑA SERVIDOR — LÓGICA MEJORADA
+   ════════════════════════════════════════ */
+
+function getServerUrl() { return (document.getElementById("serverUrlInput").value||"https://theygoodtv-server.onrender.com").replace(/\/$/,""); }
+
+/* Tipo de stream selector */
+function setTipo(tipo) {
+  tipoActual = tipo;
+  ["m3u8","iframe","dinamico"].forEach(t=>{
+    document.getElementById("tipo"+t.charAt(0).toUpperCase()+t.slice(1)+"Btn").classList.toggle("active", t===tipo);
+  });
+  document.getElementById("embedSection").classList.toggle("visible", tipo!=="dinamico");
+  const emb=document.getElementById("newCanalEmbed");
+  if(tipo==="m3u8") { emb.placeholder="https://stream.servidor.com/live/canal.m3u8"; }
+  else if(tipo==="iframe") { emb.placeholder="https://player.ejemplo.com/embed/canal"; }
 }
 
-/* ─────────────────────────────────────────────
-   PESTAÑA SERVIDOR — LÓGICA COMPLETA
-   ───────────────────────────────────────────── */
-
-function getServerUrl() {
-  return (document.getElementById("serverUrlInput").value || "https://theygoodtv-server.onrender.com").replace(/\/$/, "");
-}
-
+/* Conectar y cargar canales del servidor */
 async function cargarCanalesServidor() {
-  const url = getServerUrl();
-  const list = document.getElementById("serverCanalesList");
-  list.innerHTML = '<p style="color:#ffc800;font-size:0.65rem;text-align:center;padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i> Conectando al servidor...</p>';
-
-  // Actualizar stats
-  document.getElementById("statEstado").textContent = "...";
-  document.getElementById("statEstado").style.color = "#ffc800";
-
+  const url=getServerUrl();
+  document.getElementById("serverCanalesList").innerHTML='<p style="color:#ffc800;font-size:0.65rem;text-align:center;padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i> Conectando...</p>';
+  document.getElementById("statEstado").textContent="..."; document.getElementById("statEstado").style.color="#ffc800";
   try {
-    // Health check
-    const hRes = await fetch(url + "/health", { signal: AbortSignal.timeout(8000) });
-    const health = await hRes.json();
-    document.getElementById("statEstado").textContent = "ONLINE";
-    document.getElementById("statEstado").style.color = "#00ff99";
-    document.getElementById("statUptime").textContent = health.time ? new Date(health.time).toLocaleTimeString("es") : "OK";
+    const hRes=await fetch(url+"/health",{signal:AbortSignal.timeout(8000)});
+    const health=await hRes.json();
+    document.getElementById("statEstado").textContent="ONLINE"; document.getElementById("statEstado").style.color="#00ff99";
+    document.getElementById("statUptime").textContent=health.time?new Date(health.time).toLocaleTimeString("es"):"OK";
 
-    // Cargar canales
-    const cRes = await fetch(url + "/canales", { signal: AbortSignal.timeout(8000) });
-    const data = await cRes.json();
-    serverCanales = data.canales || [];
+    const cRes=await fetch(url+"/canales",{signal:AbortSignal.timeout(8000)});
+    const data=await cRes.json();
+    serverCanales=data.canales||[];
+    document.getElementById("statTotal").textContent=serverCanales.length;
 
-    document.getElementById("statTotal").textContent = serverCanales.length;
-
-    // Actualizar select de link rápido
-    const sel = document.getElementById("quickCanalSelect");
-    sel.innerHTML = '<option value="">— Selecciona un canal —</option>';
-    serverCanales.forEach(c => {
-      sel.innerHTML += `<option value="${c.id}">${c.nombre} (${c.id})</option>`;
-    });
-
-    // Renderizar lista
-    if (!serverCanales.length) {
-      list.innerHTML = '<p style="color:rgba(255,255,255,.4);font-size:0.65rem;text-align:center;padding:20px;">No hay canales en el servidor</p>';
-      return;
-    }
-
-    list.innerHTML = "";
-    serverCanales.forEach(c => {
-      const div = document.createElement("div");
-      div.className = "canal-server-card";
-      div.id = "sc-" + c.id;
-      div.innerHTML = `
-        <div class="status-dot checking" id="dot-${c.id}"></div>
-        <div class="canal-server-info">
-          <div class="canal-server-id">${c.id}</div>
-          <div class="canal-server-nombre">${c.nombre}</div>
-          <div class="canal-server-url">${url}/live/${c.id}/player</div>
-        </div>
-        <div class="canal-server-btns">
-          <button class="btn-sm" onclick="probarCanal('${c.id}')"><i class="fa-solid fa-play"></i> PROBAR</button>
-          <button class="btn-sm green" onclick="copiarLinkCanal('${c.id}')"><i class="fa-solid fa-copy"></i> COPIAR</button>
-          <button class="btn-sm" onclick="agregarACanaless('${c.id}','${c.nombre}')"><i class="fa-solid fa-plus"></i> AL JSON</button>
-        </div>
-      `;
-      list.appendChild(div);
-
-      // Verificar estado del canal en segundo plano
-      verificarEstadoCanal(c.id, url);
-    });
+    renderServerCanalesList();
+    await cargarServerJs();  // Cargar server.js para editor
 
   } catch(e) {
-    document.getElementById("statEstado").textContent = "OFFLINE";
-    document.getElementById("statEstado").style.color = "#ff3d5a";
-    list.innerHTML = `<p style="color:#ff3d5a;font-size:0.65rem;text-align:center;padding:20px;">
-      <i class="fa-solid fa-triangle-exclamation"></i> No se pudo conectar al servidor.<br>
-      <span style="color:rgba(255,255,255,.4);">${e.message}</span>
-    </p>`;
+    document.getElementById("statEstado").textContent="OFFLINE"; document.getElementById("statEstado").style.color="#ff3d5a";
+    document.getElementById("serverCanalesList").innerHTML=`<p style="color:#ff3d5a;font-size:0.65rem;text-align:center;padding:20px;"><i class="fa-solid fa-triangle-exclamation"></i> No se pudo conectar: ${e.message}</p>`;
   }
+}
+
+function renderServerCanalesList() {
+  const list=document.getElementById("serverCanalesList");
+  if(!serverCanales.length) { list.innerHTML='<p style="color:rgba(255,255,255,.4);font-size:0.65rem;text-align:center;padding:20px;">No hay canales</p>'; return; }
+  list.innerHTML="";
+  serverCanales.forEach(c=>{
+    const div=document.createElement("div"); div.className="canal-server-card";
+    const badgeClass=c.tieneStreamFijo?"badge-m3u8":"badge-dinamico";
+    const badgeText=c.tieneStreamFijo?"● STREAM FIJO":"◌ DINÁMICO";
+    div.innerHTML=`
+      <div class="status-dot checking" id="dot-${c.id}"></div>
+      <div class="canal-server-info">
+        <div class="canal-server-id">${c.id}</div>
+        <div class="canal-server-nombre">${c.nombre}</div>
+        <span class="canal-server-badge ${badgeClass}">${badgeText}</span>
+      </div>
+      <div class="canal-server-btns">
+        <button class="btn-sm" onclick="window.open('${getServerUrl()}/live/${c.id}/player','_blank')"><i class="fa-solid fa-play"></i> VER</button>
+        <button class="btn-sm green" onclick="copiarLink('${c.id}')"><i class="fa-solid fa-copy"></i> COPIAR</button>
+        <button class="btn-sm red" onclick="eliminarCanalServerJs('${c.id}')"><i class="fa-solid fa-trash"></i> BORRAR</button>
+      </div>`;
+    list.appendChild(div);
+    verificarEstadoCanal(c.id, getServerUrl());
+  });
 }
 
 async function verificarEstadoCanal(id, url) {
-  const dot = document.getElementById("dot-" + id);
-  if (!dot) return;
+  const dot=document.getElementById("dot-"+id); if(!dot)return;
   try {
-    const res = await fetch(url + "/live/" + id, { signal: AbortSignal.timeout(10000) });
-    const data = await res.json();
-    if (data.embed) {
-      dot.className = "status-dot ok";
-    } else {
-      dot.className = "status-dot fail";
-    }
-  } catch {
-    dot.className = "status-dot fail";
+    const res=await fetch(url+"/live/"+id,{signal:AbortSignal.timeout(10000)});
+    const data=await res.json();
+    dot.className=data.embed?"status-dot ok":"status-dot fail";
+  } catch { dot.className="status-dot fail"; }
+}
+
+function copiarLink(id) {
+  const url=getServerUrl()+"/live/"+id+"/player";
+  navigator.clipboard.writeText(url).then(()=>showMsg("✓ Copiado: "+url)).catch(()=>prompt("Copia este link:",url));
+}
+
+/* ════════════════════════════════════════
+   EDITOR DE SERVER.JS EN GITHUB
+   ════════════════════════════════════════ */
+
+async function cargarServerJs() {
+  if(!ghToken) return;
+  try {
+    const url=`https://api.github.com/repos/${ghUser}/${ghRepoServer}/contents/server.js`;
+    const res=await fetch(url,{headers:{Authorization:"token "+ghToken,Accept:"application/vnd.github.v3+json"}});
+    const meta=await res.json();
+    serverJs=atob(meta.content.replace(/\n/g,""));
+    renderCanalEditor();
+    document.getElementById("saveServerBtn").style.display="block";
+  } catch(e) {
+    console.warn("No se pudo cargar server.js:",e.message);
   }
 }
 
-function probarCanal(id) {
-  const url = getServerUrl();
-  const playerUrl = url + "/live/" + id + "/player";
-  const wrap = document.getElementById("previewWrap");
-  // Abrir en nueva ventana para ver el player limpio
-  window.open(playerUrl, "_blank", "width=800,height=500");
+/* Parsea el objeto CANALES del server.js y muestra formularios editables */
+function parsearCanalesDelServerJs() {
+  const canalesData=[];
+  // Busca bloques: "id": { nombre: "...", url: "...", embedFijo: { tipo: "...", embed: "...", fuente: "..." } }
+  const regex=/"([a-z0-9_-]+)":\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g;
+  let m;
+  while((m=regex.exec(serverJs))!==null) {
+    const id=m[1]; const body=m[2];
+    if(!body.includes("nombre")) continue;
+    const nombreM=body.match(/nombre:\s*["']([^"']+)["']/);
+    const urlM=body.match(/url:\s*["']([^"']+)["']/);
+    const embedM=body.match(/embed:\s*["']([^"']+)["']/);
+    const tipoM=body.match(/tipo:\s*["']([^"']+)["']/);
+    const fuenteM=body.match(/fuente:\s*["']([^"']+)["']/);
+    canalesData.push({
+      id,
+      nombre: nombreM?nombreM[1]:"",
+      url: urlM?urlM[1]:"",
+      embed: embedM?embedM[1]:"",
+      tipo: tipoM?tipoM[1]:"",
+      fuente: fuenteM?fuenteM[1]:"",
+      tieneEmbed: !!embedM
+    });
+  }
+  return canalesData;
 }
 
-function copiarLinkCanal(id) {
-  const url = getServerUrl() + "/live/" + id + "/player";
-  navigator.clipboard.writeText(url).then(() => {
-    showMsg(`✓ Link copiado: ${url}`);
-  }).catch(() => {
-    prompt("Copia este link:", url);
+function renderCanalEditor() {
+  const list=document.getElementById("canalEditorList");
+  const parsed=parsearCanalesDelServerJs();
+  if(!parsed.length) {
+    list.innerHTML='<p style="color:rgba(255,255,255,.5);font-size:0.65rem;text-align:center;padding:12px;">No se encontraron canales en server.js — asegúrate de que el token sea correcto</p>';
+    return;
+  }
+  list.innerHTML="";
+  parsed.forEach((c,i)=>{
+    const div=document.createElement("div"); div.className="canal-editor-item";
+    const badgeColor=c.tieneEmbed?"#00ff99":"#ffc800";
+    const badgeText=c.tieneEmbed?"● STREAM FIJO":"◌ SIN EMBED";
+    div.innerHTML=`
+      <div class="canal-editor-header">
+        <span class="canal-editor-id">${c.id} <span style="color:${badgeColor};font-size:0.55rem;font-weight:400">${badgeText}</span></span>
+        <button class="btn-sm red" onclick="eliminarCanalServerJs('${c.id}')"><i class="fa-solid fa-trash"></i> ELIMINAR</button>
+      </div>
+      <div class="canal-editor-grid">
+        <div><label>NOMBRE</label><input type="text" id="ce-nombre-${i}" value="${c.nombre}"/></div>
+        <div><label>TIPO</label>
+          <select id="ce-tipo-${i}">
+            <option value="m3u8" ${c.tipo==='m3u8'?'selected':''}>M3U8</option>
+            <option value="iframe" ${c.tipo==='iframe'?'selected':''}>iFrame</option>
+          </select>
+        </div>
+        <div class="canal-editor-full"><label>URL PÁGINA OFICIAL</label><input type="text" id="ce-url-${i}" value="${c.url}"/></div>
+        <div class="canal-editor-full"><label>EMBED / STREAM DIRECTO</label><input type="text" id="ce-embed-${i}" value="${c.embed}" placeholder="https://...m3u8  o  https://player.../embed"/></div>
+      </div>`;
+    list.appendChild(div);
   });
+
+  // Guardar referencias para leer al momento de guardar
+  window._canalEditorData = parsed;
 }
 
-function agregarACanaless(id, nombre) {
-  const url = getServerUrl() + "/live/" + id + "/player";
-  // Agregar a Ecuador por defecto
-  if (!canales.ecuador) canales.ecuador = [];
-  canales.ecuador.push({
-    nombre: nombre,
-    liga: "Canal Ecuador",
-    tipo: "iframe",
-    reproductores: [url]
+/* Leer los inputs del editor y actualizar el server.js */
+function leerEditorYActualizarServerJs() {
+  const parsed = window._canalEditorData || [];
+  let nuevoServerJs = serverJs;
+
+  parsed.forEach((c,i) => {
+    const nombre = document.getElementById("ce-nombre-"+i)?.value || c.nombre;
+    const url    = document.getElementById("ce-url-"+i)?.value    || c.url;
+    const embed  = document.getElementById("ce-embed-"+i)?.value  || c.embed;
+    const tipo   = document.getElementById("ce-tipo-"+i)?.value   || c.tipo;
+
+    // Reemplazar en el server.js el bloque de este canal
+    // Estrategia: busca el bloque por ID y reemplaza los campos
+    const patterns = [
+      { field: "nombre", val: nombre },
+      { field: "url",    val: url },
+    ];
+    patterns.forEach(p => {
+      const r = new RegExp(`("${c.id}"[^}]*${p.field}:\\s*)["'][^"']*["']`);
+      nuevoServerJs = nuevoServerJs.replace(r, `$1"${p.val}"`);
+    });
+
+    if(embed) {
+      // Si hay embed, actualizar embed y tipo
+      const rEmbed = new RegExp(`("${c.id}"[^]*?embed:\\s*)["'][^"']*["']`);
+      const rTipo  = new RegExp(`("${c.id}"[^]*?tipo:\\s*)["'][^"']*["']`);
+      nuevoServerJs = nuevoServerJs.replace(rEmbed, `$1"${embed}"`);
+      nuevoServerJs = nuevoServerJs.replace(rTipo,  `$1"${tipo}"`);
+    }
   });
-  renderCanales("ecuador");
-  showMsg(`✓ "${nombre}" agregado a Canales Ecuador. Ve a la pestaña CANALES para editarlo y luego GUARDAR.`);
-  // Cambiar a la pestaña canales
-  setTimeout(() => {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-    document.querySelectorAll(".tab")[0].classList.add("active");
-    document.getElementById("tab-canales").classList.add("active");
-  }, 1500);
+
+  return nuevoServerJs;
 }
 
-async function agregarCanalServidor() {
-  const id     = document.getElementById("newCanalId").value.trim().toLowerCase().replace(/\s+/g, "-");
+/* Guardar server.js actualizado en GitHub */
+async function guardarServerJs() {
+  if(!ghToken) { showMsg("⚠ Pon tu token en CONFIG primero",true); return; }
+
+  showMsg("⏳ Leyendo cambios y guardando en GitHub...",false,true);
+  const nuevoContenido = leerEditorYActualizarServerJs();
+
+  try {
+    await pushFileARepo(ghRepoServer, "server.js", nuevoContenido);
+    serverJs = nuevoContenido;
+    showMsg("✓ server.js guardado en GitHub. Render redeploya en ~1 min.");
+  } catch(e) {
+    showMsg("Error: "+e.message, true);
+  }
+}
+
+/* Agregar canal nuevo directo al server.js */
+async function agregarCanalAServerJs() {
+  const id     = document.getElementById("newCanalId").value.trim().toLowerCase().replace(/\s+/g,"-");
   const nombre = document.getElementById("newCanalNombre").value.trim();
   const url    = document.getElementById("newCanalUrl").value.trim();
+  const embed  = document.getElementById("newCanalEmbed").value.trim();
   const msgEl  = document.getElementById("addCanalMsg");
 
-  if (!id || !nombre || !url) {
-    msgEl.style.display = "block";
-    msgEl.style.background = "rgba(255,61,90,.1)";
-    msgEl.style.border = "1px solid #ff3d5a";
-    msgEl.style.color = "#ff3d5a";
-    msgEl.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Completa todos los campos";
+  if(!id||!nombre) {
+    msgEl.style.display="block"; msgEl.style.background="rgba(255,61,90,.1)"; msgEl.style.border="1px solid #ff3d5a"; msgEl.style.color="#ff3d5a";
+    msgEl.innerHTML="<i class='fa-solid fa-triangle-exclamation'></i> Pon al menos el ID y el nombre"; return;
+  }
+  if(!ghToken) { showMsg("⚠ Pon tu token en CONFIG primero",true); return; }
+
+  if(!serverJs) {
+    msgEl.style.display="block"; msgEl.style.background="rgba(255,200,0,.1)"; msgEl.style.border="1px solid #ffc800"; msgEl.style.color="#ffc800";
+    msgEl.innerHTML="<i class='fa-solid fa-spinner fa-spin'></i> Cargando server.js...";
+    await cargarServerJs();
+    if(!serverJs) { msgEl.innerHTML="<i class='fa-solid fa-triangle-exclamation'></i> No se pudo cargar server.js. Verifica el token y el nombre del repo en CONFIG."; return; }
+  }
+
+  msgEl.style.display="block"; msgEl.style.background="rgba(255,200,0,.1)"; msgEl.style.border="1px solid #ffc800"; msgEl.style.color="#ffc800";
+  msgEl.innerHTML="<i class='fa-solid fa-spinner fa-spin'></i> Agregando canal al server.js...";
+
+  // Construir el bloque del nuevo canal
+  let nuevoBloque = "";
+  if(tipoActual==="dinamico" || !embed) {
+    nuevoBloque = `  "${id}": {\n    nombre: "${nombre}",\n    url: "${url||""}",\n  },`;
+  } else {
+    nuevoBloque = `  "${id}": {\n    nombre: "${nombre}",\n    url: "${url||""}",\n    embedFijo: {\n      tipo: "${tipoActual}",\n      embed: "${embed}",\n      fuente: "manual"\n    }\n  },`;
+  }
+
+  // Insertar justo antes del cierre del objeto CANALES
+  // Busca el último canal y agrega después
+  const insertPoint = serverJs.lastIndexOf("},\n};");
+  let nuevoServerJs;
+  if(insertPoint !== -1) {
+    nuevoServerJs = serverJs.slice(0, insertPoint+3) + "\n" + nuevoBloque + "\n" + serverJs.slice(insertPoint+3);
+  } else {
+    // Alternativa: buscar antes del cierre de CANALES
+    const alt = serverJs.indexOf("\n};\n\nconst UA");
+    if(alt !== -1) {
+      nuevoServerJs = serverJs.slice(0,alt) + ",\n" + nuevoBloque + serverJs.slice(alt);
+    } else {
+      // Ultima alternativa: append antes de app.use
+      nuevoServerJs = serverJs.replace("app.use(cors())", nuevoBloque + "\n\napp.use(cors())");
+    }
+  }
+
+  try {
+    await pushFileARepo(ghRepoServer, "server.js", nuevoServerJs);
+    serverJs = nuevoServerJs;
+    msgEl.style.background="rgba(0,255,153,.1)"; msgEl.style.border="1px solid #00ff99"; msgEl.style.color="#00ff99";
+    msgEl.innerHTML=`<i class='fa-solid fa-check'></i> ¡Canal "${nombre}" agregado a server.js! Render redeploya en ~1 min.<br>
+      <span style="color:rgba(0,225,255,.7)">Link: ${getServerUrl()}/live/${id}/player</span>`;
+    // Limpiar campos
+    ["newCanalId","newCanalNombre","newCanalUrl","newCanalEmbed"].forEach(f=>document.getElementById(f).value="");
+    renderCanalEditor();
+    setTimeout(cargarCanalesServidor, 3000);
+  } catch(e) {
+    msgEl.style.background="rgba(255,61,90,.1)"; msgEl.style.border="1px solid #ff3d5a"; msgEl.style.color="#ff3d5a";
+    msgEl.innerHTML=`<i class='fa-solid fa-triangle-exclamation'></i> Error: ${e.message}`;
+  }
+}
+
+/* Eliminar canal del server.js */
+async function eliminarCanalServerJs(id) {
+  if(!confirm(`¿Eliminar el canal "${id}" del servidor?`)) return;
+  if(!ghToken) { showMsg("⚠ Pon tu token en CONFIG",true); return; }
+  if(!serverJs) { await cargarServerJs(); }
+
+  // Eliminar el bloque del canal del serverJs
+  // Intenta diferentes patrones de formato
+  const patrones = [
+    new RegExp(`\\s*"${id}":\\s*\\{[^{}]*(?:\\{[^{}]*\\}[^{}]*)*\\},?\\n?`, 'g'),
+    new RegExp(`\\s*"${id}":\\s*\\{[\\s\\S]*?\\},\\n`, 'g'),
+  ];
+
+  let nuevoServerJs = serverJs;
+  for(const pat of patrones) {
+    const test = nuevoServerJs.replace(pat, "\n");
+    if(test !== nuevoServerJs) { nuevoServerJs = test; break; }
+  }
+
+  if(nuevoServerJs === serverJs) {
+    showMsg(`⚠ No se encontró el canal "${id}" en server.js para eliminar. Edítalo manualmente en GitHub.`, true);
     return;
   }
 
-  msgEl.style.display = "block";
-  msgEl.style.background = "rgba(255,200,0,.1)";
-  msgEl.style.border = "1px solid #ffc800";
-  msgEl.style.color = "#ffc800";
-  msgEl.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Agregando al servidor...";
-
   try {
-    const serverUrl = getServerUrl();
-    const res = await fetch(serverUrl + "/live-add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, url, nombre })
-    });
-    const data = await res.json();
-
-    if (data.ok) {
-      msgEl.style.background = "rgba(0,255,153,.1)";
-      msgEl.style.border = "1px solid #00ff99";
-      msgEl.style.color = "#00ff99";
-      msgEl.innerHTML = `<i class='fa-solid fa-check'></i> ${data.mensaje}<br>
-        <span style="color:rgba(0,225,255,.7)">Link: ${serverUrl}/live/${id}/player</span>`;
-
-      document.getElementById("newCanalId").value = "";
-      document.getElementById("newCanalNombre").value = "";
-      document.getElementById("newCanalUrl").value = "";
-
-      // Recargar lista
-      setTimeout(() => cargarCanalesServidor(), 1000);
-    } else {
-      throw new Error(data.error || "Error desconocido");
-    }
+    await pushFileARepo(ghRepoServer, "server.js", nuevoServerJs);
+    serverJs = nuevoServerJs;
+    showMsg(`✓ Canal "${id}" eliminado de server.js`);
+    serverCanales = serverCanales.filter(c=>c.id!==id);
+    renderServerCanalesList();
+    renderCanalEditor();
   } catch(e) {
-    msgEl.style.background = "rgba(255,61,90,.1)";
-    msgEl.style.border = "1px solid #ff3d5a";
-    msgEl.style.color = "#ff3d5a";
-    msgEl.innerHTML = `<i class='fa-solid fa-triangle-exclamation'></i> Error: ${e.message}`;
+    showMsg("Error: "+e.message, true);
   }
 }
 
-async function probarCanalNuevo() {
-  const url  = document.getElementById("newCanalUrl").value.trim();
-  const id   = document.getElementById("newCanalId").value.trim() || "test";
-  if (!url) { showMsg("⚠ Pon la URL del canal", true); return; }
-
-  // Llamar al servidor para extraer el embed
-  const serverUrl = getServerUrl();
-  const msgEl = document.getElementById("addCanalMsg");
-  msgEl.style.display = "block";
-  msgEl.style.background = "rgba(255,200,0,.1)";
-  msgEl.style.border = "1px solid #ffc800";
-  msgEl.style.color = "#ffc800";
-  msgEl.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Extrayendo stream...";
-
-  try {
-    // Agregar temporalmente y probar
-    const res = await fetch(serverUrl + "/live-add", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: "preview-test-" + Date.now(), url, nombre: "Test" })
-    });
-    const data = await res.json();
-    if (data.ok) {
-      const playerUrl = serverUrl + "/live/preview-test-" + Date.now() + "/player";
-      msgEl.style.background = "rgba(0,255,153,.1)";
-      msgEl.style.border = "1px solid #00ff99";
-      msgEl.style.color = "#00ff99";
-      msgEl.innerHTML = `<i class='fa-solid fa-check'></i> Stream encontrado — abriendo preview...`;
-      window.open(serverUrl + "/live-add", "_blank");
-    }
-  } catch {}
-
-  // Abrir la página directamente en nueva ventana para ver
-  window.open(url, "_blank");
+function probarEmbedNuevo() {
+  const embed=document.getElementById("newCanalEmbed").value.trim();
+  const url=document.getElementById("newCanalUrl").value.trim();
+  const target=embed||url;
+  if(!target){showMsg("⚠ Pon un link para probar",true);return;}
+  window.open(target,"_blank","width=900,height=600");
 }
 
-function generarLinkRapido() {
-  const id   = document.getElementById("quickCanalSelect").value;
-  const tipo = document.getElementById("quickTipo").value;
-  if (!id) { showMsg("⚠ Selecciona un canal", true); return; }
-
-  const serverUrl = getServerUrl();
-  const link = tipo === "player"
-    ? serverUrl + "/live/" + id + "/player"
-    : serverUrl + "/live/" + id;
-
-  const res = document.getElementById("quickLinkResult");
-  res.style.display = "block";
-  res.textContent = link;
-
-  navigator.clipboard.writeText(link).then(() => {
-    showMsg("✓ Link copiado al portapapeles");
-  }).catch(() => {
-    prompt("Copia este link:", link);
-  });
-}
-
-/* ─────────────────── GUARDAR EN GITHUB ─────────────────── */
+/* ─── GUARDAR canales.json + contenido.json EN GITHUB ─── */
 async function guardar() {
-  if (!ghToken) { showMsg("⚠ Primero guarda tu token en CONFIG", true); return; }
-  showMsg("⏳ Guardando en GitHub...", false, true);
+  if(!ghToken){showMsg("⚠ Primero guarda tu token en CONFIG",true);return;}
+  showMsg("⏳ Guardando en GitHub...",false,true);
   try {
-    canales.eventos = eventosList;
-    await pushFile("canales.json",  JSON.stringify(canales,   null, 2));
-    await pushFile("contenido.json", JSON.stringify(contenido, null, 2));
+    canales.eventos=eventosList;
+    await pushFile("canales.json", JSON.stringify(canales,null,2));
+    await pushFile("contenido.json", JSON.stringify(contenido,null,2));
     showMsg("✓ Guardado en GitHub correctamente");
-  } catch(e) {
-    showMsg("Error: " + e.message, true);
-  }
+  } catch(e) { showMsg("Error: "+e.message,true); }
 }
 
 async function pushFile(filename, content) {
-  const url  = `https://api.github.com/repos/${ghUser}/${ghRepo}/contents/${filename}`;
-  const meta = await fetch(url, { headers: { Authorization: "token " + ghToken, Accept: "application/vnd.github.v3+json" } });
-  const metaJson = await meta.json();
-  const sha = metaJson.sha;
-  const encoded = btoa(unescape(encodeURIComponent(content)));
-  const res = await fetch(url, {
-    method: "PUT",
-    headers: { Authorization: "token " + ghToken, Accept: "application/vnd.github.v3+json", "Content-Type": "application/json" },
-    body: JSON.stringify({ message: "Admin: update " + filename, content: encoded, sha })
+  return pushFileARepo(ghRepo, filename, content);
+}
+
+async function pushFileARepo(repo, filename, content) {
+  const url=`https://api.github.com/repos/${ghUser}/${repo}/contents/${filename}`;
+  const meta=await fetch(url,{headers:{Authorization:"token "+ghToken,Accept:"application/vnd.github.v3+json"}});
+  const metaJson=await meta.json();
+  const sha=metaJson.sha;
+  const encoded=btoa(unescape(encodeURIComponent(content)));
+  const res=await fetch(url,{
+    method:"PUT",
+    headers:{Authorization:"token "+ghToken,Accept:"application/vnd.github.v3+json","Content-Type":"application/json"},
+    body:JSON.stringify({message:`Admin: update ${filename}`,content:encoded,sha})
   });
-  if (!res.ok) { const err = await res.json(); throw new Error(err.message || res.statusText); }
+  if(!res.ok){const err=await res.json();throw new Error(err.message||res.statusText);}
 }
 
-function showMsg(text, isErr=false, loading=false) {
-  const el = document.getElementById("msg");
-  el.className = "msg " + (isErr ? "err" : "ok");
-  el.textContent = text;
-  el.style.display = "block";
-  if (!loading && !isErr) setTimeout(() => el.style.display="none", 4000);
+function showMsg(text,isErr=false,loading=false) {
+  const el=document.getElementById("msg");
+  el.className="msg "+(isErr?"err":"ok");
+  el.textContent=text; el.style.display="block";
+  if(!loading&&!isErr) setTimeout(()=>el.style.display="none",4000);
 }
 
-/* ─────────────────── GENERADOR DE SERIES ─────────────────── */
+/* ─── GENERADOR SERIES ─── */
 function actualizarFilasTemp() {
-  const n = parseInt(document.getElementById("genNumTemp").value) || 1;
-  const cont = document.getElementById("genTempRows");
-  const vals = [];
-  cont.querySelectorAll("input").forEach(i => vals.push(i.value));
-  cont.innerHTML = "";
-  for (let t = 1; t <= n; t++) {
-    const row = document.createElement("div");
-    row.className = "gen-temp-row";
-    row.innerHTML = `<label>T${t} — Eps</label><input type="number" min="1" max="300" placeholder="Ej: 60" value="${vals[t-1]||''}"/>`;
+  const n=parseInt(document.getElementById("genNumTemp").value)||1;
+  const cont=document.getElementById("genTempRows");
+  const vals=[]; cont.querySelectorAll("input").forEach(i=>vals.push(i.value));
+  cont.innerHTML="";
+  for(let t=1;t<=n;t++){
+    const row=document.createElement("div"); row.className="gen-temp-row";
+    row.innerHTML=`<label>T${t} — Eps</label><input type="number" min="1" max="300" placeholder="Ej: 60" value="${vals[t-1]||''}"/>`;
     cont.appendChild(row);
   }
 }
-
 function generarSerie() {
-  const nombre  = document.getElementById("genNombre").value.trim();
-  const imdb    = document.getElementById("genImdb").value.trim();
-  const genero  = document.getElementById("genGenero").value.trim();
-  const portada = document.getElementById("genPortada").value.trim();
-  const player  = document.getElementById("genPlayer").value;
-  const numTemp = parseInt(document.getElementById("genNumTemp").value) || 1;
-  const rows    = document.getElementById("genTempRows").querySelectorAll("input");
-
-  if (!nombre) { showMsg("⚠ Pon el nombre de la serie", true); return; }
-  if (!imdb)   { showMsg("⚠ Pon el ID de IMDb", true); return; }
-
-  const temporadas = [];
-  let totalEps = 0;
-  for (let t = 0; t < numTemp; t++) {
-    const numEps = parseInt(rows[t]?.value) || 0;
-    if (!numEps) { showMsg(`⚠ Pon episodios de T${t+1}`, true); return; }
-    const episodios = [];
-    for (let e = 1; e <= numEps; e++) {
-      episodios.push({ nombre: `Episodio ${e}`, link: player.replace("{id}",imdb).replace("{t}",t+1).replace("{e}",e) });
-    }
-    temporadas.push({ nombre: `Temporada ${t+1}`, episodios });
-    totalEps += numEps;
+  const nombre=document.getElementById("genNombre").value.trim();
+  const imdb=document.getElementById("genImdb").value.trim();
+  const genero=document.getElementById("genGenero").value.trim();
+  const portada=document.getElementById("genPortada").value.trim();
+  const player=document.getElementById("genPlayer").value;
+  const numTemp=parseInt(document.getElementById("genNumTemp").value)||1;
+  const rows=document.getElementById("genTempRows").querySelectorAll("input");
+  if(!nombre){showMsg("⚠ Pon el nombre",true);return;}
+  if(!imdb){showMsg("⚠ Pon el ID de IMDb",true);return;}
+  const temporadas=[]; let totalEps=0;
+  for(let t=0;t<numTemp;t++){
+    const numEps=parseInt(rows[t]?.value)||0;
+    if(!numEps){showMsg(`⚠ Pon episodios de T${t+1}`,true);return;}
+    const episodios=[];
+    for(let e=1;e<=numEps;e++) episodios.push({nombre:`Episodio ${e}`,link:player.replace("{id}",imdb).replace("{t}",t+1).replace("{e}",e)});
+    temporadas.push({nombre:`Temporada ${t+1}`,episodios}); totalEps+=numEps;
   }
-
-  if (!contenido.series) contenido.series = [];
-  contenido.series.push({ nombre, genero, portada, temporadas });
+  if(!contenido.series)contenido.series=[];
+  contenido.series.push({nombre,genero,portada,temporadas});
   renderSeries();
-
-  const prev = document.getElementById("genPreview");
-  prev.style.display = "block";
-  prev.innerHTML = `✓ <strong>${nombre}</strong> — ${numTemp} temp. — ${totalEps} eps`;
-
-  document.getElementById("genNombre").value = "";
-  document.getElementById("genImdb").value = "";
-  document.getElementById("genNumTemp").value = "1";
-  actualizarFilasTemp();
+  document.getElementById("genPreview").style.display="block";
+  document.getElementById("genPreview").innerHTML=`✓ ${nombre} — ${numTemp} temp. — ${totalEps} eps`;
+  document.getElementById("genNombre").value=""; document.getElementById("genImdb").value="";
+  document.getElementById("genNumTemp").value="1"; actualizarFilasTemp();
   showMsg(`✓ "${nombre}" agregada. Presiona GUARDAR EN GITHUB.`);
 }
 
-window.addEventListener("load", actualizarFilasTemp);
+window.addEventListener("load",actualizarFilasTemp);
 </script>
 </body>
 </html>
