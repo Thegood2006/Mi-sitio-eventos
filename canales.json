@@ -6,7 +6,8 @@
       "tipo": "iframe",
       "reproductores": [
         "https://www.canalrcn.com/ec/tv-en-vivo",
-        "https://deportelibree.com/disney.php"
+        "https://deportes.ksdjugfsddeports.com:9092/MTU3LjEwMC44Ny4xOTE=/30_.m3u8?token=DKp2O2qOIOQcmj3i6pTG_Q&expires=1781778248}",
+        "https://regionales.saohgdasregions.fun:9092/MTU3LjEwMC44Ny4xOTE=/17_.m3u8?token=zzq-eASgljjkyDwcvq7PvQ&expires=1781789084"
       ]
     }
   ],
@@ -29,14 +30,6 @@
     }
   ],
   "ecuador": [
-    {
-      "nombre": "Ecuavisa",
-      "liga": "Canal Ecuador",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://jireh-7-hls-video-us-isp.dps.live/hls-video/c54ac2799874375c81c1672abb700870537c5223/ecuavisa/ecuavisa.smil/ecuavisa/livestream1/chunks_dvr.m3u8?ndvc=1&dpssid=r1us13874053282544f6a7459a45fe1ba52d344dceacd1&sid=ba5t1l1xb21428716576a22fe49875cb"
-      ]
-    },
     {
       "nombre": "Teleamazonas",
       "liga": "Canal Ecuador",
@@ -123,6 +116,30 @@
       "tipo": "iframe",
       "reproductores": [
         "https://www.tvc.com.ec/envivo/"
+      ]
+    },
+    {
+      "nombre": "carton",
+      "liga": "Canal Ecuador",
+      "tipo": "iframe",
+      "reproductores": [
+        "https://theygoodtv-server.onrender.com/live/cartonn/player"
+      ]
+    },
+    {
+      "nombre": "carton",
+      "liga": "Canal Ecuador",
+      "tipo": "iframe",
+      "reproductores": [
+        "https://theygoodtv-server.onrender.com/live/cartonn/player"
+      ]
+    },
+    {
+      "nombre": "carton",
+      "liga": "Canal Ecuador",
+      "tipo": "iframe",
+      "reproductores": [
+        "https://theygoodtv-server.onrender.com/live/cartonn/player"
       ]
     }
   ],
