@@ -5,7 +5,7 @@
       "liga": "23:00",
       "tipo": "iframe",
       "reproductores": [
-        "<iframe src=\"https://moviedays.top/embed-live3.php?v=tudn\" allowfullscreen allow=\"autoplay; encrypted-media\"></iframe>"
+        "https://moviedays.top/embed-live3.php?v=tudn"
       ]
     }
   ],
