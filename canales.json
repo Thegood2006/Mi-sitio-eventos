@@ -118,30 +118,6 @@
       "reproductores": [
         "https://www.tvc.com.ec/envivo/"
       ]
-    },
-    {
-      "nombre": "carton",
-      "liga": "Canal Ecuador",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://theygoodtv-server.onrender.com/live/cartonn/player"
-      ]
-    },
-    {
-      "nombre": "carton",
-      "liga": "Canal Ecuador",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://theygoodtv-server.onrender.com/live/cartonn/player"
-      ]
-    },
-    {
-      "nombre": "carton",
-      "liga": "Canal Ecuador",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://theygoodtv-server.onrender.com/live/cartonn/player"
-      ]
     }
   ],
   "internacional": [
@@ -191,22 +167,6 @@
       "tipo": "m3u8",
       "reproductores": [
         "TU_LINK_FOX_MX"
-      ]
-    },
-    {
-      "nombre": "Nuevo evento",
-      "liga": "",
-      "tipo": "m3u8",
-      "reproductores": [
-        ""
-      ]
-    },
-    {
-      "nombre": "Nuevo evento",
-      "liga": "",
-      "tipo": "m3u8",
-      "reproductores": [
-        ""
       ]
     }
   ],
