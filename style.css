@@ -1,34 +1,36 @@
 /* ═══════════════════════════════════════════════════════════
-   THEY GOOD TV — Android TV / YouTube TV Style
-   Design system: 10-foot UI, large tiles, focus rings,
-   dark slate palette
+   THEY GOOD TV — Broadcast Signal UI
+   Dark control-room palette + live-signal ambient motion.
+   Display face: Orbitron (headers, labels, buttons)
+   Body face:    Inter    (paragraphs, descriptions)
 ═══════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-0:        #0d0d0d;
-  --bg-1:        #161616;
-  --bg-2:        #212121;
-  --bg-3:        #2a2a2a;
+  --bg-0:        #0a0a0a;
+  --bg-1:        #151515;
+  --bg-2:        #1f1f1f;
+  --bg-3:        #292929;
   --bg-4:        #333333;
 
   --red:         #e00000;
-  --red-hover:   #c00000;
-  --red-dim:     rgba(220,0,0,0.14);
-  --red-glow:    rgba(220,0,0,0.35);
+  --red-hover:   #ff1a1a;
+  --red-dim:     rgba(224,0,0,0.14);
+  --red-glow:    rgba(224,0,0,0.4);
+  --amber:       #ffb400;
 
   --white:       #ffffff;
-  --text-1:      #f1f1f1;
-  --text-2:      #aaaaaa;
-  --text-3:      #666666;
+  --text-1:      #f3f3f3;
+  --text-2:      #a8a8a8;
+  --text-3:      #6b6b6b;
 
   --border:      rgba(255,255,255,0.08);
   --border-md:   rgba(255,255,255,0.14);
-  --border-hi:   rgba(255,255,255,0.22);
+  --border-hi:   rgba(255,255,255,0.24);
 
   --focus-ring:  3px solid #ffffff;
-  --focus-glow:  0 0 0 5px rgba(255,255,255,0.15);
+  --focus-glow:  0 0 0 5px rgba(255,255,255,0.16);
 
   --r-xs:   4px;
   --r-sm:   8px;
@@ -41,7 +43,11 @@
   --shadow-2: 0 8px 28px rgba(0,0,0,0.7);
   --shadow-3: 0 20px 60px rgba(0,0,0,0.85);
 
-  --ease: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --ease:     0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-slow: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  --font-display: 'Orbitron', sans-serif;
+  --font-body:    'Inter', sans-serif;
 }
 
 *, *::before, *::after {
@@ -49,12 +55,15 @@
   -webkit-font-smoothing: antialiased;
 }
 
+html { scroll-behavior: smooth; }
+
 body {
   background: var(--bg-0);
   color: var(--text-1);
   min-height: 100vh;
   overflow-x: hidden;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-body);
+  position: relative;
 }
 
 #bgCanvas { display: none !important; }
@@ -63,6 +72,58 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: var(--r-pill); }
 ::-webkit-scrollbar-thumb:hover { background: var(--bg-4); }
+
+/* ═══════════════════════════════════════════════════════════
+   SIGNATURE — AMBIENT SIGNAL BACKDROP
+   Fills the dark canvas with slow-drifting broadcast "signal"
+   glows + a faint scanline sweep, so the page never reads as
+   empty even where there's no content yet.
+═══════════════════════════════════════════════════════════ */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  z-index: -2;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+}
+body::before {
+  top: -10%; left: -12%;
+  width: 46vw; height: 46vw;
+  background: radial-gradient(circle, var(--red-glow), transparent 70%);
+  animation: driftA 22s ease-in-out infinite;
+}
+body::after {
+  bottom: -16%; right: -10%;
+  width: 40vw; height: 40vw;
+  background: radial-gradient(circle, rgba(255,180,0,0.18), transparent 70%);
+  animation: driftB 26s ease-in-out infinite;
+}
+@keyframes driftA {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50%     { transform: translate(6vw, 8vh) scale(1.15); }
+}
+@keyframes driftB {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50%     { transform: translate(-5vw, -6vh) scale(1.1); }
+}
+
+#scanline {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.025) 50%, transparent 100%);
+  background-size: 100% 240px;
+  animation: scanSweep 9s linear infinite;
+  opacity: 0.6;
+}
+@keyframes scanSweep {
+  0%   { background-position: 0 -240px; }
+  100% { background-position: 0 100vh; }
+}
 
 /* ── FOCUS ── */
 button:focus-visible,
@@ -90,7 +151,8 @@ header {
   justify-content: space-between !important;
   height: 60px;
   padding: 0 24px !important;
-  background: #0a0a0a !important;
+  background: rgba(10,10,10,0.88) !important;
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border) !important;
   position: sticky !important;
   top: 0;
@@ -121,22 +183,23 @@ header {
   justify-content: center !important;
   font-size: 13px !important;
   color: #fff !important;
-  animation: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 0 0 var(--red-glow);
+  animation: logoPulse 3s ease-in-out infinite;
   flex-shrink: 0;
+}
+@keyframes logoPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(224,0,0,0.35); }
+  50%     { box-shadow: 0 0 14px 2px rgba(224,0,0,0.35); }
 }
 
 header h1 {
-  font-family: 'Orbitron', sans-serif !important;
-  font-size: 1rem !important;
+  font-family: var(--font-display) !important;
+  font-size: clamp(0.82rem, 2.4vw, 1rem) !important;
   font-weight: 900 !important;
   color: #fff !important;
   background: none !important;
-  -webkit-background-clip: unset !important;
   -webkit-text-fill-color: #fff !important;
-  background-clip: unset !important;
   letter-spacing: 2px !important;
-  animation: none !important;
 }
 
 header p { display: none !important; }
@@ -153,6 +216,7 @@ header p { display: none !important; }
   padding: 5px 12px !important;
   border-radius: var(--r-pill) !important;
   letter-spacing: 1px;
+  font-family: var(--font-display);
 }
 
 .live-pulse {
@@ -174,7 +238,7 @@ header p { display: none !important; }
   background: var(--bg-2);
   border: 1px solid var(--border-md);
   color: var(--text-2);
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   font-size: 0.55rem;
   padding: 4px 12px;
   border-radius: var(--r-pill);
@@ -251,17 +315,19 @@ body.tv-mode #tvBadge { display: inline-block; }
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: background var(--ease), border-color var(--ease) !important;
+  transition: background var(--ease), border-color var(--ease), transform var(--ease) !important;
   white-space: nowrap;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
+  min-height: 38px;
 }
 
 .controls button:hover {
   background: var(--bg-3) !important;
   border-color: var(--border-md) !important;
-  transform: none !important;
+  transform: translateY(-1px) !important;
   box-shadow: none !important;
 }
+.controls button:active { transform: scale(0.96) !important; }
 
 #tvModeBtn {
   background: var(--red) !important;
@@ -279,7 +345,11 @@ body.tv-mode #tvBadge { display: inline-block; }
   background: rgba(0,200,100,0.12) !important;
   border-color: rgba(0,200,100,0.4) !important;
   color: #00c864 !important;
-  animation: none !important;
+  animation: castGlow 2s ease-in-out infinite !important;
+}
+@keyframes castGlow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,200,100,0.25); }
+  50%     { box-shadow: 0 0 12px 2px rgba(0,200,100,0.25); }
 }
 
 #stopCastBtn {
@@ -287,11 +357,11 @@ body.tv-mode #tvBadge { display: inline-block; }
   border: 1px solid rgba(220,0,0,0.35) !important;
   color: #ff4444 !important;
   animation: none !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 #stopCastBtn:hover {
   background: rgba(220,0,0,0.2) !important;
-  transform: none !important;
+  transform: translateY(-1px) !important;
   box-shadow: none !important;
 }
 
@@ -323,6 +393,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   overflow-x: auto;
   scrollbar-width: none;
   flex-wrap: nowrap;
+  scroll-snap-type: x proximate;
 }
 .nav-tabs::-webkit-scrollbar { display: none; }
 
@@ -342,7 +413,9 @@ body.tv-mode #tvBadge { display: inline-block; }
   gap: 5px;
   letter-spacing: 0.5px !important;
   transition: all var(--ease) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
+  scroll-snap-align: start;
+  min-height: 38px;
 }
 
 .nav-tab:hover {
@@ -360,9 +433,9 @@ body.tv-mode #tvBadge { display: inline-block; }
   box-shadow: none !important;
 }
 
-.tab-section { animation: fadeInTab .2s ease; }
+.tab-section { animation: fadeInTab .35s var(--ease-slow); }
 @keyframes fadeInTab {
-  from { opacity: 0; transform: translateY(5px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -371,7 +444,7 @@ body.tv-mode #tvBadge { display: inline-block; }
 .section-title,
 .proximos-title {
   color: var(--text-1) !important;
-  font-family: 'Orbitron', sans-serif !important;
+  font-family: var(--font-display) !important;
   font-size: 0.72rem !important;
   font-weight: 700 !important;
   letter-spacing: 1.5px !important;
@@ -402,13 +475,15 @@ body.tv-mode #tvBadge { display: inline-block; }
   border-radius: var(--r-pill) !important;
   padding: 9px 14px !important;
   color: var(--text-1) !important;
-  font-size: 0.72rem !important;
-  font-family: 'Orbitron', sans-serif;
+  font-size: 0.78rem !important;
+  font-family: var(--font-body);
   outline: none;
-  transition: border-color var(--ease);
+  transition: border-color var(--ease), background var(--ease);
+  min-height: 38px;
 }
 .search-box input:focus {
   border-color: var(--border-hi) !important;
+  background: var(--bg-3) !important;
   box-shadow: none !important;
 }
 .search-box input::placeholder { color: var(--text-3) !important; }
@@ -421,15 +496,17 @@ body.tv-mode #tvBadge { display: inline-block; }
   padding: 9px 14px !important;
   cursor: pointer;
   font-size: 0.75rem !important;
-  font-family: 'Orbitron', sans-serif;
-  transition: background var(--ease) !important;
+  font-family: var(--font-display);
+  transition: background var(--ease), transform var(--ease) !important;
   box-shadow: none !important;
-  transform: none !important;
+  min-height: 38px;
+  min-width: 44px;
 }
 .search-box button:hover {
   background: var(--bg-3) !important;
   color: var(--text-1) !important;
 }
+.search-box button:active { transform: scale(0.94) !important; }
 
 .search-results-label {
   color: var(--text-3);
@@ -438,7 +515,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 8px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 /* ── EVENT CATEGORY / ACCORDION ── */
@@ -459,8 +536,9 @@ body.tv-mode #tvBadge { display: inline-block; }
   font-weight: 700 !important;
   letter-spacing: 0.5px !important;
   transition: background var(--ease), border-color var(--ease) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   border-left: 3px solid transparent !important;
+  min-height: 44px;
 }
 
 .event-btn:hover {
@@ -473,8 +551,13 @@ body.tv-mode #tvBadge { display: inline-block; }
 
 .event-btn span { display: flex; align-items: center; gap: 8px; }
 .event-btn i.fa-chevron-down { color: var(--text-3); font-size: 0.65rem; transition: transform var(--ease); }
+.event-btn[aria-expanded="true"] i.fa-chevron-down,
+.event-btn.open i.fa-chevron-down { transform: rotate(180deg); }
 
-.event-menu { padding: 6px 0 4px !important; }
+.event-menu {
+  padding: 6px 0 4px !important;
+  animation: fadeInTab .25s var(--ease-slow);
+}
 
 /* ── EVENT ITEMS ── */
 .event-item {
@@ -502,8 +585,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   display: flex;
   align-items: center;
   gap: 6px;
-  animation: none !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 .live::before {
   content: '';
@@ -520,14 +602,15 @@ body.tv-mode #tvBadge { display: inline-block; }
   font-size: 0.78rem !important;
   font-weight: 700 !important;
   margin-bottom: 3px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .event-item p {
   color: var(--text-2) !important;
-  font-size: 0.65rem !important;
+  font-size: 0.72rem !important;
   margin-bottom: 10px !important;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
+  font-family: var(--font-body);
 }
 
 /* ── PLAYER BUTTONS ── */
@@ -542,7 +625,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   background: var(--red) !important;
   border: none !important;
   color: #fff !important;
-  padding: 10px 14px !important;
+  padding: 11px 14px !important;
   border-radius: var(--r-sm) !important;
   cursor: pointer;
   font-size: 0.7rem !important;
@@ -554,9 +637,10 @@ body.tv-mode #tvBadge { display: inline-block; }
   gap: 6px;
   transition: background var(--ease), transform var(--ease), box-shadow var(--ease) !important;
   box-shadow: 0 3px 12px rgba(200,0,0,0.3) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   position: relative;
   overflow: hidden;
+  min-height: 44px;
 }
 
 .player-btn::before {
@@ -571,6 +655,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   box-shadow: 0 6px 20px rgba(200,0,0,0.45) !important;
   transform: translateY(-1px) !important;
 }
+.player-btn:active { transform: scale(0.97) !important; }
 
 .player-btn.caido {
   background: var(--bg-3) !important;
@@ -586,6 +671,7 @@ body.tv-mode #tvBadge { display: inline-block; }
 .repro-estado {
   margin: 6px 0 4px;
   min-height: 18px;
+  font-family: var(--font-body);
 }
 
 /* ── STREAM STATUS ── */
@@ -597,7 +683,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   padding: 2px 8px;
   border-radius: 10px;
   margin-left: 6px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 .stream-status.activo  { background: rgba(0,200,80,.12); border: 1px solid rgba(0,200,80,.3); color: #00c850; }
 .stream-status.caido   { background: rgba(220,0,0,.12);  border: 1px solid rgba(220,0,0,.3);  color: #ff4444; }
@@ -609,11 +695,11 @@ body.tv-mode #tvBadge { display: inline-block; }
   text-align: center;
   padding: 10px 0 4px;
   letter-spacing: 1px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   CARDS GRID
+   CARDS GRID — with staggered entrance
 ═══════════════════════════════════════════════════════════ */
 .cards-grid {
   display: grid !important;
@@ -628,9 +714,26 @@ body.tv-mode #tvBadge { display: inline-block; }
   border-radius: var(--r-md) !important;
   overflow: hidden;
   cursor: pointer;
-  transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease) !important;
+  transition: transform var(--ease-slow), border-color var(--ease), box-shadow var(--ease-slow) !important;
   position: relative;
+  opacity: 0;
+  animation: cardIn .5s var(--ease-slow) forwards;
 }
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+/* staggered delay by position, repeats every 10 so long grids stay snappy */
+.cards-grid .card:nth-child(10n+1)  { animation-delay: 0.00s; }
+.cards-grid .card:nth-child(10n+2)  { animation-delay: 0.03s; }
+.cards-grid .card:nth-child(10n+3)  { animation-delay: 0.06s; }
+.cards-grid .card:nth-child(10n+4)  { animation-delay: 0.09s; }
+.cards-grid .card:nth-child(10n+5)  { animation-delay: 0.12s; }
+.cards-grid .card:nth-child(10n+6)  { animation-delay: 0.15s; }
+.cards-grid .card:nth-child(10n+7)  { animation-delay: 0.18s; }
+.cards-grid .card:nth-child(10n+8)  { animation-delay: 0.21s; }
+.cards-grid .card:nth-child(10n+9)  { animation-delay: 0.24s; }
+.cards-grid .card:nth-child(10n+10) { animation-delay: 0.27s; }
 
 .card::before {
   content: '';
@@ -639,15 +742,13 @@ body.tv-mode #tvBadge { display: inline-block; }
   width: 3px;
   background: var(--red);
   opacity: 0;
-  border-radius: 0;
   transition: opacity var(--ease);
 }
-.card::after { display: none !important; }
 
 .card:hover {
-  transform: translateY(-4px) scale(1.03) !important;
+  transform: translateY(-5px) scale(1.035) !important;
   border-color: var(--border-hi) !important;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08) !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08) !important;
 }
 .card:hover::before { opacity: 1; }
 
@@ -656,7 +757,9 @@ body.tv-mode #tvBadge { display: inline-block; }
   aspect-ratio: 2/3;
   object-fit: cover;
   display: block;
+  transition: transform .5s var(--ease-slow);
 }
+.card:hover img { transform: scale(1.08); }
 
 .card-info { padding: 8px 10px 10px !important; }
 
@@ -668,14 +771,15 @@ body.tv-mode #tvBadge { display: inline-block; }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .card-info p {
   color: var(--text-3) !important;
-  font-size: 0.58rem !important;
+  font-size: 0.62rem !important;
   margin: 0 0 7px !important;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  font-family: var(--font-body);
 }
 
 .card-play {
@@ -684,7 +788,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   color: #fff !important;
   font-size: 0.6rem !important;
   font-weight: 700 !important;
-  padding: 6px 8px !important;
+  padding: 7px 8px !important;
   border-radius: var(--r-xs) !important;
   cursor: pointer;
   width: 100%;
@@ -694,8 +798,9 @@ body.tv-mode #tvBadge { display: inline-block; }
   gap: 4px;
   transition: background var(--ease) !important;
   box-shadow: 0 2px 8px rgba(180,0,0,0.25) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   letter-spacing: 0.5px;
+  min-height: 32px;
 }
 .card-play:hover {
   background: var(--red-hover) !important;
@@ -704,7 +809,7 @@ body.tv-mode #tvBadge { display: inline-block; }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   BANNER ESTRENOS
+   BANNER ESTRENOS — ken-burns drift
 ═══════════════════════════════════════════════════════════ */
 .banner-estrenos {
   position: relative;
@@ -723,7 +828,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   z-index: 10;
   background: var(--red) !important;
   color: #fff !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   font-size: 0.52rem !important;
   font-weight: 900 !important;
   padding: 3px 10px !important;
@@ -734,7 +839,7 @@ body.tv-mode #tvBadge { display: inline-block; }
 .banner-track {
   display: flex;
   height: 100%;
-  transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+  transition: transform 0.6s cubic-bezier(.4,0,.2,1);
 }
 
 .banner-slide {
@@ -743,10 +848,16 @@ body.tv-mode #tvBadge { display: inline-block; }
   position: relative;
   cursor: pointer;
   flex-shrink: 0;
+  overflow: hidden;
 }
 .banner-slide img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
+  animation: kenBurns 14s ease-in-out infinite alternate;
+}
+@keyframes kenBurns {
+  from { transform: scale(1)    translate(0,0); }
+  to   { transform: scale(1.12) translate(-1.5%, -1%); }
 }
 
 .banner-slide-info {
@@ -758,7 +869,7 @@ body.tv-mode #tvBadge { display: inline-block; }
 
 .banner-slide-title {
   color: var(--text-1) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   font-size: 0.82rem !important;
   font-weight: 900 !important;
   margin-bottom: 4px;
@@ -767,9 +878,9 @@ body.tv-mode #tvBadge { display: inline-block; }
 
 .banner-slide-meta {
   color: var(--text-2) !important;
-  font-size: 0.6rem !important;
+  font-size: 0.62rem !important;
   display: flex; align-items: center; gap: 8px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-body);
 }
 
 .banner-slide-play {
@@ -779,15 +890,16 @@ body.tv-mode #tvBadge { display: inline-block; }
   background: var(--red) !important;
   border: none !important;
   color: #fff !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   font-size: 0.58rem !important;
   font-weight: 900 !important;
-  padding: 5px 12px !important;
+  padding: 6px 12px !important;
   border-radius: var(--r-xs) !important;
   cursor: pointer;
   margin-top: 6px;
   transition: background var(--ease), transform var(--ease) !important;
   box-shadow: 0 2px 10px rgba(180,0,0,0.35);
+  min-height: 32px;
 }
 .banner-slide-play:hover {
   background: var(--red-hover) !important;
@@ -801,13 +913,13 @@ body.tv-mode #tvBadge { display: inline-block; }
   border: 1px solid var(--border-md) !important;
   color: var(--text-1) !important;
   border-radius: 50%;
-  width: 30px !important; height: 30px !important;
+  width: 32px !important; height: 32px !important;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px;
   cursor: pointer; z-index: 10;
-  transition: background var(--ease) !important;
+  transition: background var(--ease), transform var(--ease) !important;
 }
-.banner-arrow:hover { background: rgba(0,0,0,0.9) !important; }
+.banner-arrow:hover { background: rgba(0,0,0,0.9) !important; transform: translateY(-50%) scale(1.08) !important; }
 .banner-prev { left: 8px; }
 .banner-next { right: 8px; }
 
@@ -858,18 +970,19 @@ body.tv-mode #tvBadge { display: inline-block; }
   font-size: 0.75rem !important;
   font-weight: 700 !important;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 .evento-proximo-liga {
   color: var(--text-2) !important;
-  font-size: 0.6rem !important;
+  font-size: 0.65rem !important;
   margin-top: 2px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
+  font-family: var(--font-body);
 }
 .evento-proximo-fecha {
   color: var(--text-2) !important;
   font-size: 0.6rem !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   flex-shrink: 0;
   text-align: right;
 }
@@ -879,7 +992,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   font-weight: 700 !important;
   display: block;
   animation: liveDot 1.6s ease infinite;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .evento-ver-btn {
@@ -889,14 +1002,15 @@ body.tv-mode #tvBadge { display: inline-block; }
   color: #fff !important;
   font-size: 0.68rem !important;
   font-weight: 700 !important;
-  padding: 8px 12px !important;
+  padding: 9px 12px !important;
   border-radius: var(--r-sm) !important;
   cursor: pointer;
   transition: background var(--ease), transform var(--ease) !important;
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   box-shadow: 0 3px 10px rgba(180,0,0,0.25);
   margin-top: 2px;
+  min-height: 40px;
 }
 .evento-ver-btn:hover {
   background: var(--red-hover) !important;
@@ -910,20 +1024,21 @@ body.tv-mode #tvBadge { display: inline-block; }
   border: 1px solid var(--border) !important;
   color: var(--text-3) !important;
   font-size: 0.62rem !important;
-  padding: 7px 12px !important;
+  padding: 8px 12px !important;
   border-radius: var(--r-sm) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   text-align: center;
   cursor: default;
   margin-top: 2px;
 }
 
+/* Skeleton shimmer while events load, instead of bare text */
 .proximos-loading {
   color: var(--text-3) !important;
   font-size: 0.68rem !important;
   text-align: center;
   padding: 16px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -935,6 +1050,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   background: rgba(0,0,0,0.88);
   z-index: 1000;
   align-items: center; justify-content: center; padding: 16px;
+  animation: fadeInTab .2s ease;
 }
 #seriesModal.open { display: flex; }
 
@@ -947,6 +1063,11 @@ body.tv-mode #tvBadge { display: inline-block; }
   display: flex; flex-direction: column;
   overflow: hidden;
   box-shadow: var(--shadow-3) !important;
+  animation: modalIn .3s var(--ease-slow);
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modal-header {
@@ -962,7 +1083,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   font-weight: 900 !important;
   margin: 0; flex: 1;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .modal-close {
@@ -974,8 +1095,9 @@ body.tv-mode #tvBadge { display: inline-block; }
   cursor: pointer;
   font-size: 0.65rem !important;
   font-weight: 700 !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   transition: background var(--ease), color var(--ease) !important;
+  min-height: 36px;
 }
 .modal-close:hover { background: var(--bg-3) !important; color: var(--text-1) !important; }
 
@@ -992,11 +1114,12 @@ body.tv-mode #tvBadge { display: inline-block; }
   color: var(--text-2) !important;
   font-size: 0.65rem !important;
   font-weight: 700 !important;
-  padding: 6px 14px !important;
+  padding: 7px 14px !important;
   border-radius: var(--r-pill) !important;
   cursor: pointer; white-space: nowrap;
   transition: all var(--ease) !important; flex-shrink: 0;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
+  min-height: 34px;
 }
 .season-tab.active {
   background: var(--white) !important;
@@ -1031,13 +1154,14 @@ body.tv-mode #tvBadge { display: inline-block; }
   font-size: 0.58rem !important;
   font-weight: 700 !important;
   margin-bottom: 2px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .episode-name {
   color: var(--text-1) !important;
-  font-size: 0.78rem !important;
+  font-size: 0.8rem !important;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: var(--font-body);
 }
 
 .episode-play {
@@ -1046,11 +1170,12 @@ body.tv-mode #tvBadge { display: inline-block; }
   color: #fff !important;
   font-size: 0.62rem !important;
   font-weight: 700 !important;
-  padding: 6px 14px !important;
+  padding: 7px 14px !important;
   border-radius: var(--r-xs) !important;
   cursor: pointer; white-space: nowrap; flex-shrink: 0;
   transition: background var(--ease) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
+  min-height: 34px;
 }
 .episode-play:hover { background: var(--red-hover) !important; }
 
@@ -1067,7 +1192,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   border-radius: var(--r-pill);
   padding: 2px 8px;
   white-space: nowrap; flex-shrink: 0;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .modal-nav-btns {
@@ -1082,13 +1207,14 @@ body.tv-mode #tvBadge { display: inline-block; }
   border: 1px solid var(--border) !important;
   color: var(--text-2) !important;
   font-size: 0.62rem !important;
-  padding: 7px 14px !important;
+  padding: 8px 14px !important;
   border-radius: var(--r-sm) !important;
   cursor: pointer;
   display: flex; align-items: center; gap: 6px;
   transition: background var(--ease) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
+  min-height: 38px;
 }
 .modal-nav-btn:hover { background: var(--bg-3) !important; color: var(--text-1) !important; }
 .modal-nav-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
@@ -1097,7 +1223,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   color: var(--text-3) !important;
   font-size: 0.62rem !important;
   align-self: center;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1108,6 +1234,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   background: rgba(0,0,0,0.9);
   z-index: 2000;
   align-items: center; justify-content: center; padding: 20px;
+  animation: fadeInTab .2s ease;
 }
 #tmdbModal.open { display: flex; }
 
@@ -1119,6 +1246,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   max-height: 90vh; overflow-y: auto;
   box-shadow: var(--shadow-3) !important;
   scrollbar-width: thin; scrollbar-color: var(--bg-3) transparent;
+  animation: modalIn .3s var(--ease-slow);
 }
 
 .tmdb-header {
@@ -1135,7 +1263,7 @@ body.tv-mode #tvBadge { display: inline-block; }
 
 .tmdb-title {
   color: var(--text-1) !important;
-  font-family: 'Orbitron', sans-serif !important;
+  font-family: var(--font-display) !important;
   font-size: 1rem !important;
   font-weight: 900 !important;
   margin-bottom: 8px;
@@ -1150,7 +1278,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   font-size: 0.65rem !important;
   padding: 3px 8px !important;
   border-radius: var(--r-pill) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .tmdb-rating {
@@ -1161,14 +1289,14 @@ body.tv-mode #tvBadge { display: inline-block; }
   font-weight: 700 !important;
   padding: 3px 8px !important;
   border-radius: var(--r-pill) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .tmdb-overview {
   color: var(--text-2) !important;
-  font-size: 0.78rem !important;
+  font-size: 0.82rem !important;
   line-height: 1.65 !important;
-  font-family: sans-serif !important;
+  font-family: var(--font-body) !important;
 }
 
 .tmdb-body { padding: 18px 20px 22px; }
@@ -1177,38 +1305,41 @@ body.tv-mode #tvBadge { display: inline-block; }
   color: var(--text-3);
   font-size: 0.62rem; font-weight: 700;
   letter-spacing: 1px; margin-bottom: 10px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 .tmdb-play-btn {
   background: var(--red) !important;
   border: none !important; color: #fff !important;
   font-size: 0.75rem !important; font-weight: 700 !important;
-  padding: 10px 22px !important; border-radius: var(--r-sm) !important;
+  padding: 11px 22px !important; border-radius: var(--r-sm) !important;
   cursor: pointer; margin-right: 8px; margin-bottom: 8px;
-  transition: background var(--ease) !important;
+  transition: background var(--ease), transform var(--ease) !important;
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
+  min-height: 42px;
 }
-.tmdb-play-btn:hover { background: var(--red-hover) !important; transform: none !important; }
+.tmdb-play-btn:hover { background: var(--red-hover) !important; transform: translateY(-1px) !important; }
 
 .tmdb-close-btn {
   background: var(--bg-2) !important;
   border: 1px solid var(--border-md) !important;
   color: var(--text-2) !important;
   border-radius: var(--r-sm) !important;
-  padding: 10px 20px !important;
+  padding: 11px 20px !important;
   cursor: pointer; font-size: 0.7rem !important; font-weight: 700 !important;
   display: inline-flex; align-items: center; gap: 6px;
   transition: background var(--ease), color var(--ease) !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
+  min-height: 42px;
 }
 .tmdb-close-btn:hover { background: var(--bg-3) !important; color: var(--text-1) !important; }
 
 .tmdb-no-link {
   color: var(--text-3) !important;
-  font-size: 0.68rem !important;
+  font-size: 0.7rem !important;
   margin-top: 10px; font-style: italic;
+  font-family: var(--font-body);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1222,7 +1353,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   border-radius: var(--r-pill);
   padding: 5px 14px;
   color: #00c864 !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   font-size: 0.55rem !important;
   font-weight: 700; letter-spacing: 1px;
   align-items: center; gap: 6px;
@@ -1243,14 +1374,18 @@ body.tv-mode #tvBadge { display: inline-block; }
   border-radius: var(--r-md) !important;
   padding: 12px 22px !important;
   color: var(--text-1) !important;
-  font-size: 0.75rem !important;
+  font-size: 0.78rem !important;
   line-height: 1.6; z-index: 9999;
   display: none; text-align: center;
   max-width: 360px; box-shadow: var(--shadow-2);
   white-space: pre-line;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-body);
 }
-#castToast.show { display: block; }
+#castToast.show { display: block; animation: toastIn .25s var(--ease-slow); }
+@keyframes toastIn {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
 
 #castModal {
   display: none; position: fixed; inset: 0;
@@ -1265,9 +1400,19 @@ body.tv-mode #tvBadge { display: inline-block; }
   border-radius: var(--r-xl); width: 100%; max-width: 420px;
   padding: 24px; box-shadow: var(--shadow-3) !important;
   max-height: 88vh; overflow-y: auto;
+  animation: modalIn .3s var(--ease-slow);
 }
-.cast-box h3 { color: var(--text-1) !important; font-size: 0.95rem !important; margin-bottom: 6px; font-family: 'Orbitron', sans-serif; }
-.cast-subtitle { color: var(--text-3) !important; font-size: 0.58rem !important; margin-bottom: 20px; letter-spacing: 1px; font-family: 'Orbitron', sans-serif; }
+.cast-box h3 { color: var(--text-1) !important; font-size: 0.95rem !important; margin-bottom: 6px; font-family: var(--font-display); }
+.cast-subtitle { color: var(--text-3) !important; font-size: 0.6rem !important; margin-bottom: 20px; letter-spacing: 1px; font-family: var(--font-display); }
+
+.cast-method { margin-bottom: 16px; }
+.cast-method-title {
+  color: #fff; font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 1px; margin-bottom: 8px; padding: 6px 10px;
+  background: rgba(255,255,255,0.05); border-radius: var(--r-sm);
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display);
+}
 
 .cast-step {
   display: flex; align-items: flex-start; gap: 12px;
@@ -1275,7 +1420,8 @@ body.tv-mode #tvBadge { display: inline-block; }
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   padding: 10px 14px; margin-bottom: 6px;
-  color: var(--text-2) !important; font-size: 0.74rem;
+  color: var(--text-2) !important; font-size: 0.78rem;
+  font-family: var(--font-body);
 }
 .cast-num {
   background: var(--red); color: #fff;
@@ -1283,17 +1429,18 @@ body.tv-mode #tvBadge { display: inline-block; }
   min-width: 22px; height: 22px;
   display: flex; align-items: center; justify-content: center;
   font-size: 0.65rem; flex-shrink: 0;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 .cast-close-btn {
   width: 100%; margin-top: 16px;
   background: var(--bg-2) !important;
   border: 1px solid var(--border-md) !important;
   color: var(--text-2) !important;
-  border-radius: var(--r-md); padding: 11px;
+  border-radius: var(--r-md); padding: 12px;
   cursor: pointer;
-  font-family: 'Orbitron', sans-serif; font-size: 0.68rem;
+  font-family: var(--font-display); font-size: 0.68rem;
   transition: background var(--ease) !important;
+  min-height: 44px;
 }
 .cast-close-btn:hover { background: var(--bg-3) !important; color: var(--text-1) !important; }
 
@@ -1325,7 +1472,7 @@ body.tv-mode #tvBadge { display: inline-block; }
 
 .tv-time {
   color: var(--text-2);
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   font-size: 0.65rem !important;
   min-width: 110px; text-align: center;
 }
@@ -1350,6 +1497,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   transform: scale(1.08); outline: none;
 }
 .tv-ctrl-btn.big:hover { background: var(--red-hover); }
+.tv-ctrl-btn:active { transform: scale(0.94); }
 
 #tvHint {
   display: none; position: fixed; top: 50%; left: 50%;
@@ -1358,7 +1506,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   border: 1px solid var(--border-md);
   border-radius: var(--r-lg); padding: 24px 32px;
   z-index: 999; text-align: center; color: var(--text-1);
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
   box-shadow: var(--shadow-3);
 }
 #tvHint h3 { color: var(--text-1); font-size: 0.85rem; margin-bottom: 16px; }
@@ -1373,7 +1521,7 @@ body.tv-mode #tvBadge { display: inline-block; }
   border-radius: 6px; padding: 3px 8px;
   color: var(--text-1); font-weight: 700; white-space: nowrap;
 }
-.hint-desc { color: var(--text-2); align-self: center; }
+.hint-desc { color: var(--text-2); align-self: center; font-family: var(--font-body); }
 
 /* ═══════════════════════════════════════════════════════════
    TV MODE LAYOUT
@@ -1409,7 +1557,7 @@ body.tv-mode .event-btn { font-size: 0.88rem !important; padding: 14px 16px !imp
 body.tv-mode .player-btn { font-size: 0.84rem !important; padding: 13px !important; }
 body.tv-mode .episode-play { padding: 8px 16px !important; font-size: 0.78rem !important; }
 body.tv-mode .event-item h4 { font-size: 0.88rem !important; }
-body.tv-mode .event-item p  { font-size: 0.72rem !important; }
+body.tv-mode .event-item p  { font-size: 0.78rem !important; }
 
 body.tv-mode .event-btn:focus,
 body.tv-mode .player-btn:focus,
@@ -1434,26 +1582,90 @@ body.tv-mode .cards-grid {
   color: var(--text-3) !important;
   font-size: 0.6rem !important;
   letter-spacing: 2px !important;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--font-display);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — mobile-first refinements
 ═══════════════════════════════════════════════════════════ */
-@media (max-width: 960px) {
+
+/* Tablet: keep two-column but narrower sidebar */
+@media (max-width: 1100px) {
+  .container { grid-template-columns: 1fr 340px; }
+}
+
+/* Stack player above sidebar */
+@media (max-width: 880px) {
   .container {
     display: flex; flex-direction: column;
     height: auto; overflow: visible;
   }
-  .player-box { border-right: none !important; border-bottom: 1px solid var(--border) !important; }
-  #video { height: 52vw; min-height: 200px; }
+  .player-box {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+  .video-container { aspect-ratio: 16/9; height: auto; }
+  #video { aspect-ratio: 16/9; }
   .sidebar { height: auto; max-height: none !important; }
+  body::before, body::after { width: 70vw; height: 70vw; }
 }
 
-@media (max-width: 520px) {
-  header { padding: 0 14px !important; }
-  .controls button { padding: 6px 10px !important; font-size: 0.62rem !important; }
-  .event-btn { font-size: 0.72rem !important; padding: 10px 12px !important; }
-  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)) !important; }
-  #video { height: 56vw; }
+@media (max-width: 600px) {
+  header { padding: 0 14px !important; height: 54px; }
+  .header-right { gap: 8px; }
+  .header-live-dot span:not(.live-pulse) { display: none; }
+  .header-live-dot { padding: 6px !important; }
+
+  .controls { padding: 8px 10px !important; gap: 5px !important; }
+  .controls button {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 8px 10px !important;
+    font-size: 0.62rem !important;
+  }
+  .controls button span { display: none; }
+
+  .sidebar { padding: 12px !important; }
+  .nav-tab { font-size: 0.58rem !important; padding: 8px 12px !important; }
+
+  .banner-estrenos { height: 150px !important; }
+  .banner-slide-title { font-size: 0.72rem !important; }
+
+  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important; gap: 8px !important; }
+  .card-info h4 { font-size: 0.64rem !important; }
+  .card-play { font-size: 0.56rem !important; padding: 6px !important; }
+
+  .event-btn { font-size: 0.7rem !important; padding: 11px 12px !important; }
+  .event-item h4 { font-size: 0.74rem !important; }
+
+  /* Modals become full-screen bottom sheets on mobile */
+  #seriesModal, #tmdbModal, #castModal { padding: 0 !important; align-items: flex-end !important; }
+  .modal-box, .tmdb-box, .cast-box {
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: 92vh !important;
+    border-radius: var(--r-lg) var(--r-lg) 0 0 !important;
+  }
+  .tmdb-header { flex-direction: column; }
+  .tmdb-poster { width: 100% !important; max-width: 160px; }
+
+  .tv-ctrl-btn { width: 42px; height: 42px; font-size: 14px; }
+  .tv-ctrl-btn.big { width: 56px; height: 56px; font-size: 20px; }
+}
+
+@media (max-width: 380px) {
+  .cards-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACCESSIBILITY — respect reduced motion
+═══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  body::before, body::after, #scanline { display: none !important; }
 }
