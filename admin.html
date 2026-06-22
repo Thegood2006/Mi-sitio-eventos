@@ -200,6 +200,10 @@ textarea { height: 80px; resize: vertical; }
         <p style="color:rgba(255,255,255,.5);font-size:0.65rem;margin-bottom:14px;">Links de partidos específicos con botón VER.</p>
         <div id="eventos-list"></div>
         <button class="add-btn" onclick="addEventoLink()"><i class="fa-solid fa-plus"></i> AGREGAR EVENTO</button>
+        <button class="add-btn" onclick="importarPartidosAutomaticos()">
+  <i class="fa-solid fa-futbol"></i>
+  IMPORTAR PARTIDOS
+</button>
       </div>
     </div>
 
@@ -385,7 +389,14 @@ let ghUser       = "Thegood2006";
 let ghRepo       = "MI-sitio-eventos";
 let ghRepoServer = "theygoodtv-server";
 let ghToken      = "";
-let canales      = { futbol:[], ciclismo:[], ufc:[], ecuador:[], internacional:[] };
+let canales = {
+ futbol:[],
+ ciclismo:[],
+ ufc:[],
+ ecuador:[],
+ internacional:[],
+ eventos:[]
+};
 let contenido    = { peliculas:[], series:[] };
 let eventos      = [];
 let serverCanales = [];
@@ -481,20 +492,149 @@ function addEvento(cat) { if(!canales[cat])canales[cat]=[]; canales[cat].push({n
 function delEvento(cat,i) { canales[cat].splice(i,1); renderCanales(cat); }
 
 /* Eventos con links */
-let eventosList=[];
 function renderEventos() {
-  eventosList=canales.eventos||[];
-  const list=document.getElementById("eventos-list"); if(!list)return; list.innerHTML="";
+
+  eventosList = canales.eventos || [];
+
+  const list = document.getElementById("eventos-list");
+
+  if(!list) return;
+
+  list.innerHTML = "";
+
   eventosList.forEach((ev,i)=>{
-    const div=document.createElement("div"); div.className="evento-card";
-    div.innerHTML=`<div class="evento-header"><span class="evento-num"><i class="fa-solid fa-calendar" style="color:#00e1ff"></i> Evento ${i+1}</span><button class="del-btn" onclick="delEventoLink(${i})"><i class="fa-solid fa-trash"></i></button></div>
-    <label>NOMBRE DEL PARTIDO</label><input type="text" value="${ev.nombre||''}" onchange="eventosList[${i}].nombre=this.value"/>
-    <label>LINK DEL STREAM</label><input type="text" value="${(ev.reproductores||[''])[0]}" onchange="eventosList[${i}].reproductores=[this.value]"/>`;
+
+    const div = document.createElement("div");
+
+    div.className="evento-card";
+
+    div.innerHTML=`
+
+    <div class="evento-header">
+
+      <span class="evento-num">
+
+      <i class="fa-solid fa-calendar" style="color:#00e1ff"></i>
+
+      Evento ${i+1}
+
+      </span>
+
+      <button class="del-btn" onclick="delEventoLink(${i})">
+
+      <i class="fa-solid fa-trash"></i>
+
+      </button>
+
+    </div>
+
+    <label>ID DEL EVENTO</label>
+
+    <input
+      type="text"
+      value="${ev.id||''}"
+      onchange="eventosList[${i}].id=this.value"
+    >
+
+    <label>NOMBRE DEL PARTIDO</label>
+
+    <input
+      type="text"
+      value="${ev.nombre||''}"
+      onchange="eventosList[${i}].nombre=this.value"
+    >
+
+    <label>LINK DEL STREAM</label>
+
+    <input
+      type="text"
+      value="${(ev.reproductores||[''])[0]}"
+      onchange="eventosList[${i}].reproductores=[this.value]"
+    >
+
+    `;
+
     list.appendChild(div);
+
   });
+
 }
-function addEventoLink() { eventosList.push({nombre:"Nuevo partido",reproductores:[""]}); canales.eventos=eventosList; renderEventos(); }
+function addEventoLink(){
+
+ eventosList.push({
+
+   id:"",
+
+   nombre:"Nuevo partido",
+
+   reproductores:[""]
+
+ });
+
+ canales.eventos = eventosList;
+
+ renderEventos();
+
+}
 function delEventoLink(i) { eventosList.splice(i,1); canales.eventos=eventosList; renderEventos(); }
+  async function importarPartidosAutomaticos(){
+
+  const ligas=[
+    "4328",
+    "4335",
+    "4331",
+    "4332",
+    "4350",
+    "4480"
+  ];
+
+  for(const liga of ligas){
+
+    try{
+
+      const r=await fetch(
+      `https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${liga}`
+      );
+
+      const d=await r.json();
+
+      (d.events||[])
+      .slice(0,3)
+      .forEach(ev=>{
+
+        const existe=eventosList.some(
+          e=>String(e.id)===String(ev.idEvent)
+        );
+
+        if(!existe){
+
+          eventosList.push({
+
+            id:String(ev.idEvent),
+
+            nombre:`${ev.strHomeTeam} vs ${ev.strAwayTeam}`,
+
+            reproductores:[""]
+
+          });
+
+        }
+
+      });
+
+    }catch(e){
+
+      console.log(e);
+
+    }
+
+  }
+
+  canales.eventos=eventosList;
+
+  renderEventos();
+
+}
 
 /* Películas */
 function renderPeliculas() {
