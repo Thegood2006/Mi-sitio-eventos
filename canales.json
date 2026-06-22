@@ -167,6 +167,14 @@
       "reproductores": [
         "TU_LINK_FOX_MX"
       ]
+    },
+    {
+      "nombre": "STAR",
+      "liga": "Internacional",
+      "tipo": "iframe",
+      "reproductores": [
+        "https://theygoodtv-server.onrender.com/live/star/player"
+      ]
     }
   ],
   "undefined": [
