@@ -200,9 +200,9 @@ textarea { height: 80px; resize: vertical; }
         <p style="color:rgba(255,255,255,.5);font-size:0.65rem;margin-bottom:14px;">Links de partidos específicos con botón VER.</p>
         <div id="eventos-list"></div>
         <button class="add-btn" onclick="addEventoLink()"><i class="fa-solid fa-plus"></i> AGREGAR EVENTO</button>
-        <button class="add-btn" onclick="importarPartidosAutomaticos()">
-  <i class="fa-solid fa-futbol"></i>
-  IMPORTAR PARTIDOS
+       <button class="add-btn" onclick="importarPartidosAutomaticos()">
+ <i class="fa-solid fa-futbol"></i>
+ IMPORTAR PARTIDOS
 </button>
       </div>
     </div>
@@ -577,29 +577,48 @@ function addEventoLink(){
 
 }
 function delEventoLink(i) { eventosList.splice(i,1); canales.eventos=eventosList; renderEventos(); }
-  async function importarPartidosAutomaticos(){
+async function importarPartidosAutomaticos(){
 
-  const ligas=[
-    "4328",
-    "4335",
-    "4331",
-    "4332",
-    "4350",
-    "4480"
+  const torneos=[
+
+    "4429", // Mundial FIFA
+
+    "4480", // Champions League
+
+    "4481", // Europa League
+
+    "4487", // Libertadores
+
+    "4488", // Sudamericana
+
+    "4328", // Premier League
+
+    "4335", // La Liga
+
+    "4331", // Bundesliga
+
+    "4332", // Serie A
+
+    "4334", // Ligue 1
+
+    "4350", // Liga MX
+
+    "4754"  // Liga Pro Ecuador
+
   ];
 
-  for(const liga of ligas){
+  for(const torneo of torneos){
 
     try{
 
       const r=await fetch(
-      `https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${liga}`
+       `https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${torneo}`
       );
 
       const d=await r.json();
 
       (d.events||[])
-      .slice(0,3)
+      .slice(0,5)
       .forEach(ev=>{
 
         const existe=eventosList.some(
