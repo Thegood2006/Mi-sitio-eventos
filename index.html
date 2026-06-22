@@ -1837,7 +1837,61 @@ async function cargarTodo() {
     initBanner(contenido.peliculas);
     initBannerSeries(contenido.series);
   } catch(e) { console.error("Error cargando datos:", e); }
+  
 }
+  function limpiarIframesPublicidad(){
+
+ document.querySelectorAll("iframe").forEach(f=>{
+
+   try{
+
+     const src=(f.src||"").toLowerCase();
+
+     const malos=[
+      'doubleclick',
+      'googlesyndication',
+      'adsterra',
+      'propellerads',
+      'popads',
+      'exoclick',
+      'trafficjunky',
+      'mgid',
+      'taboola',
+      'outbrain',
+      'adnxs'
+     ];
+
+     if(malos.some(x=>src.includes(x))){
+        f.remove();
+        return;
+     }
+
+     f.setAttribute(
+       "sandbox",
+       "allow-scripts allow-same-origin allow-presentation"
+     );
+
+     f.setAttribute(
+       "referrerpolicy",
+       "no-referrer"
+     );
+
+   }catch(e){}
+
+ });
+
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+  limpiarIframesPublicidad();
+
+  setInterval(
+    limpiarIframesPublicidad,
+    2000
+  );
+
+});
 
 /* ════════════════════════════════════════════════════
    RENDER CANALES
