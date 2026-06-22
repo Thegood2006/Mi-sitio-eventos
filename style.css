@@ -1459,4 +1459,93 @@ body.tv-mode .card:focus {
   .cards-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)) !important; }
   #video { height: 56vw; }
 }
+/* ═══════════════════════════════════════
+   TABLET (768px - 1024px)
+═══════════════════════════════════════ */
+@media (max-width: 1024px) {
+
+  .container {
+    grid-template-columns: 1fr 320px;
+  }
+
+  .sidebar {
+    padding: 12px !important;
+  }
+
+  .cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
+  }
+
+  .banner-estrenos {
+    height: 160px !important;
+  }
+
+  .controls button {
+    font-size: 0.7rem !important;
+    padding: 6px 10px !important;
+  }
+}
+
+/* ═══════════════════════════════════════
+   TABLET EN HORIZONTAL / SMALL LAPTOP
+═══════════════════════════════════════ */
+@media (max-width: 900px) and (orientation: landscape) {
+
+  .container {
+    grid-template-columns: 1fr 300px;
+  }
+
+  .sidebar {
+    overflow-y: auto;
+  }
+
+  .banner-estrenos {
+    height: 140px !important;
+  }
+}
+
+/* ═══════════════════════════════════════
+   MÓVIL GRANDE (600px - 768px)
+═══════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  .cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .event-btn {
+    font-size: 0.78rem !important;
+  }
+
+  .player-box {
+    height: auto;
+  }
+
+  #video {
+    height: 45vw;
+  }
+}
+
+/* ═══════════════════════════════════════
+   TOUCH OPTIMIZATION (IMPORTANTE TV/MÓVIL)
+═══════════════════════════════════════ */
+@media (hover: none) and (pointer: coarse) {
+
+  button, .card, .event-item {
+    min-height: 44px;
+  }
+
+  .card:hover {
+    transform: none !important;
+  }
+
+  .nav-tab {
+    padding: 10px 16px !important;
+  }
+
+  .player-btn {
+    padding: 12px !important;
+  }
+}
 
