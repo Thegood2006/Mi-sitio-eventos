@@ -1,11 +1,19 @@
 {
   "futbol": [
     {
-      "nombre": "2",
+      "nombre": "🇨🇭 Suiza vs 🇨🇦 Canadá",
       "liga": "23:00",
       "tipo": "iframe",
       "reproductores": [
         "https://moviedays.top/embed-live2.php"
+      ]
+    },
+    {
+      "nombre": "Nuevo evento",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://moviedays.top/embed-live1.php?v=espn"
       ]
     }
   ],
@@ -558,7 +566,7 @@
   "eventos": [
     {
       "id": "66456924",
-      "nombre": "🇨🇭 Suiza vs 🇨🇦 Canadá",
+      "nombre": "",
       "reproductores": [
         "https://moviedays.top/embed-live1.php?v=espn"
       ]
