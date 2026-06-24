@@ -1324,62 +1324,139 @@ function bannerSeriesMove(d){goBannerSeries((bsIdx+d+bsItems.length)%bsItems.len
 /* ═════════════════════════════════════
    PRÓXIMOS EVENTOS — TheSportsDB
 ═════════════════════════════════════ */
-async function cargarProximosEventos(){
-  const grid=document.getElementById("proximosGrid");
-  if(!grid)return;
-  grid.innerHTML='<div class="proximos-loading"><i class="fa-solid fa-spinner fa-spin"></i> Cargando partidos...</div>';
-  const ligas=[
-    {id:"4328",nombre:"Premier League"},{id:"4335",nombre:"La Liga"},
-    {id:"4331",nombre:"Bundesliga"},{id:"4332",nombre:"Serie A"},
-    {id:"4350",nombre:"Liga MX"},{id:"4480",nombre:"Champions League"},
-  ];
-  let eventosLinks={};
-  try{const cd=await(await fetch(URL_CANALES+"?nocache="+Date.now(),{signal:AbortSignal.timeout(5000)})).json();if(cd.eventos)cd.eventos.forEach(ev=>{eventosLinks[String(ev.id)]=ev;});}catch(e){}
+async function cargarProximosEventos() {
+  const grid = document.getElementById("proximosGrid");
+  if (!grid) return;
 
-  async function fetchLiga(liga){
-    try{const r=await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${liga.id}`,{signal:AbortSignal.timeout(9000)});if(!r.ok)return[];const d=await r.json();
-      return(d.events||[]).slice(0,5).map(ev=>({idEvent:String(ev.idEvent),strHomeTeam:ev.strHomeTeam||"",strAwayTeam:ev.strAwayTeam||"",dateEvent:ev.dateEvent||"",strTime:ev.strTime||"00:00:00",_liga:liga.nombre,thumbHome:ev.strHomeTeamBadge||"",thumbAway:ev.strAwayTeamBadge||""}));
-    }catch(e){return[];}
-  }
-  const results=await Promise.allSettled(ligas.map(l=>fetchLiga(l)));
-  let todos=[];results.forEach(r=>{if(r.status==="fulfilled")todos.push(...r.value);});
-
-  const ahora=new Date();
-  const TRES_H=3*60*60*1000,SIETE_D=7*24*60*60*1000;
-  todos=todos.filter(ev=>{
-    try{const f=new Date(ev.dateEvent+"T"+(ev.strTime||"00:00:00"));const d=f-ahora;return d>-TRES_H&&d<SIETE_D;}catch(e){return false;}
-  });
-
-  if(!todos.length){
-    grid.innerHTML=`<div class="proximos-loading"><i class="fa-solid fa-calendar-check" style="color:var(--cyan)"></i><br>No hay partidos próximos.
-      <br><button onclick="cargarProximosEventos()" style="margin-top:8px;background:linear-gradient(90deg,var(--cyan),var(--cyan2));border:none;color:#fff;font-family:'Orbitron',sans-serif;font-size:.5rem;padding:6px 14px;border-radius:8px;cursor:pointer;"><i class="fa-solid fa-rotate-right"></i> REINTENTAR</button></div>`;
+  // Busca el key: primero localStorage (puesto desde admin), luego constante hardcoded
+  const API_KEY = localStorage.getItem("tgtv_api_football") || "c7ac3c8a9376c3813bf128410f3c8d04";
+  if (!API_KEY || API_KEY === "c7ac3c8a9376c3813bf128410f3c8d04") {
+    grid.innerHTML = `<div class="proximos-loading" style="color:#ffc800">
+      <i class="fa-solid fa-key"></i> Configura tu API Key de API-Football en el Admin → CONFIG.</div>`;
     return;
   }
-  todos.sort((a,b)=>new Date((a.dateEvent||"2099-01-01")+"T"+(a.strTime||"00:00:00"))-new Date((b.dateEvent||"2099-01-01")+"T"+(b.strTime||"00:00:00")));
-  todos=todos.slice(0,12);
-  grid.innerHTML="";
 
-  todos.forEach(ev=>{
-    const fev=new Date(ev.dateEvent+"T"+ev.strTime);
-    const diffMs=fev-ahora;
-    const esHoy=fev.toDateString()===ahora.toDateString();
-    const esVivo=diffMs<0&&Math.abs(diffMs)<TRES_H;
+  grid.innerHTML = '<div class="proximos-loading"><i class="fa-solid fa-spinner fa-spin"></i> Cargando partidos...</div>';
+
+  const ligas = [
+    { id: 2,   nombre: "Champions League" },
+    { id: 39,  nombre: "Premier League"   },
+    { id: 140, nombre: "La Liga"          },
+    { id: 78,  nombre: "Bundesliga"       },
+    { id: 135, nombre: "Serie A"          },
+    { id: 262, nombre: "Liga MX"          },
+  ];
+
+  const season = 2025;
+  const hoy    = new Date().toISOString().slice(0, 10);
+  const en7    = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10);
+
+  let eventosLinks = {};
+  try {
+    const cd = await fetch(URL_CANALES + "?nocache=" + Date.now(), { signal: AbortSignal.timeout(5000) });
+    const cj = await cd.json();
+    if (cj.eventos) cj.eventos.forEach(ev => { eventosLinks[String(ev.id)] = ev; });
+  } catch(e) {}
+
+  async function fetchLiga(liga) {
+    try {
+      const res = await fetch(
+        `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=${season}&from=${hoy}&to=${en7}&status=NS-1H-2H-HT`,
+        { headers: { "x-apisports-key": API_KEY }, signal: AbortSignal.timeout(10000) }
+      );
+      if (!res.ok) return [];
+      const data = await res.json();
+      return (data.response || []).slice(0, 4).map(f => ({
+        idEvent    : String(f.fixture.id),
+        strHomeTeam: f.teams.home.name,
+        strAwayTeam: f.teams.away.name,
+        thumbHome  : f.teams.home.logo,
+        thumbAway  : f.teams.away.logo,
+        dateEvent  : f.fixture.date.slice(0, 10),
+        strTime    : f.fixture.date.slice(11, 19),
+        status     : f.fixture.status.short, // NS, 1H, 2H, HT, FT…
+        elapsed    : f.fixture.status.elapsed,
+        _liga      : liga.nombre
+      }));
+    } catch(e) { return []; }
+  }
+
+  const results = await Promise.allSettled(ligas.map(l => fetchLiga(l)));
+  let todos = [];
+  results.forEach(r => { if (r.status === "fulfilled") todos.push(...r.value); });
+
+  if (!todos.length) {
+    grid.innerHTML = `<div class="proximos-loading">
+      <i class="fa-solid fa-calendar-check" style="color:var(--cyan)"></i><br>
+      No hay partidos en los próximos 7 días.
+      <br><button onclick="cargarProximosEventos()" style="margin-top:8px;background:linear-gradient(90deg,var(--cyan),var(--cyan2));border:none;color:#fff;font-family:'Orbitron',sans-serif;font-size:.5rem;padding:6px 14px;border-radius:8px;cursor:pointer;">
+        <i class="fa-solid fa-rotate-right"></i> REINTENTAR</button></div>`;
+    return;
+  }
+
+  // Ordenar: en vivo primero, luego por fecha
+  const LIVE_STATUS = ["1H","2H","HT","ET","P","BT"];
+  todos.sort((a, b) => {
+    const aLive = LIVE_STATUS.includes(a.status) ? 0 : 1;
+    const bLive = LIVE_STATUS.includes(b.status) ? 0 : 1;
+    if (aLive !== bLive) return aLive - bLive;
+    return new Date(a.dateEvent + "T" + a.strTime) - new Date(b.dateEvent + "T" + b.strTime);
+  });
+  todos = todos.slice(0, 12);
+
+  grid.innerHTML = "";
+  const ahora = new Date();
+  const LIVE_STATUS_SET = new Set(LIVE_STATUS);
+
+  todos.forEach(ev => {
+    const fev    = new Date(ev.dateEvent + "T" + ev.strTime);
+    const esVivo = LIVE_STATUS_SET.has(ev.status);
+    const esHoy  = fev.toDateString() === ahora.toDateString();
+    const mañana = new Date(ahora); mañana.setDate(ahora.getDate() + 1);
+
     let fechaStr;
-    if(esVivo){fechaStr='<span style="color:#ff4444;animation:blink 1.4s ease infinite">● EN VIVO</span>';}
-    else if(esHoy){fechaStr="HOY "+fev.toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});}
-    else{const man=new Date(ahora);man.setDate(ahora.getDate()+1);fechaStr=(fev.toDateString()===man.toDateString()?"MAÑANA ":fev.toLocaleDateString("es",{weekday:"short",day:"2-digit",month:"short"})+" ")+fev.toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});}
-    const ld=eventosLinks[ev.idEvent]||Object.values(eventosLinks).find(e=>e.nombre&&(e.nombre.toLowerCase().includes((ev.strHomeTeam||"").toLowerCase().slice(0,6))||e.nombre.toLowerCase().includes((ev.strAwayTeam||"").toLowerCase().slice(0,6))));
-    const bs="width:18px;height:18px;object-fit:contain;flex-shrink:0;border-radius:2px;";
-    const hB=ev.thumbHome?`<img src="${ev.thumbHome}" style="${bs}" onerror="this.style.display='none'">`:`<span style="${bs}background:rgba(0,225,255,.08);display:inline-block;"></span>`;
-    const aB=ev.thumbAway?`<img src="${ev.thumbAway}" style="${bs}" onerror="this.style.display='none'">`:`<span style="${bs}background:rgba(0,225,255,.08);display:inline-block;"></span>`;
-    const div=document.createElement("div");div.className="evento-proximo";
-    div.innerHTML=`<div class="evento-proximo-top"><div class="evento-proximo-info">
-        <div class="evento-proximo-nombre">${hB}<span class="name-text">${ev.strHomeTeam} vs ${ev.strAwayTeam}</span>${aB}</div>
-        <div class="evento-proximo-liga">${ev._liga}</div></div>
-        <div class="evento-proximo-fecha">${fechaStr}</div></div>
+    if (esVivo) {
+      const min = ev.elapsed ? `${ev.elapsed}'` : "";
+      fechaStr = `<span style="color:#ff4444;animation:blink 1.4s ease infinite">● EN VIVO ${min}</span>`;
+    } else if (esHoy) {
+      fechaStr = "HOY " + fev.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" });
+    } else {
+      fechaStr = (fev.toDateString() === mañana.toDateString() ? "MAÑANA " :
+        fev.toLocaleDateString("es", { weekday: "short", day: "2-digit", month: "short" }) + " ")
+        + fev.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    const ld = eventosLinks[ev.idEvent] ||
+      Object.values(eventosLinks).find(e =>
+        e.nombre && (
+          e.nombre.toLowerCase().includes((ev.strHomeTeam || "").toLowerCase().slice(0, 6)) ||
+          e.nombre.toLowerCase().includes((ev.strAwayTeam || "").toLowerCase().slice(0, 6))
+        )
+      );
+
+    const bs = "width:20px;height:20px;object-fit:contain;flex-shrink:0;border-radius:2px;";
+    const hB = ev.thumbHome
+      ? `<img src="${ev.thumbHome}" style="${bs}" onerror="this.style.display='none'">`
+      : `<span style="${bs}background:rgba(0,225,255,.08);display:inline-block;"></span>`;
+    const aB = ev.thumbAway
+      ? `<img src="${ev.thumbAway}" style="${bs}" onerror="this.style.display='none'">`
+      : `<span style="${bs}background:rgba(0,225,255,.08);display:inline-block;"></span>`;
+
+    const div = document.createElement("div");
+    div.className = "evento-proximo";
+    div.innerHTML = `
+      <div class="evento-proximo-top">
+        <div class="evento-proximo-info">
+          <div class="evento-proximo-nombre">${hB}<span class="name-text">${ev.strHomeTeam} vs ${ev.strAwayTeam}</span>${aB}</div>
+          <div class="evento-proximo-liga">${ev._liga}</div>
+        </div>
+        <div class="evento-proximo-fecha">${fechaStr}</div>
+      </div>
       ${ld?.reproductores?.length
-        ?`<button class="evento-ver-btn" onclick="loadStream('${ld.reproductores[0].replace(/'/g,"\\'")}')"><i class="fa-solid fa-play"></i> VER PARTIDO</button>`
-        :`<div class="evento-sin-link"><i class="fa-solid fa-clock"></i> Link próximamente</div>`}`;
+        ? `<button class="evento-ver-btn" onclick="loadStream('${ld.reproductores[0].replace(/'/g,"\\'")}')">
+             <i class="fa-solid fa-play"></i> VER PARTIDO</button>`
+        : `<div class="evento-sin-link"><i class="fa-solid fa-clock"></i> Link próximamente</div>`
+      }`;
     grid.appendChild(div);
   });
 }
