@@ -310,6 +310,9 @@ textarea { height: 80px; resize: vertical; }
         <label>REPOSITORIO (canales/contenido)</label><input type="text" id="cfgRepo" value="MI-sitio-eventos"/>
         <label>REPOSITORIO DEL SERVIDOR (server.js)</label><input type="text" id="cfgRepoServer" value="theygoodtv-server"/>
         <label>TOKEN CLASSIC (ghp_...)</label><input type="text" id="cfgToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+        <label>API-FOOTBALL KEY (x-apisports-key)</label>
+<input type="text" id="cfgApiFootball" placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off"/>
+<p style="color:#6060a0;font-size:0.6rem;margin-top:4px;"><i class="fa-solid fa-futbol"></i> Se guarda en localStorage. Plan gratuito: 100 req/día — <a href="https://dashboard.api-football.com" target="_blank" style="color:#00e1ff">dashboard</a></p>
         <p style="color:#6060a0;font-size:0.6rem;margin-top:8px;"><i class="fa-solid fa-lock"></i> El token se guarda solo en este navegador (localStorage)</p>
         <button class="btn" style="margin-top:14px;" onclick="guardarConfig()"><i class="fa-solid fa-floppy-disk"></i> GUARDAR CONFIG</button>
       </div>
@@ -383,6 +386,7 @@ function cargarConfig() {
   document.getElementById("cfgRepo").value        = ghRepo;
   document.getElementById("cfgRepoServer").value  = ghRepoServer;
   document.getElementById("cfgToken").value       = ghToken;
+  document.getElementById("cfgApiFootball").value = localStorage.getItem("tgtv_api_football") || "";
 }
 function guardarConfig() {
   ghUser       = document.getElementById("cfgUser").value.trim();
@@ -391,6 +395,7 @@ function guardarConfig() {
   ghToken      = document.getElementById("cfgToken").value.trim();
   localStorage.setItem(TOKEN_KEY, ghToken);
   localStorage.setItem("tgtv_repo_server", ghRepoServer);
+  localStorage.setItem("tgtv_api_football", document.getElementById("cfgApiFootball").value.trim());
   showMsg("✓ Config guardada");
 }
 
@@ -501,68 +506,75 @@ function delEventoLink(i) { eventosList.splice(i,1); syncEventos(); renderEvento
 
 /* ← FIX 2: Importar partidos usando múltiples ligas con manejo de errores robusto */
 async function importarPartidosAutomaticos() {
+  const apiKey = localStorage.getItem("tgtv_api_football") || "";
   const resultEl = document.getElementById("importarResultado");
   resultEl.style.display = "block";
-  resultEl.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Consultando TheSportsDB...";
 
-  /* Usamos la API pública gratuita v1 con key=3 — limitada pero funcional */
+  if (!apiKey) {
+    resultEl.innerHTML = "⚠ <strong>Pon tu API Key de API-Football en CONFIG primero.</strong>";
+    return;
+  }
+
+  resultEl.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Consultando API-Football...";
+
+  // IDs de API-Football (distintos a TheSportsDB)
   const ligas = [
-    { id:"4480", nombre:"Champions League" },
-    { id:"4481", nombre:"Europa League" },
-    { id:"4328", nombre:"Premier League" },
-    { id:"4335", nombre:"La Liga" },
-    { id:"4331", nombre:"Bundesliga" },
-    { id:"4332", nombre:"Serie A" },
-    { id:"4334", nombre:"Ligue 1" },
-    { id:"4350", nombre:"Liga MX" },
-    { id:"4487", nombre:"Libertadores" },
-    { id:"4488", nombre:"Sudamericana" },
-    { id:"4754", nombre:"Liga Pro Ecuador" },
+    { id: 2,   nombre: "Champions League" },
+    { id: 3,   nombre: "Europa League"    },
+    { id: 39,  nombre: "Premier League"   },
+    { id: 140, nombre: "La Liga"          },
+    { id: 78,  nombre: "Bundesliga"       },
+    { id: 135, nombre: "Serie A"          },
+    { id: 61,  nombre: "Ligue 1"          },
+    { id: 262, nombre: "Liga MX"          },
+    { id: 13,  nombre: "Libertadores"     },
+    { id: 11,  nombre: "Sudamericana"     },
   ];
 
+  const season = 2025;
+  const hoy    = new Date().toISOString().slice(0, 10);
+  const en7    = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10);
+
   let importados = 0, lineas = [];
-  const ahora = Date.now();
 
   for (const liga of ligas) {
     try {
-      /* ← FIX 2: timeout generoso + manejo de respuesta vacía */
       const ctrl = new AbortController();
-      const to   = setTimeout(() => ctrl.abort(), 10000);
+      const to   = setTimeout(() => ctrl.abort(), 12000);
       const res  = await fetch(
-        `https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${liga.id}`,
-        { signal: ctrl.signal }
+        `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=${season}&from=${hoy}&to=${en7}&status=NS`,
+        {
+          headers: { "x-apisports-key": apiKey },
+          signal: ctrl.signal
+        }
       );
       clearTimeout(to);
 
-      if(!res.ok) { lineas.push(`⚠ ${liga.nombre}: HTTP ${res.status}`); continue; }
+      if (!res.ok) { lineas.push(`⚠ ${liga.nombre}: HTTP ${res.status}`); continue; }
 
-      const data = await res.json();
-      const events = (data.events || []).slice(0, 5);
+      const data     = await res.json();
+      const fixtures = (data.response || []).slice(0, 5);
 
-      if(!events.length) { lineas.push(`— ${liga.nombre}: sin partidos`); continue; }
+      if (!fixtures.length) { lineas.push(`— ${liga.nombre}: sin partidos próximos`); continue; }
 
       let count = 0;
-      events.forEach(ev => {
-        const ya = eventosList.some(e => String(e.id) === String(ev.idEvent));
-        if(!ya) {
-          eventosList.push({
-            id: String(ev.idEvent),
-            nombre: `${ev.strHomeTeam} vs ${ev.strAwayTeam}`,
-            reproductores: [""]
-          });
-          importados++;
-          count++;
+      fixtures.forEach(f => {
+        const idEvt  = String(f.fixture.id);
+        const nombre = `${f.teams.home.name} vs ${f.teams.away.name}`;
+        const ya     = eventosList.some(e => String(e.id) === idEvt);
+        if (!ya) {
+          eventosList.push({ id: idEvt, nombre, reproductores: [""] });
+          importados++; count++;
         }
       });
-      lineas.push(`✓ ${liga.nombre}: ${count} nuevos (${events.length} encontrados)`);
+      lineas.push(`✓ ${liga.nombre}: ${count} nuevos`);
 
     } catch(e) {
-      /* AbortError = timeout; otros = red/parse */
       lineas.push(`✗ ${liga.nombre}: ${e.name === 'AbortError' ? 'timeout' : e.message}`);
     }
 
-    /* Pequeña pausa entre requests para no saturar la API gratuita */
-    await new Promise(r => setTimeout(r, 400));
+    // Pausa entre requests — el plan gratuito tiene rate limit
+    await new Promise(r => setTimeout(r, 600));
   }
 
   syncEventos();
