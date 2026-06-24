@@ -1329,7 +1329,7 @@ async function cargarProximosEventos() {
   if (!grid) return;
 
   // Busca el key: primero localStorage (puesto desde admin), luego constante hardcoded
-  const API_KEY = localStorage.getItem("tgtv_api_football") || "PON_TU_KEY_AQUI";
+  const API_KEY = localStorage.getItem("tgtv_api_football") || "cc4b3ac5d106f2b721461da77743f444";
   if (!API_KEY || API_KEY === "PON_TU_KEY_AQUI") {
     grid.innerHTML = `<div class="proximos-loading" style="color:#ffc800">
       <i class="fa-solid fa-key"></i> Configura tu API Key de API-Football en el Admin → CONFIG.</div>`;
