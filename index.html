@@ -1339,13 +1339,14 @@ async function cargarProximosEventos() {
   grid.innerHTML = '<div class="proximos-loading"><i class="fa-solid fa-spinner fa-spin"></i> Cargando partidos...</div>';
 
   const ligas = [
-    { id: 2,   nombre: "Champions League" },
-    { id: 39,  nombre: "Premier League"   },
-    { id: 140, nombre: "La Liga"          },
-    { id: 78,  nombre: "Bundesliga"       },
-    { id: 135, nombre: "Serie A"          },
-    { id: 262, nombre: "Liga MX"          },
-  ];
+  { id: 2, nombre: "Champions League" },
+  { id: 39, nombre: "Premier League" },
+  { id: 140, nombre: "La Liga" },
+  { id: 78, nombre: "Bundesliga" },
+  { id: 135, nombre: "Serie A" },
+  { id: 262, nombre: "Liga MX" },
+  { id: 1, nombre: "Copa del Mundo" }
+];
 
   const season = 2025;
   const hoy    = new Date().toISOString().slice(0, 10);
