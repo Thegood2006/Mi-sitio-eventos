@@ -1329,8 +1329,8 @@ async function cargarProximosEventos() {
   if (!grid) return;
 
   // Busca el key: primero localStorage (puesto desde admin), luego constante hardcoded
-  const API_KEY = localStorage.getItem("tgtv_api_football") || "c7ac3c8a9376c3813bf128410f3c8d04";
-  if (!API_KEY || API_KEY === "c7ac3c8a9376c3813bf128410f3c8d04") {
+  const API_KEY = localStorage.getItem("tgtv_api_football") || "PON_TU_KEY_AQUI";
+  if (!API_KEY || API_KEY === "PON_TU_KEY_AQUI") {
     grid.innerHTML = `<div class="proximos-loading" style="color:#ffc800">
       <i class="fa-solid fa-key"></i> Configura tu API Key de API-Football en el Admin → CONFIG.</div>`;
     return;
@@ -1460,7 +1460,6 @@ async function cargarProximosEventos() {
     grid.appendChild(div);
   });
 }
-
 /* ═════════════════════════════════════
    INIT
 ═════════════════════════════════════ */
