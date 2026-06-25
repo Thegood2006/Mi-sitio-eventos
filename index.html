@@ -439,7 +439,13 @@ body.tv-mode .footer { display:none; }
         </div>
       </div>
       <!-- BARRA DE VOLUMEN — SIEMPRE VISIBLE cuando hay iframe -->
-      <div id="ifrVolBar">
+     <div id="ifrVolBar">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-family:var(--font-hud);font-size:.4rem;color:rgba(0,225,255,.5);letter-spacing:1px;">VOLUMEN</span>
+          <button id="ifrInteractBtn" onclick="toggleShield()" style="display:flex;align-items:center;gap:4px;background:rgba(0,255,153,.15);border:1px solid rgba(0,255,153,.4);border-radius:20px;color:#00ff99;font-family:'Orbitron',sans-serif;font-size:.4rem;padding:3px 10px;cursor:pointer;">
+            <i class="fa-solid fa-hand-pointer"></i> INTERACTUAR
+          </button>
+        </div>
         <div class="vol-bar-inner">
           <button class="vol-icon-btn" onclick="ifrVolChange(-10)" title="Bajar volumen">
             <i class="fa-solid fa-volume-down"></i>
