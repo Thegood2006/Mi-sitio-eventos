@@ -753,10 +753,7 @@ if (ws) ws.style.display = "none";
   const container = document.getElementById("videoContainer");
   if (window.hls) { window.hls.destroy(); window.hls = null; }
   container.innerHTML = "";
-  /* Re-añadir barra vol y panel acción (fueron borrados con innerHTML) */
-  container.appendChild(document.getElementById("ifrVolBar") || _buildVolBar());
-  container.appendChild(document.getElementById("ifrActionPanel") || _buildActionPanel());
-
+ 
   const esIframe = tipo === 'iframe' ||
     (!url.includes(".m3u8") && !url.includes("chunklist") && !url.endsWith(".mp4") && !url.includes(".mp4?") &&
      (url.includes("fastream") || url.includes("embed") || url.includes("vidsrc") ||
