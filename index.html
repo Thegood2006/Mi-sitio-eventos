@@ -760,11 +760,19 @@ function loadStream(url, tipo) {
 if (ws) ws.style.display = "none";
 
   /* Quitar clase iframe-active */
+
+
   document.body.classList.remove("iframe-active", "ifr-ctrl-visible");
 
   const container = document.getElementById("videoContainer");
-  if (window.hls) { window.hls.destroy(); window.hls = null; }
+ if (window.hls) { window.hls.destroy(); window.hls = null; }
+  const _volBar   = document.getElementById("ifrVolBar");
+  const _actPanel = document.getElementById("ifrActionPanel");
+  if (_volBar)   _volBar.remove();
+  if (_actPanel) _actPanel.remove();
   container.innerHTML = "";
+  if (_volBar)   container.appendChild(_volBar);
+  if (_actPanel) container.appendChild(_actPanel);
  
   const esIframe = tipo === 'iframe' ||
     (!url.includes(".m3u8") && !url.includes("chunklist") && !url.endsWith(".mp4") && !url.includes(".mp4?") &&
@@ -846,16 +854,12 @@ iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allo
       <button onclick="loadStream('${su}','${st}')" style="margin-top:12px;background:linear-gradient(90deg,#00e1ff,#0011ff);border:none;color:#fff;font-family:'Orbitron',sans-serif;font-size:.55rem;padding:7px 16px;border-radius:8px;cursor:pointer;"><i class="fa-solid fa-rotate-right"></i> REINTENTAR</button></div>`;
   }, 15000);
 
-  iframe.addEventListener("load", () => {
-    clearTimeout(loaderTO);
-    loader.style.opacity = "0"; loader.style.transition = "opacity .3s";
-    setTimeout(() => { if (loader.parentNode) loader.remove(); }, 350);
-    iframe.addEventListener("load", () => {
+ iframe.addEventListener("load", () => {
     clearTimeout(loaderTO);
     loader.style.opacity = "0"; loader.style.transition = "opacity .3s";
     setTimeout(() => { if (loader.parentNode) loader.remove(); }, 350);
     mostrarToast("🔊 Toca INTERACTUAR → luego click en el video para activar el audio");
-  });
+
   });
 
   /* Shield — absorbe clicks del iframe, muestra panel al tocar */
