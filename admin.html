@@ -547,6 +547,9 @@ select option { background: #1a1b2e; }
               <button class="btn-sm gold" onclick="importarPartidos()">
                 <i class="fa-solid fa-cloud-arrow-down"></i> Importar próximos
               </button>
+              <button class="btn-sm" onclick="importarMundial()" style="border-color:rgba(255,200,0,.4);color:#ffc800;">
+  <i class="fa-solid fa-trophy"></i> Mundial 2026
+</button>
             </div>
           </div>
           <div id="eventos-list"></div>
@@ -1003,7 +1006,7 @@ async function importarPartidos() {
       const ctrl = new AbortController();
       const to   = setTimeout(() => ctrl.abort(), 12000);
       const res  = await fetch(
-        `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=${season}&from=${hoy}&to=${en7}&status=NS`,
+        `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=${season}&from=${hoy}&to=${en7}&status=NS-1H-2H-HT`
         { headers: {"x-apisports-key": apiKey}, signal: ctrl.signal }
       );
       clearTimeout(to);
@@ -1035,6 +1038,35 @@ async function importarPartidos() {
   syncEventos();
   renderEventos();
   logEl.innerHTML = `<strong style="color:var(--green)">✓ ${importados} partidos importados</strong><br><br>` + lineas.join("<br>");
+}
+  async function importarMundial() {
+  const logEl = document.getElementById("importLog");
+  logEl.style.display = "block";
+  logEl.innerHTML = "<i class='fa-solid fa-spinner spin'></i> Cargando partidos del Mundial...";
+
+  try {
+    const res = await fetch(
+      "https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4429",
+      { signal: AbortSignal.timeout(8000) }
+    );
+    const data = await res.json();
+    const eventos = (data.events || []).filter(f => f.strHomeTeam && f.strAwayTeam).slice(0, 10);
+
+    let importados = 0;
+    eventos.forEach(f => {
+      const ya = eventosList.some(e => String(e.id) === String(f.idEvent));
+      if (!ya) {
+        eventosList.push({ id: String(f.idEvent), nombre: `${f.strHomeTeam} vs ${f.strAwayTeam}`, reproductores: [""] });
+        importados++;
+      }
+    });
+
+    syncEventos();
+    renderEventos();
+    logEl.innerHTML = `<strong style="color:var(--green)">✓ ${importados} partidos del Mundial importados</strong>`;
+  } catch(e) {
+    logEl.innerHTML = `<span style="color:var(--red)">✗ Error: ${e.message}</span>`;
+  }
 }
 
 /* ════════════════════════════════════
