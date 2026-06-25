@@ -1119,8 +1119,7 @@ async function cargarProximosEventos() {
     { id: "4332", nombre: "Serie A" },
     { id: "4334", nombre: "Ligue 1" },
     { id: "4346", nombre: "Champions League" },
-    { id: "4480", nombre: "Copa del Mundo" },
-    { id: "4979", nombre: "Copa del Mundo 2026" },
+    { id: "4429", nombre: "Copa del Mundo 2026" },
     { id: "4407", nombre: "Copa América" },
     { id: "4399", nombre: "Eurocopa" },
     { id: "4443", nombre: "Nations League" },
@@ -1146,7 +1145,7 @@ async function cargarProximosEventos() {
       );
       if (!res.ok) return [];
       const data = await res.json();
-      return (data.events || []).slice(0, 4).map(f => ({
+     return (data.events || []).filter(f => f.strHomeTeam && f.strAwayTeam).slice(0, 4).map(f => ({
         idEvent    : f.idEvent,
         strHomeTeam: f.strHomeTeam,
         strAwayTeam: f.strAwayTeam,
