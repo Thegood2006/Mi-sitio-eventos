@@ -440,73 +440,32 @@ body.tv-mode .footer { display:none; }
       </div>
       <!-- BARRA DE VOLUMEN — SIEMPRE VISIBLE cuando hay iframe -->
      <div id="ifrVolBar">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-          <span style="font-family:var(--font-hud);font-size:.4rem;color:rgba(0,225,255,.5);letter-spacing:1px;">VOLUMEN</span>
-          <button id="ifrInteractBtn" onclick="toggleShield()" style="display:flex;align-items:center;gap:4px;background:rgba(0,255,153,.15);border:1px solid rgba(0,255,153,.4);border-radius:20px;color:#00ff99;font-family:'Orbitron',sans-serif;font-size:.4rem;padding:3px 10px;cursor:pointer;">
-            <i class="fa-solid fa-hand-pointer"></i> INTERACTUAR
-          </button>
-        </div>
-        <div class="vol-bar-inner">
-          <button class="vol-icon-btn" onclick="ifrVolChange(-10)" title="Bajar volumen">
-            <i class="fa-solid fa-volume-down"></i>
-          </button>
-          <div class="vol-track" id="ifrVolTrack" onclick="ifrVolClick(event)">
-            <div class="vol-fill" id="ifrVolFill"></div>
-          </div>
-          <button class="vol-icon-btn" onclick="ifrVolChange(10)" title="Subir volumen">
-            <i class="fa-solid fa-volume-up"></i>
-          </button>
-          <button class="vol-icon-btn" id="ifrMuteBtn" onclick="ifrToggleMute()" title="Silenciar">
-            <i class="fa-solid fa-volume-high"></i>
-          </button>
-          <span class="vol-pct" id="ifrVolPct">100%</span>
-        </div>
-      </div>
+  <div style="display:flex;align-items:center;justify-content:center;padding:6px 14px 10px;">
+    <button id="ifrInteractBtn" onclick="toggleShield()" style="display:flex;align-items:center;gap:6px;background:rgba(0,255,153,.15);border:1px solid rgba(0,255,153,.4);border-radius:20px;color:#00ff99;font-family:'Orbitron',sans-serif;font-size:.42rem;padding:5px 14px;cursor:pointer;letter-spacing:1px;">
+      <i class="fa-solid fa-hand-pointer"></i> TOCA AQUÍ PARA CONTROLAR
+    </button>
+  </div>
+</div>
 
       <!-- PANEL DE BOTONES — aparece al tocar -->
-      <div id="ifrActionPanel">
-        <div class="ifr-action-row">
-          <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="ifrSkip(-30)"><i class="fa-solid fa-backward"></i></button>
-            <span class="ifr-lbl">30s</span>
-          </div>
-          <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="ifrSkip(-10)"><i class="fa-solid fa-rotate-left"></i></button>
-            <span class="ifr-lbl">10s</span>
-          </div>
-          <div class="ifr-sep"></div>
-          <div class="ifr-btn-wrap">
-            <button class="ifr-btn big" onclick="ifrPlayPause()" id="ifrPlayBtn"><i class="fa-solid fa-pause"></i></button>
-            <span class="ifr-lbl">PLAY</span>
-          </div>
-          <div class="ifr-sep"></div>
-          <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="ifrSkip(10)"><i class="fa-solid fa-rotate-right"></i></button>
-            <span class="ifr-lbl">10s</span>
-          </div>
-          <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="ifrSkip(30)"><i class="fa-solid fa-forward"></i></button>
-            <span class="ifr-lbl">30s</span>
-          </div>
-          <div class="ifr-sep"></div>
-          <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="fullscreenPlayer()"><i class="fa-solid fa-expand"></i></button>
-            <span class="ifr-lbl">FULL</span>
-          </div>
-          <div class="ifr-btn-wrap">
-            <button class="ifr-btn yellow" onclick="recargarIframe()"><i class="fa-solid fa-rotate-right"></i></button>
-            <span class="ifr-lbl" style="color:#ffc800">RECARGAR</span>
-            <div class="ifr-btn-wrap">
-  <button class="ifr-btn" id="ifrInteractBtn" onclick="toggleShield()" style="background:rgba(0,255,153,.15);border-color:rgba(0,255,153,.4);color:#00ff99;">
-    <i class="fa-solid fa-hand-pointer"></i>
-  </button>
-  <span class="ifr-lbl" style="color:#00ff99">INTERACTUAR</span>
+     <div id="ifrActionPanel">
+  <div class="ifr-action-row">
+    <div class="ifr-btn-wrap">
+      <button class="ifr-btn" onclick="fullscreenPlayer()"><i class="fa-solid fa-expand"></i></button>
+      <span class="ifr-lbl">FULL</span>
+    </div>
+    <div class="ifr-btn-wrap">
+      <button class="ifr-btn yellow" onclick="recargarIframe()"><i class="fa-solid fa-rotate-right"></i></button>
+      <span class="ifr-lbl" style="color:#ffc800">RECARGAR</span>
+    </div>
+    <div class="ifr-btn-wrap">
+      <button class="ifr-btn" onclick="toggleShield()" style="background:rgba(0,255,153,.15);border-color:rgba(0,255,153,.4);color:#00ff99;">
+        <i class="fa-solid fa-hand-pointer"></i>
+      </button>
+      <span class="ifr-lbl" style="color:#00ff99">CONTROL</span>
+    </div>
+  </div>
 </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /video-container -->
 
     <div class="controls">
       <button class="ctrl-btn" onclick="fullscreenPlayer()"><i class="fa-solid fa-expand"></i> FULLSCREEN</button>
