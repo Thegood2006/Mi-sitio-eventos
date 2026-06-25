@@ -6,7 +6,6 @@
 <title>THEY GOOD TV</title>
 
 <script>
-/* ═══════════ BLOQUEO GLOBAL DE POPUPS ═══════════ */
 (function() {
   'use strict';
   window._originalOpen = window.open.bind(window);
@@ -30,9 +29,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* ═══════════════════════════════════════
-   RESET & ROOT
-═══════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --cyan:#00e1ff; --purple:#8b00ff; --cyan2:#0011ff; --red:#ff3d5a;
@@ -47,7 +43,7 @@ html,body { height:100%; background:var(--bg0); color:#fff; font-family:var(--fo
 :focus-visible { outline:2px solid var(--cyan); outline-offset:2px; }
 #bgCanvas { position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.3; }
 
-/* ═══ HEADER ═══ */
+/* HEADER */
 header { position:sticky; top:0; z-index:200; height:var(--header-h); display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:linear-gradient(90deg,rgba(0,0,0,.98),rgba(7,7,26,.98)); border-bottom:1px solid var(--border); backdrop-filter:blur(12px); }
 .header-left,.header-right { display:flex; align-items:center; gap:10px; }
 .logo-wrap { display:flex; align-items:center; gap:10px; }
@@ -62,105 +58,116 @@ header { position:sticky; top:0; z-index:200; height:var(--header-h); display:fl
 #tvBadge { display:none; font-family:var(--font-hud); font-size:.45rem; color:var(--cyan); background:rgba(0,225,255,.1); border:1px solid var(--border2); padding:3px 10px; border-radius:20px; }
 body.tv-mode #tvBadge { display:inline-block; }
 
-/* ═══ LAYOUT ═══ */
+/* LAYOUT */
 .container { display:grid; grid-template-columns:1fr var(--sidebar-w); height:calc(100vh - var(--header-h)); overflow:hidden; }
 
-/* ═══ PLAYER ═══ */
+/* PLAYER */
 .player-box { display:flex; flex-direction:column; background:#000; overflow:hidden; }
 .video-container { position:relative; flex:1; background:#000; min-height:0; overflow:hidden; }
 #video { width:100%; height:100%; display:block; object-fit:contain; background:#000; }
 
 /* ═══════════════════════════════════════
-   CONTROLES IFRAME — REDISEÑADOS
-   Panel completo con: volumen, silencio,
-   retroceder 10s/30s, adelantar 10s/30s,
-   play/pausa y fullscreen
+   IFRAME CONTROLS — BARRA FIJA SIEMPRE VISIBLE
+   La barra de volumen está SIEMPRE al fondo.
+   Los botones de acción aparecen/desaparecen al tocar.
 ═══════════════════════════════════════ */
-#iframeControls {
-  display: none;
+
+/* Barra de volumen FIJA — siempre visible en modo iframe */
+#ifrVolBar {
+  display: none; /* se activa con .iframe-active en body */
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  z-index: 100;
-  background: linear-gradient(0deg, rgba(0,0,0,.96) 0%, rgba(0,0,0,.6) 70%, transparent 100%);
-  padding: 36px 16px 14px;
-  transition: opacity .35s;
-  pointer-events: none;
-}
-#iframeControls.active {
+  z-index: 120;
+  background: linear-gradient(0deg, rgba(0,0,0,.97) 0%, rgba(0,0,0,.5) 80%, transparent 100%);
+  padding: 28px 14px 10px;
   pointer-events: all;
-  opacity: 1;
 }
-#iframeControls.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
+body.iframe-active #ifrVolBar { display: block; }
 
-/* Barra de volumen */
-.ifr-vol-row {
+.vol-bar-inner {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 8px;
+  max-width: 100%;
 }
-.ifr-vol-label {
+.vol-bar-label {
   font-family: var(--font-hud);
-  font-size: .44rem;
+  font-size: .42rem;
   color: rgba(0,225,255,.7);
   letter-spacing: 1px;
-  min-width: 50px;
-  text-align: right;
+  min-width: 32px;
+  text-align: center;
 }
-.ifr-vol-track {
+.vol-track {
   flex: 1;
-  max-width: 200px;
-  height: 4px;
-  background: rgba(255,255,255,.15);
-  border-radius: 4px;
+  height: 6px;
+  background: rgba(255,255,255,.12);
+  border-radius: 6px;
   cursor: pointer;
   position: relative;
 }
-.ifr-vol-fill {
+.vol-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--cyan), var(--purple));
-  border-radius: 4px;
+  border-radius: 6px;
   width: 100%;
+  pointer-events: none;
   transition: width .1s;
-  pointer-events: none;
 }
-.ifr-vol-thumb {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 14px; height: 14px;
-  background: var(--cyan);
+.vol-icon-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  background: rgba(0,225,255,.1);
+  border: 1px solid rgba(0,225,255,.3);
   border-radius: 50%;
-  right: 0; /* JS lo posiciona */
-  pointer-events: none;
-  box-shadow: 0 0 8px rgba(0,225,255,.6);
+  color: var(--cyan);
+  font-size: 13px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all .2s;
+}
+.vol-icon-btn:hover { background: rgba(0,225,255,.25); transform: scale(1.1); }
+.vol-pct {
+  font-family: var(--font-hud);
+  font-size: .48rem;
+  color: var(--cyan);
+  min-width: 34px;
+  text-align: center;
 }
 
-/* Fila de botones principales */
-.ifr-bar {
+/* Panel de botones de acción — aparece/desaparece */
+#ifrActionPanel {
+  display: none;
+  position: absolute;
+  bottom: 60px; left: 0; right: 0;
+  z-index: 119;
+  padding: 8px 14px 6px;
+  background: linear-gradient(0deg, rgba(0,0,0,.85) 0%, transparent 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s;
+}
+body.iframe-active #ifrActionPanel { display: block; pointer-events: all; }
+body.iframe-active.ifr-ctrl-visible #ifrActionPanel { opacity: 1; }
+
+.ifr-action-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
-
 .ifr-btn {
   display: flex; align-items: center; justify-content: center;
   width: 40px; height: 40px;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
   border-radius: 50%;
   color: rgba(255,255,255,.85);
   font-size: 14px;
   cursor: pointer;
   transition: all .2s;
   flex-shrink: 0;
-  font-family: var(--font-hud);
 }
 .ifr-btn.big {
   width: 52px; height: 52px;
@@ -169,56 +176,20 @@ body.tv-mode #tvBadge { display:inline-block; }
   border-color: var(--cyan);
   color: var(--cyan);
 }
-.ifr-btn.vol-btn {
-  background: rgba(0,225,255,.08);
-  border-color: rgba(0,225,255,.3);
-  color: var(--cyan);
-}
-.ifr-btn:hover {
-  background: rgba(0,225,255,.25);
-  border-color: var(--cyan);
-  box-shadow: 0 0 14px rgba(0,225,255,.4);
-  transform: scale(1.1);
-  color: var(--cyan);
-}
+.ifr-btn.yellow { background: rgba(255,200,0,.1); border-color: rgba(255,200,0,.35); color: #ffc800; }
+.ifr-btn:hover { background: rgba(0,225,255,.25); border-color: var(--cyan); transform: scale(1.1); color: var(--cyan); }
 .ifr-btn:active { transform: scale(.92); }
+.ifr-btn-wrap { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.ifr-lbl { font-family: var(--font-hud); font-size: .36rem; color: rgba(255,255,255,.4); }
+.ifr-sep { width:1px; height:30px; background:rgba(255,255,255,.1); margin:0 3px; }
 
-.ifr-btn-label {
-  font-family: var(--font-hud);
-  font-size: .38rem;
-  color: rgba(255,255,255,.45);
-  text-align: center;
-  margin-top: 2px;
-}
-.ifr-btn-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
+/* AD SHIELD badge */
+.ad-badge { position:absolute; top:8px; left:8px; z-index:130; background:rgba(0,0,0,.82); border:1px solid rgba(0,225,255,.35); color:var(--cyan); font-family:var(--font-hud); font-size:.44rem; padding:3px 8px; border-radius:6px; letter-spacing:1px; display:flex; align-items:center; gap:4px; pointer-events:none; }
 
-/* Separador */
-.ifr-sep {
-  width: 1px;
-  height: 32px;
-  background: rgba(255,255,255,.1);
-  margin: 0 4px;
-}
+/* Shield */
+.iframe-click-shield { position:absolute; inset:0; z-index:50; background:transparent; cursor:default; }
 
-/* ═══ BLOQUEO TOTAL DE CLICKS EN IFRAME ═══
-   Cubre TODO el iframe. Los clicks en los controles
-   funcionan porque están ENCIMA con z-index mayor.
-   El iframe queda completamente inaccesible al ratón.
-═══════════════════════════════════════════════════ */
-.iframe-click-shield {
-  position: absolute;
-  inset: 0;
-  z-index: 50; /* debajo de controles (z:100) pero encima del iframe (z:1) */
-  background: transparent;
-  cursor: default;
-}
-
-/* ═══ CONTROLES NATIVOS ═══ */
+/* CONTROLES NATIVOS */
 .controls { display:flex; align-items:center; gap:6px; flex-wrap:wrap; padding:8px 12px; background:linear-gradient(0deg,rgba(0,0,0,.98),rgba(7,7,26,.95)); border-top:1px solid var(--border); flex-shrink:0; }
 .ctrl-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; background:rgba(0,225,255,.05); border:1px solid rgba(0,225,255,.18); border-radius:var(--r-sm); color:rgba(255,255,255,.75); font-family:var(--font-hud); font-size:.52rem; letter-spacing:.5px; cursor:pointer; transition:all .2s; white-space:nowrap; }
 .ctrl-btn:hover { background:rgba(0,225,255,.14); border-color:var(--cyan); color:var(--cyan); transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,225,255,.18); }
@@ -227,12 +198,17 @@ body.tv-mode #tvBadge { display:inline-block; }
 @keyframes castPulse { 0%,100%{box-shadow:0 0 8px rgba(0,255,153,.3)} 50%{box-shadow:0 0 20px rgba(0,255,153,.6)} }
 #stopCastBtn { background:rgba(255,61,90,.08); border-color:rgba(255,61,90,.4); color:var(--red); }
 #tvModeBtn { background:linear-gradient(135deg,rgba(255,107,0,.2),rgba(255,61,0,.2)); border-color:rgba(255,107,0,.4); color:#ff8c00; }
-#castIndicator { position:absolute; top:10px; right:10px; z-index:50; display:none; align-items:center; gap:6px; background:rgba(0,0,0,.85); border:1px solid var(--green); border-radius:20px; padding:4px 12px; color:var(--green); font-family:var(--font-hud); font-size:.45rem; letter-spacing:1px; animation:castPulse 2s infinite; }
+#castIndicator { position:absolute; top:10px; right:10px; z-index:140; display:none; align-items:center; gap:6px; background:rgba(0,0,0,.85); border:1px solid var(--green); border-radius:20px; padding:4px 12px; color:var(--green); font-family:var(--font-hud); font-size:.45rem; letter-spacing:1px; animation:castPulse 2s infinite; }
 #castIndicator.visible { display:flex; }
 .cast-dot { width:7px; height:7px; background:var(--green); border-radius:50%; animation:blink 1.2s ease infinite; }
-.ad-badge { position:absolute; top:8px; left:8px; z-index:110; background:rgba(0,0,0,.82); border:1px solid rgba(0,225,255,.35); color:var(--cyan); font-family:var(--font-hud); font-size:.44rem; padding:3px 8px; border-radius:6px; letter-spacing:1px; display:flex; align-items:center; gap:4px; pointer-events:none; }
 
-/* ═══ SIDEBAR ═══ */
+@keyframes spinLoader { to{transform:rotate(360deg)} }
+.iframe-loader { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#000; z-index:5; gap:14px; }
+.iframe-loader-spinner { width:48px; height:48px; border:3px solid rgba(0,225,255,.12); border-top-color:var(--cyan); border-radius:50%; animation:spinLoader .75s linear infinite; }
+.iframe-loader-text { font-family:var(--font-hud); font-size:.58rem; color:var(--cyan); letter-spacing:2px; }
+.iframe-loader-sub { font-family:var(--font-hud); font-size:.48rem; color:rgba(255,255,255,.28); letter-spacing:1.5px; }
+
+/* SIDEBAR */
 .sidebar { background:linear-gradient(180deg,rgba(6,6,22,.99) 0%,rgba(3,3,14,.99) 100%); border-left:1px solid var(--border); overflow-y:auto; padding:14px 12px; display:flex; flex-direction:column; }
 .nav-tabs { display:flex; gap:4px; background:rgba(0,0,0,.5); border:1px solid var(--border); border-radius:var(--r-md); padding:4px; margin-bottom:14px; flex-shrink:0; }
 .nav-tab { flex:1; background:transparent; border:none; color:rgba(0,225,255,.45); font-family:var(--font-hud); font-size:.46rem; font-weight:700; padding:7px 3px; border-radius:var(--r-sm); cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:4px; white-space:nowrap; }
@@ -340,13 +316,8 @@ body.tv-mode #tvBadge { display:inline-block; }
 #castModal.open { display:flex; }
 .cast-box { background:linear-gradient(145deg,#0d1117,var(--bg2)); border:1px solid var(--border2); border-radius:var(--r-lg); width:100%; max-width:400px; padding:22px; max-height:88vh; overflow-y:auto; }
 .cast-close-btn { width:100%; margin-top:14px; padding:10px; background:rgba(255,61,90,.08); border:1px solid rgba(255,61,90,.4); border-radius:var(--r-md); color:var(--red); font-family:var(--font-hud); font-size:.6rem; cursor:pointer; }
-#castToast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,.96); border:1px solid var(--cyan); border-radius:var(--r-md); padding:12px 20px; color:#fff; font-size:.7rem; line-height:1.6; z-index:9999; display:none; text-align:center; max-width:340px; white-space:pre-line; }
+#castToast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,.96); border:1px solid var(--cyan); border-radius:var(--r-md); padding:12px 20px; color:#fff; font-size:.7rem; line-height:1.6; z-index:9999; display:none; text-align:center; max-width:340px; white-space:pre-line; }
 #castToast.show { display:block; }
-@keyframes spinLoader { to{transform:rotate(360deg)} }
-.iframe-loader { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#000; z-index:5; gap:14px; }
-.iframe-loader-spinner { width:48px; height:48px; border:3px solid rgba(0,225,255,.12); border-top-color:var(--cyan); border-radius:50%; animation:spinLoader .75s linear infinite; }
-.iframe-loader-text { font-family:var(--font-hud); font-size:.58rem; color:var(--cyan); letter-spacing:2px; }
-.iframe-loader-sub { font-family:var(--font-hud); font-size:.48rem; color:rgba(255,255,255,.28); letter-spacing:1.5px; }
 #tvControls { display:none; position:fixed; bottom:0; left:0; right:0; background:linear-gradient(0deg,rgba(0,0,0,.95) 0%,transparent 100%); padding:24px 28px 16px; z-index:500; flex-direction:column; gap:10px; }
 #tvControls.visible { display:flex; }
 #tvControls.hidden { opacity:0; pointer-events:none; }
@@ -359,7 +330,7 @@ body.tv-mode #tvBadge { display:inline-block; }
 .tv-ctrl-btn:hover { background:rgba(0,225,255,.28); border-color:var(--cyan); transform:scale(1.1); }
 .footer { text-align:center; padding:12px; font-family:var(--font-hud); font-size:.44rem; letter-spacing:4px; color:rgba(0,225,255,.2); background:rgba(0,0,0,.92); border-top:1px solid rgba(0,225,255,.06); }
 
-/* ═══ RESPONSIVE ═══ */
+/* RESPONSIVE */
 @media (max-width:900px) {
   :root { --sidebar-w:300px; --header-h:56px; }
   .logo-text h1 { font-size:.75rem; }
@@ -388,6 +359,8 @@ body.tv-mode #tvBadge { display:inline-block; }
   .modal-box,.tmdb-box { max-width:100%; border-radius:12px 12px 0 0; }
   #seriesModal,#tmdbModal { align-items:flex-end; padding:0; }
   .footer { display:none; }
+  #ifrVolBar { padding: 18px 10px 8px; }
+  #ifrActionPanel { bottom: 55px; }
 }
 body.tv-mode .controls { display:none; }
 body.tv-mode #tvControls { display:flex; }
@@ -416,91 +389,68 @@ body.tv-mode .footer { display:none; }
 
 <div class="container">
 
-  <!-- ══ PLAYER ══ -->
+  <!-- PLAYER -->
   <div class="player-box">
     <div class="video-container" id="videoContainer">
       <video id="video" controls autoplay playsinline webkit-playsinline></video>
       <div id="castIndicator"><span class="cast-dot"></span><i class="fa-solid fa-tv"></i> TRANSMITIENDO A TV</div>
 
-      <!-- ════════════════════════════════════════
-           CONTROLES IFRAME
-           ════════════════════════════════════════ -->
-      <div id="iframeControls">
-
-        <!-- Fila de volumen -->
-        <div class="ifr-vol-row">
-          <span class="ifr-vol-label">VOL</span>
-          <button class="ifr-btn vol-btn" onclick="ifrVolChange(-10)" title="Bajar volumen" style="width:32px;height:32px;font-size:12px;border-radius:8px;">
+      <!-- BARRA DE VOLUMEN — SIEMPRE VISIBLE cuando hay iframe -->
+      <div id="ifrVolBar">
+        <div class="vol-bar-inner">
+          <button class="vol-icon-btn" onclick="ifrVolChange(-10)" title="Bajar volumen">
             <i class="fa-solid fa-volume-down"></i>
           </button>
-          <div class="ifr-vol-track" id="ifrVolTrack" onclick="ifrVolClick(event)">
-            <div class="ifr-vol-fill" id="ifrVolFill"></div>
+          <div class="vol-track" id="ifrVolTrack" onclick="ifrVolClick(event)">
+            <div class="vol-fill" id="ifrVolFill"></div>
           </div>
-          <button class="ifr-btn vol-btn" onclick="ifrVolChange(10)" title="Subir volumen" style="width:32px;height:32px;font-size:12px;border-radius:8px;">
+          <button class="vol-icon-btn" onclick="ifrVolChange(10)" title="Subir volumen">
             <i class="fa-solid fa-volume-up"></i>
           </button>
-          <button class="ifr-btn vol-btn" onclick="ifrToggleMute()" id="ifrMuteBtn" title="Silenciar" style="width:32px;height:32px;font-size:12px;border-radius:8px;">
+          <button class="vol-icon-btn" id="ifrMuteBtn" onclick="ifrToggleMute()" title="Silenciar">
             <i class="fa-solid fa-volume-high"></i>
           </button>
+          <span class="vol-pct" id="ifrVolPct">100%</span>
         </div>
+      </div>
 
-        <!-- Fila principal de controles -->
-        <div class="ifr-bar">
+      <!-- PANEL DE BOTONES — aparece al tocar -->
+      <div id="ifrActionPanel">
+        <div class="ifr-action-row">
           <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="ifrSkip(-30)" title="Retroceder 30s">
-              <i class="fa-solid fa-backward"></i>
-            </button>
-            <span class="ifr-btn-label">30s</span>
+            <button class="ifr-btn" onclick="ifrSkip(-30)"><i class="fa-solid fa-backward"></i></button>
+            <span class="ifr-lbl">30s</span>
           </div>
           <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="ifrSkip(-10)" title="Retroceder 10s">
-              <i class="fa-solid fa-rotate-left"></i>
-            </button>
-            <span class="ifr-btn-label">10s</span>
+            <button class="ifr-btn" onclick="ifrSkip(-10)"><i class="fa-solid fa-rotate-left"></i></button>
+            <span class="ifr-lbl">10s</span>
           </div>
-
           <div class="ifr-sep"></div>
-
           <div class="ifr-btn-wrap">
-            <button class="ifr-btn big" onclick="ifrPlayPause()" id="ifrPlayBtn" title="Play/Pausa">
-              <i class="fa-solid fa-pause"></i>
-            </button>
-            <span class="ifr-btn-label">PLAY</span>
+            <button class="ifr-btn big" onclick="ifrPlayPause()" id="ifrPlayBtn"><i class="fa-solid fa-pause"></i></button>
+            <span class="ifr-lbl">PLAY</span>
           </div>
-
           <div class="ifr-sep"></div>
-
           <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="ifrSkip(10)" title="Adelantar 10s">
-              <i class="fa-solid fa-rotate-right"></i>
-            </button>
-            <span class="ifr-btn-label">10s</span>
+            <button class="ifr-btn" onclick="ifrSkip(10)"><i class="fa-solid fa-rotate-right"></i></button>
+            <span class="ifr-lbl">10s</span>
           </div>
           <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="ifrSkip(30)" title="Adelantar 30s">
-              <i class="fa-solid fa-forward"></i>
-            </button>
-            <span class="ifr-btn-label">30s</span>
+            <button class="ifr-btn" onclick="ifrSkip(30)"><i class="fa-solid fa-forward"></i></button>
+            <span class="ifr-lbl">30s</span>
           </div>
-
           <div class="ifr-sep"></div>
-
           <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="fullscreenPlayer()" title="Pantalla completa">
-              <i class="fa-solid fa-expand"></i>
-            </button>
-            <span class="ifr-btn-label">FULL</span>
+            <button class="ifr-btn" onclick="fullscreenPlayer()"><i class="fa-solid fa-expand"></i></button>
+            <span class="ifr-lbl">FULL</span>
           </div>
-
           <div class="ifr-btn-wrap">
-            <button class="ifr-btn" onclick="recargarIframe()" title="Recargar canal" style="background:rgba(255,200,0,.1);border-color:rgba(255,200,0,.3);color:#ffc800;">
-              <i class="fa-solid fa-rotate-right"></i>
-            </button>
-            <span class="ifr-btn-label" style="color:#ffc800;">RECARGAR</span>
+            <button class="ifr-btn yellow" onclick="recargarIframe()"><i class="fa-solid fa-rotate-right"></i></button>
+            <span class="ifr-lbl" style="color:#ffc800">RECARGAR</span>
           </div>
         </div>
+      </div>
 
-      </div><!-- /iframeControls -->
     </div><!-- /video-container -->
 
     <div class="controls">
@@ -513,7 +463,7 @@ body.tv-mode .footer { display:none; }
     </div>
   </div>
 
-  <!-- ══ SIDEBAR ══ -->
+  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="switchTab('tv')" id="tab-tv"><i class="fa-solid fa-satellite-dish"></i> TV</button>
@@ -645,9 +595,7 @@ body.tv-mode .footer { display:none; }
 <div id="castToast"></div>
 
 <script>
-/* ════════════════════════════════════════
-   VARIABLES GLOBALES
-════════════════════════════════════════ */
+/* ════ VARIABLES GLOBALES ════ */
 let currentLink = "";
 let currentTipo = 'm3u8';
 let tvMode = false;
@@ -659,7 +607,7 @@ let castLinkIframe = null;
 /* Estado iframe */
 let ifrPaused    = false;
 let ifrMuted     = false;
-let ifrVol       = 100;   /* 0-100 */
+let ifrVol       = 100;
 let ifrCtrlTimer = null;
 let currentIframe= null;
 let ifrPauseOvl  = null;
@@ -669,17 +617,16 @@ const RENDER_SERVER = "https://theygoodtv-server.onrender.com";
 const URL_CANALES   = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/canales.json";
 const URL_CONTENIDO = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/contenido.json";
 
-/* ─────────────────────────────────────────
-   HELPER: obtener API Key de localStorage
-   (misma key que usa el admin: tgtv_api_football)
-───────────────────────────────────────── */
+/* ════ API KEY — busca en múltiples claves posibles ════ */
 function getApiFootballKey() {
-  return localStorage.getItem("tgtv_api_football") || "";
+  return localStorage.getItem("tgtv_api_football")
+      || localStorage.getItem("api_football_key")
+      || localStorage.getItem("apiFootballKey")
+      || localStorage.getItem("football_api_key")
+      || "";
 }
 
-/* ════════════════════════════════════════
-   CARGA INICIAL
-════════════════════════════════════════ */
+/* ════ CARGA INICIAL ════ */
 async function cargarTodo() {
   try {
     let canales;
@@ -708,9 +655,7 @@ async function cargarTodo() {
   } catch(e) { console.error("Error cargando datos:", e); }
 }
 
-/* ════════════════════════════════════════
-   RENDER CANALES
-════════════════════════════════════════ */
+/* ════ RENDER CANALES ════ */
 function renderCategoria(menuId, eventos) {
   const menu = document.getElementById(menuId);
   if (!menu || !eventos) return;
@@ -729,9 +674,7 @@ function renderCategoria(menuId, eventos) {
   });
 }
 
-/* ════════════════════════════════════════
-   RENDER CARDS
-════════════════════════════════════════ */
+/* ════ RENDER CARDS ════ */
 function renderCards(gridId, items, esSerie) {
   const grid = document.getElementById(gridId);
   if (!grid || !items) return;
@@ -749,13 +692,7 @@ function renderCards(gridId, items, esSerie) {
   });
 }
 
-/* ════════════════════════════════════════
-   LOAD STREAM
-   ─────────────────────────────────────
-   Para iframes: pone un escudo COMPLETO
-   encima que absorbe TODOS los clicks.
-   Los controles van por ENCIMA del escudo.
-════════════════════════════════════════ */
+/* ════ LOAD STREAM ════ */
 function loadStream(url, tipo) {
   if (!url || url.startsWith("TU_LINK") || !url.trim()) {
     mostrarError("⚠️ Este canal no tiene link asignado todavía."); return;
@@ -765,13 +702,15 @@ function loadStream(url, tipo) {
   if (ifrPauseOvl) { ifrPauseOvl.remove(); ifrPauseOvl = null; }
   window._skipWarnShown = false;
 
+  /* Quitar clase iframe-active */
+  document.body.classList.remove("iframe-active", "ifr-ctrl-visible");
+
   const container = document.getElementById("videoContainer");
   if (window.hls) { window.hls.destroy(); window.hls = null; }
   container.innerHTML = "";
-
-  /* Ocultar controles iframe */
-  const ifrCtrl = document.getElementById("iframeControls");
-  if (ifrCtrl) { ifrCtrl.style.display = "none"; }
+  /* Re-añadir barra vol y panel acción (fueron borrados con innerHTML) */
+  container.appendChild(document.getElementById("ifrVolBar") || _buildVolBar());
+  container.appendChild(document.getElementById("ifrActionPanel") || _buildActionPanel());
 
   const esIframe = tipo === 'iframe' ||
     (!url.includes(".m3u8") && !url.includes("chunklist") && !url.endsWith(".mp4") && !url.includes(".mp4?") &&
@@ -788,7 +727,7 @@ function loadStream(url, tipo) {
   const video = document.createElement("video");
   video.id = "video"; video.controls = true; video.autoplay = true; video.playsInline = true;
   video.setAttribute("webkit-playsinline", ""); video.crossOrigin = "anonymous";
-  video.style.cssText = "width:100%;height:100%;background:#000;display:block;object-fit:contain;";
+  video.style.cssText = "width:100%;height:100%;background:#000;display:block;object-fit:contain;position:absolute;inset:0;";
   container.appendChild(video);
   video.addEventListener("timeupdate", actualizarBarraTV);
   video.addEventListener("pause", () => { const b = document.getElementById("tvPlayPauseBtn"); if(b) b.innerHTML='<i class="fa-solid fa-play"></i>'; });
@@ -817,30 +756,23 @@ function loadStream(url, tipo) {
   video.play().catch(() => { video.muted=true; video.play(); });
 }
 
-/* ────────────────────────────────────────────────────────
-   _crearIframe — núcleo del anti-ad para iframes
+/* helpers para reconstruir controles si innerHTML los borró */
+function _buildVolBar() { return document.getElementById("ifrVolBar"); }
+function _buildActionPanel() { return document.getElementById("ifrActionPanel"); }
 
-   ESTRATEGIA:
-   • Un escudo TRANSPARENTE (z-index:50) cubre TODO el iframe.
-     Absorbe todos los clicks: ningún anuncio puede abrirse.
-   • Los controles tienen z-index:100 → están encima del escudo
-     y reciben clicks normalmente.
-   • El badge "AD SHIELD" también está sobre el escudo.
-   • Al hacer click en el escudo → mostrar/ocultar controles.
-──────────────────────────────────────────────────────── */
+/* ════ CREAR IFRAME ════ */
 function _crearIframe(container, url) {
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText = "position:relative;width:100%;height:100%;background:#000;overflow:hidden;";
+  /* Asegurar que ifrVolBar e ifrActionPanel estén dentro del container */
+  const volBar    = document.getElementById("ifrVolBar");
+  const actPanel  = document.getElementById("ifrActionPanel");
 
-  /* ── Loader ── */
   const loader = document.createElement("div");
   loader.className = "iframe-loader";
   loader.innerHTML = `<div class="iframe-loader-spinner"></div>
     <div class="iframe-loader-text">CARGANDO CANAL...</div>
     <div class="iframe-loader-sub">Esto puede tardar unos segundos</div>`;
-  wrapper.appendChild(loader);
+  container.appendChild(loader);
 
-  /* ── Iframe sin sandbox para que funcione ── */
   const iframe = document.createElement("iframe");
   iframe.src = url;
   iframe.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:none;background:#000;z-index:1;";
@@ -849,7 +781,6 @@ function _crearIframe(container, url) {
   iframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
   currentIframe = iframe;
 
-  /* ── Timeout 15s ── */
   const loaderTO = setTimeout(() => {
     if (!loader.parentNode) return;
     const su = url.replace(/'/g, "\\'"), st = currentTipo || 'iframe';
@@ -866,95 +797,58 @@ function _crearIframe(container, url) {
     setTimeout(() => { if (loader.parentNode) loader.remove(); }, 350);
   });
 
-  /* ── ESCUDO TOTAL: cubre todo el iframe ──
-     z-index: 50 → encima del iframe (z:1)
-                  pero debajo de los controles (z:100)
-     Absorbe TODOS los clicks → ningún anuncio puede activarse.
-     Al hacer click aquí → mostrar controles ── */
+  /* Shield — absorbe clicks del iframe, muestra panel al tocar */
   const shield = document.createElement("div");
   shield.className = "iframe-click-shield";
-  shield.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    _ifrToggleControls();
-  });
-  shield.addEventListener("touchstart", (e) => {
-    _ifrToggleControls();
-  }, { passive: true });
+  shield.addEventListener("click",      (e) => { e.preventDefault(); e.stopPropagation(); _ifrToggleActionPanel(); });
+  shield.addEventListener("touchstart", ()  => { _ifrToggleActionPanel(); }, { passive: true });
 
-  /* ── Badge AD SHIELD ── */
+  /* Badge */
   const badge = document.createElement("div");
   badge.className = "ad-badge";
   badge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> AD SHIELD';
-  badge.style.zIndex = "110";
+  badge.style.zIndex = "130";
 
-  /* ── Cast indicator ── */
+  /* Cast indicator */
   const castInd = document.createElement("div");
   castInd.id = "castIndicator";
+  castInd.className = ""; // sin clase visible por defecto
   castInd.innerHTML = '<span class="cast-dot"></span><i class="fa-solid fa-tv"></i> TRANSMITIENDO A TV';
-  castInd.style.cssText = "position:absolute;top:10px;right:10px;z-index:110;display:none;align-items:center;gap:6px;background:rgba(0,0,0,.85);border:1px solid var(--green);border-radius:20px;padding:4px 12px;color:var(--green);font-family:var(--font-hud);font-size:.45rem;";
+  castInd.style.cssText = "position:absolute;top:10px;right:10px;z-index:140;display:none;align-items:center;gap:6px;background:rgba(0,0,0,.85);border:1px solid var(--green);border-radius:20px;padding:4px 12px;color:var(--green);font-family:var(--font-hud);font-size:.45rem;animation:castPulse 2s infinite;";
 
-  wrapper.appendChild(iframe);
-  wrapper.appendChild(shield);  /* encima del iframe */
-  wrapper.appendChild(badge);
-  wrapper.appendChild(castInd);
-  container.appendChild(wrapper);
+  container.appendChild(iframe);
+  container.appendChild(shield);
+  container.appendChild(badge);
+  container.appendChild(castInd);
 
-  /* Mover los controles al wrapper para que queden z:100 dentro del mismo stacking context */
-  const ifrCtrl = document.getElementById("iframeControls");
-  if (ifrCtrl) {
-    ifrCtrl.style.display = "block";
-    ifrCtrl.style.zIndex  = "100";
-    ifrCtrl.classList.remove("hidden");
-    ifrCtrl.classList.add("active");
-    /* Auto-ocultar después de 3s */
-    ifrCtrlTimer = setTimeout(() => {
-      ifrCtrl.classList.remove("active");
-      ifrCtrl.classList.add("hidden");
-    }, 3000);
-  }
+  /* Mover volBar y actionPanel AL FINAL para que queden z-index correcto */
+  if (volBar)   container.appendChild(volBar);
+  if (actPanel) container.appendChild(actPanel);
 
-  /* Actualizar icono play */
+  /* Activar modo iframe */
+  document.body.classList.add("iframe-active");
+
   ifrPaused = false;
   const playBtn = document.getElementById("ifrPlayBtn");
   if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-  /* Actualizar vol UI */
   _ifrUpdateVolUI();
 }
 
-/* ════════════════════════════════════════
-   CONTROLES IFRAME
-════════════════════════════════════════ */
-function _ifrToggleControls() {
-  const ctrl = document.getElementById("iframeControls");
-  if (!ctrl) return;
-  const esVisible = ctrl.classList.contains("active") && !ctrl.classList.contains("hidden");
-  if (esVisible) {
-    ctrl.classList.remove("active");
-    ctrl.classList.add("hidden");
+/* ════ CONTROLES IFRAME ════ */
+function _ifrToggleActionPanel() {
+  const visible = document.body.classList.contains("ifr-ctrl-visible");
+  if (visible) {
+    document.body.classList.remove("ifr-ctrl-visible");
   } else {
-    ctrl.classList.remove("hidden");
-    ctrl.classList.add("active");
+    document.body.classList.add("ifr-ctrl-visible");
     clearTimeout(ifrCtrlTimer);
     ifrCtrlTimer = setTimeout(() => {
-      ctrl.classList.remove("active");
-      ctrl.classList.add("hidden");
+      document.body.classList.remove("ifr-ctrl-visible");
     }, 4000);
   }
 }
-function _ifrShowControls() {
-  const ctrl = document.getElementById("iframeControls");
-  if (!ctrl) return;
-  ctrl.classList.remove("hidden");
-  ctrl.classList.add("active");
-  clearTimeout(ifrCtrlTimer);
-  ifrCtrlTimer = setTimeout(() => {
-    ctrl.classList.remove("active");
-    ctrl.classList.add("hidden");
-  }, 4000);
-}
 
-/* Play/Pausa — overlay negro sobre el iframe */
+/* Play/Pausa simulada con overlay */
 function ifrPlayPause() {
   const container = document.getElementById("videoContainer");
   const btn = document.getElementById("ifrPlayBtn");
@@ -969,16 +863,13 @@ function ifrPlayPause() {
       ifrPauseOvl = document.createElement("div");
       ifrPauseOvl.style.cssText = "position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:49;display:flex;align-items:center;justify-content:center;pointer-events:none;";
       ifrPauseOvl.innerHTML = '<i class="fa-solid fa-pause" style="font-size:52px;color:rgba(255,255,255,.55);"></i>';
-      const wrapper = currentIframe.parentNode;
-      if (wrapper) wrapper.appendChild(ifrPauseOvl);
+      container.appendChild(ifrPauseOvl);
     }
     if (btn) btn.innerHTML = '<i class="fa-solid fa-play"></i>';
     ifrPaused = true;
   }
-  _ifrShowControls();
 }
 
-/* Skip — muestra un toast la primera vez */
 function ifrSkip(seconds) {
   if (!window._skipWarnShown) {
     mostrarToast(`⏩ Para streams en vivo el salto no está disponible.\nUsa los controles del reproductor.`);
@@ -986,19 +877,15 @@ function ifrSkip(seconds) {
   } else {
     mostrarToast(`${seconds > 0 ? '⏩ +' : '⏪ '}${Math.abs(seconds)}s`);
   }
-  _ifrShowControls();
 }
 
-/* Volumen: +/- 10 */
 function ifrVolChange(delta) {
   ifrVol = Math.max(0, Math.min(100, ifrVol + delta));
   if (ifrVol > 0) ifrMuted = false;
   _ifrUpdateVolUI();
-  _ifrShowControls();
-  mostrarToast(`🔊 Volumen: ${ifrVol}%\n(Usa el control del dispositivo para cambiar el audio real)`);
+  mostrarToast(`🔊 Volumen UI: ${ifrVol}%`);
 }
 
-/* Click en barra de volumen */
 function ifrVolClick(e) {
   const track = document.getElementById("ifrVolTrack");
   if (!track) return;
@@ -1007,23 +894,22 @@ function ifrVolClick(e) {
   ifrVol  = Math.round(pct * 100);
   ifrMuted = ifrVol === 0;
   _ifrUpdateVolUI();
-  _ifrShowControls();
 }
 
-/* Silenciar/activar */
 function ifrToggleMute() {
   ifrMuted = !ifrMuted;
   if (!ifrMuted && ifrVol === 0) ifrVol = 50;
   _ifrUpdateVolUI();
-  _ifrShowControls();
-  mostrarToast(ifrMuted ? "🔇 Silenciado\n(Usa el volumen del dispositivo para silenciar el audio real)" : `🔊 Volumen: ${ifrVol}%`);
+  mostrarToast(ifrMuted ? "🔇 Silenciado" : `🔊 Volumen: ${ifrVol}%`);
 }
 
 function _ifrUpdateVolUI() {
-  const fill  = document.getElementById("ifrVolFill");
-  const muteB = document.getElementById("ifrMuteBtn");
+  const fill   = document.getElementById("ifrVolFill");
+  const muteB  = document.getElementById("ifrMuteBtn");
+  const pctLbl = document.getElementById("ifrVolPct");
   const displayVol = ifrMuted ? 0 : ifrVol;
-  if (fill) fill.style.width = displayVol + "%";
+  if (fill)   fill.style.width = displayVol + "%";
+  if (pctLbl) pctLbl.textContent = displayVol + "%";
   if (muteB) {
     muteB.innerHTML = displayVol === 0
       ? '<i class="fa-solid fa-volume-xmark"></i>'
@@ -1033,7 +919,6 @@ function _ifrUpdateVolUI() {
   }
 }
 
-/* Recargar iframe */
 function recargarIframe() {
   if (activeIframeUrl) {
     ifrPaused = false;
@@ -1042,9 +927,7 @@ function recargarIframe() {
   }
 }
 
-/* ════════════════════════════════════════
-   UTILIDADES PLAYER
-════════════════════════════════════════ */
+/* ════ UTILIDADES PLAYER ════ */
 function mostrarError(msg) {
   document.getElementById("videoContainer").innerHTML =
     `<div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:180px;background:#0a0a1a;color:#ff4444;font-family:'Orbitron',sans-serif;font-size:.7rem;text-align:center;padding:16px;">${msg}</div>`;
@@ -1077,9 +960,7 @@ function showTVControls() { const c=document.getElementById("tvControls"); c.cla
 function toggleTVMode() { tvMode=!tvMode; document.body.classList.toggle("tv-mode",tvMode); document.getElementById("tvModeBtn").innerHTML=tvMode?'<i class="fa-solid fa-display"></i> MODO NORMAL':'<i class="fa-solid fa-display"></i> MODO TV'; }
 function detectarDispositivo() { const ua=navigator.userAgent.toLowerCase(); const esTV=!/windows|macintosh|cros/.test(ua)&&!/android|iphone|ipad|ipod|mobile/i.test(ua)&&/smarttv|smart-tv|androidtv|googletv|firetv|webos|tizen/.test(ua); if(esTV){tvMode=true;document.body.classList.add("tv-mode");} }
 
-/* ════════════════════════════════════════
-   SERIES MODAL
-════════════════════════════════════════ */
+/* ════ SERIES MODAL ════ */
 function openSeriesModal(btn) {
   let sd = btn.dataset?.serie || btn.closest(".card")?.querySelector("[data-serie]")?.dataset?.serie;
   if (!sd) return;
@@ -1126,9 +1007,7 @@ function actualizarNavEpisodios() {
 function navegarEpisodio(dir) { if(!currentSerie||currentEpisodeIndex<0)return; const ep=currentSerie.temporadas[currentSeason]?.episodios?.[currentEpisodeIndex+dir]; if(ep?.link) reproducirEpisodio(currentEpisodeIndex+dir,ep.link); }
 function closeSeriesModal() { document.getElementById("seriesModal").classList.remove("open"); }
 
-/* ════════════════════════════════════════
-   CAST
-════════════════════════════════════════ */
+/* ════ CAST ════ */
 let castContext=null, castingActive=false, castInitialized=false;
 function getMimeForUrl(u) { return (!u)?'video/mp4':(u.includes('.m3u8')||u.includes('chunklist'))?'application/x-mpegURL':'video/mp4'; }
 function initCastSDK() { try{castContext=cast.framework.CastContext.getInstance();castContext.setOptions({receiverApplicationId:chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,autoJoinPolicy:chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED});castContext.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED,onCastSessionStateChanged);castInitialized=true;}catch(e){castInitialized=false;} }
@@ -1136,14 +1015,12 @@ async function onCastSessionStateChanged(e) { const SS=cast.framework.SessionSta
 async function enviarMediaACast(session) { const urlC=castLinkIframe||currentLink; try{const mime=getMimeForUrl(urlC),info=new chrome.cast.media.MediaInfo(urlC,mime);info.streamType=mime==='application/x-mpegURL'?chrome.cast.media.StreamType.LIVE:chrome.cast.media.StreamType.BUFFERED;const req=new chrome.cast.media.LoadRequest(info);req.autoplay=true;await session.loadMedia(req);setCastingState(true);mostrarToast("📺 ¡Transmitiendo en TV! ✓");}catch(e){setCastingState(true);mostrarToast("⚠️ Error al cargar media en TV.");} }
 window.__onGCastApiAvailable = function(ok) { if(ok) initCastSDK(); };
 function ensureCastReady() { if(castInitialized&&castContext)return true; if(typeof cast!=='undefined'&&cast.framework){initCastSDK();return castInitialized;} return false; }
-function setCastingState(a) { castingActive=a; const cb=document.getElementById("castBtn"),sb=document.getElementById("stopCastBtn"),ci=document.getElementById("castIndicator"); if(a){if(cb){cb.classList.add("casting-active");cb.innerHTML='<i class="fa-solid fa-tv"></i> EN CAST';}if(sb)sb.style.display="flex";if(ci)ci.classList.add("visible");}else{if(cb){cb.classList.remove("casting-active");cb.innerHTML='<i class="fa-solid fa-tv"></i> CAST';}if(sb)sb.style.display="none";if(ci)ci.classList.remove("visible");} }
+function setCastingState(a) { castingActive=a; const cb=document.getElementById("castBtn"),sb=document.getElementById("stopCastBtn"),ci=document.getElementById("castIndicator"); if(a){if(cb){cb.classList.add("casting-active");cb.innerHTML='<i class="fa-solid fa-tv"></i> EN CAST';}if(sb)sb.style.display="flex";if(ci){ci.style.display="flex";}}else{if(cb){cb.classList.remove("casting-active");cb.innerHTML='<i class="fa-solid fa-tv"></i> CAST';}if(sb)sb.style.display="none";if(ci)ci.style.display="none";} }
 async function finalizarCast() { if(typeof cast!=='undefined'&&castContext){const s=castContext.getCurrentSession();if(s){try{await s.endSession(true);}catch(e){}}}setCastingState(false);mostrarToast("📺 Cast finalizado."); }
 async function castToTV() { if(!currentLink){mostrarToast("⚠️ Selecciona un canal primero.");return;} if(!ensureCastReady()){mostrarToast("⚠️ Google Cast no disponible.\nUsa Chrome con extensión Cast.");return;} const sa=castContext.getCurrentSession(); if(sa){await enviarMediaACast(sa);return;} try{mostrarToast("📡 Buscando dispositivos Cast...");await castContext.requestSession();}catch(e){if(e?.code===chrome.cast?.ErrorCode?.CANCEL)return;castInitialized=false;castContext=null;mostrarToast("⚠️ Error al conectar.");} }
 function mostrarToast(msg) { const t=document.getElementById("castToast"); if(!t)return; t.innerHTML=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),4000); }
 
-/* ════════════════════════════════════════
-   TMDB
-════════════════════════════════════════ */
+/* ════ TMDB ════ */
 const TMDB_KEY="48ad3d1469534954a306bf380db6bfe0",TMDB_BASE="https://api.themoviedb.org/3",TMDB_IMG="https://image.tmdb.org/t/p/w500";
 async function buscarTMDb() {
   const q=document.getElementById("tmdbSearch").value.trim(); if(!q)return;
@@ -1158,16 +1035,12 @@ async function abrirDetalleTMDb(id,tipo) {
 }
 function cerrarTMDb() { document.getElementById("tmdbModal").classList.remove("open"); }
 
-/* ════════════════════════════════════════
-   TABS / BÚSQUEDA
-════════════════════════════════════════ */
+/* ════ TABS / BÚSQUEDA ════ */
 function switchTab(tab) { document.querySelectorAll('.tab-section').forEach(s=>s.style.display='none'); document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active')); document.getElementById('seccion-'+tab).style.display='block'; document.getElementById('tab-'+tab).classList.add('active'); }
 function filtrarTV(query) { const q=query.trim().toLowerCase(); const rd=document.getElementById('tvSearchGrid'),rl=document.getElementById('tvSearchResults'); if(!q){rd.style.display='none';rl.style.display='none';return;} const found=[]; document.querySelectorAll('#seccion-tv .event-item').forEach(item=>{const n=item.querySelector('h4')?.textContent||'',l=item.querySelector('p')?.textContent||''; if(n.toLowerCase().includes(q)||l.toLowerCase().includes(q))found.push(item.cloneNode(true));}); rd.innerHTML=''; if(!found.length)rd.innerHTML=`<p style="color:#888;font-size:.65rem;padding:8px 0">Sin resultados para "${query}"</p>`; else found.forEach(el=>rd.appendChild(el)); rd.style.display='block'; rl.style.display='block'; }
 function filtrarSeries(query) { const q=query.trim().toLowerCase(); const grid=document.getElementById('seriesSearchGrid'),label=document.getElementById('seriesSearchLabel'),mg=document.getElementById('seriesGrid'); if(!q){grid.style.display='none';label.style.display='none';mg.style.display='grid';return;} const items=(contenidoGlobal.series||[]).filter(s=>s.nombre.toLowerCase().includes(q)||(s.genero||'').toLowerCase().includes(q)); mg.style.display='none'; label.style.display='block'; grid.style.display='grid'; grid.innerHTML=''; if(!items.length){grid.innerHTML='<p style="color:#888;font-size:.65rem;grid-column:1/-1">Sin resultados</p>';return;} renderCards('seriesSearchGrid',items,true); }
 
-/* ════════════════════════════════════════
-   BANNERS
-════════════════════════════════════════ */
+/* ════ BANNERS ════ */
 let bIdx=0,bItems=[],bTimer=null;
 function initBanner(pels) { bItems=(pels||[]).slice(0,6); if(!bItems.length){document.getElementById('bannerEstrenos').style.display='none';return;} const track=document.getElementById('bannerTrack'),dots=document.getElementById('bannerDots'); track.innerHTML='';dots.innerHTML=''; bItems.forEach((item,i)=>{const slide=document.createElement('div');slide.className='banner-slide';const poster=item.portada||`https://placehold.co/400x170/0a0a1a/00f0ff?text=${encodeURIComponent(item.nombre)}`;const ac=item.link&&!item.link.startsWith('TU_LINK')?`onclick="loadStream('${item.link.replace(/'/g,"\\'")}');switchTab('peliculas');"`:'' ;slide.innerHTML=`<img src="${poster}" alt="${item.nombre}" loading="lazy" onerror="this.src='https://placehold.co/400x170/0a0a1a/00f0ff?text=${encodeURIComponent(item.nombre)}'"><div class="banner-slide-info"><div class="banner-slide-title">${item.nombre}</div><div class="banner-slide-meta"><span>${item.genero||''}</span>${item.año?'<span>· '+item.año+'</span>':''}</div>${ac?`<button class="banner-slide-play" ${ac}><i class="fa-solid fa-play"></i> REPRODUCIR</button>`:''}</div>`;track.appendChild(slide);const dot=document.createElement('button');dot.className='banner-dot'+(i===0?' active':'');dot.onclick=()=>goBanner(i);dots.appendChild(dot);}); clearInterval(bTimer);bTimer=setInterval(()=>goBanner((bIdx+1)%bItems.length),4500); }
 function goBanner(i) { bIdx=i; document.getElementById('bannerTrack').style.transform=`translateX(-${i*100}%)`; document.querySelectorAll('#bannerEstrenos .banner-dot').forEach((d,j)=>d.classList.toggle('active',j===i)); }
@@ -1177,10 +1050,7 @@ function initBannerSeries(series) { bsItems=(series||[]).slice(0,6); if(!bsItems
 function goBannerSeries(i) { bsIdx=i; const t=document.getElementById('bannerSeriesTrack'); if(t)t.style.transform=`translateX(-${i*100}%)`; document.querySelectorAll('#bannerSeries .banner-dot').forEach((d,j)=>d.classList.toggle('active',j===i)); }
 function bannerSeriesMove(d) { goBannerSeries((bsIdx+d+bsItems.length)%bsItems.length); clearInterval(bsTimer); bsTimer=setInterval(()=>goBannerSeries((bsIdx+1)%bsItems.length),5000); }
 
-/* ════════════════════════════════════════
-   PRÓXIMOS EVENTOS — API-FOOTBALL
-   Lee la key de localStorage (igual que admin)
-════════════════════════════════════════ */
+/* ════ PRÓXIMOS EVENTOS — API-FOOTBALL ════ */
 async function cargarProximosEventos() {
   const grid = document.getElementById("proximosGrid");
   if (!grid) return;
@@ -1188,7 +1058,7 @@ async function cargarProximosEventos() {
   const API_KEY = getApiFootballKey();
   if (!API_KEY) {
     grid.innerHTML = `<div class="proximos-loading" style="color:#ffc800;">
-      <i class="fa-solid fa-key"></i> Agrega tu API Key de API-Football en Admin → CONFIG para ver partidos próximos.</div>`;
+      <i class="fa-solid fa-key"></i> Agrega tu API Key de API-Football en Admin → CONFIG.</div>`;
     return;
   }
 
@@ -1222,6 +1092,11 @@ async function cargarProximosEventos() {
       );
       if (!res.ok) return [];
       const data = await res.json();
+      /* Verificar si hay errores en la respuesta */
+      if (data.errors && Object.keys(data.errors).length > 0) {
+        console.warn("API-Football error:", data.errors);
+        return [];
+      }
       return (data.response || []).slice(0,4).map(f => ({
         idEvent    : String(f.fixture.id),
         strHomeTeam: f.teams.home.name,
@@ -1293,9 +1168,7 @@ async function cargarProximosEventos() {
   });
 }
 
-/* ════════════════════════════════════════
-   TECLADO
-════════════════════════════════════════ */
+/* ════ TECLADO ════ */
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") { closeSeriesModal(); return; }
   if (tvMode) {
@@ -1312,16 +1185,12 @@ document.addEventListener("keydown", e => {
 document.addEventListener("mousemove", () => { if(tvMode) showTVControls(); });
 document.addEventListener("touchstart", () => { if(tvMode) showTVControls(); }, {passive:true});
 
-/* ════════════════════════════════════════
-   INIT
-════════════════════════════════════════ */
+/* ════ INIT ════ */
 detectarDispositivo();
 cargarTodo();
 cargarProximosEventos();
 
-/* ════════════════════════════════════════
-   PARTÍCULAS
-════════════════════════════════════════ */
+/* ════ PARTÍCULAS ════ */
 (function(){
   const canvas=document.getElementById('bgCanvas'); if(!canvas)return;
   const ctx=canvas.getContext('2d'); let W,H,pts;
