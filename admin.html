@@ -1006,7 +1006,7 @@ async function importarPartidos() {
       const ctrl = new AbortController();
       const to   = setTimeout(() => ctrl.abort(), 12000);
       const res  = await fetch(
-       `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=${season}&from=${hoy}&to=${en7}&status=NS-1H-2H-HT`,
+      `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=${season}&from=${hoy}&to=${en7}&status=NS-1H-2H-HT`,
         { headers: {"x-apisports-key": apiKey}, signal: ctrl.signal }
       );
       clearTimeout(to);
