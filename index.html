@@ -490,6 +490,12 @@ body.tv-mode .footer { display:none; }
           <div class="ifr-btn-wrap">
             <button class="ifr-btn yellow" onclick="recargarIframe()"><i class="fa-solid fa-rotate-right"></i></button>
             <span class="ifr-lbl" style="color:#ffc800">RECARGAR</span>
+            <div class="ifr-btn-wrap">
+  <button class="ifr-btn" id="ifrInteractBtn" onclick="toggleShield()" style="background:rgba(0,255,153,.15);border-color:rgba(0,255,153,.4);color:#00ff99;">
+    <i class="fa-solid fa-hand-pointer"></i>
+  </button>
+  <span class="ifr-lbl" style="color:#00ff99">INTERACTUAR</span>
+</div>
           </div>
         </div>
       </div>
@@ -840,11 +846,18 @@ function _crearIframe(container, url) {
   });
 
   /* Shield — absorbe clicks del iframe, muestra panel al tocar */
+  /* Shield — absorbe clicks del iframe, muestra panel al tocar */
   const shield = document.createElement("div");
   shield.className = "iframe-click-shield";
-  shield.addEventListener("click",      (e) => { e.preventDefault(); e.stopPropagation(); _ifrToggleActionPanel(); });
-  shield.addEventListener("touchstart", ()  => { _ifrToggleActionPanel(); }, { passive: true });
-
+  shield.id = "ifrShield";
+  shield.addEventListener("click", (e) => { 
+    e.preventDefault(); 
+    e.stopPropagation(); 
+    _ifrToggleActionPanel(); 
+  });
+  shield.addEventListener("touchstart", () => { 
+    _ifrToggleActionPanel(); 
+  }, { passive: true });
   /* Badge */
   const badge = document.createElement("div");
   badge.className = "ad-badge";
@@ -1246,6 +1259,33 @@ cargarProximosEventos();
     requestAnimationFrame(draw);
   })();
 })();
+  function toggleShield() {
+  const shield = document.getElementById("ifrShield");
+  const btn = document.getElementById("ifrInteractBtn");
+  if (!shield) return;
+  if (shield.style.display === "none") {
+    shield.style.display = "block";
+    btn.style.background = "rgba(0,255,153,.15)";
+    btn.style.borderColor = "rgba(0,255,153,.4)";
+    btn.style.color = "#00ff99";
+    mostrarToast("🛡️ Shield activado — ads bloqueados");
+  } else {
+    shield.style.display = "none";
+    btn.style.background = "rgba(255,200,0,.2)";
+    btn.style.borderColor = "rgba(255,200,0,.5)";
+    btn.style.color = "#ffc800";
+    mostrarToast("👆 Modo interactivo — puedes controlar el volumen");
+    setTimeout(() => {
+      if (shield) shield.style.display = "block";
+      if (btn) {
+        btn.style.background = "rgba(0,255,153,.15)";
+        btn.style.borderColor = "rgba(0,255,153,.4)";
+        btn.style.color = "#00ff99";
+      }
+      mostrarToast("🛡️ Shield reactivado automáticamente");
+    }, 10000);
+  }
+}
 </script>
 </body>
 </html>
