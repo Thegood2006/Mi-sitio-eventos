@@ -973,16 +973,12 @@ async function importarPartidos() {
   const apiKey = localStorage.getItem("tgtv_api_football") || "";
   const logEl  = document.getElementById("importLog");
   logEl.style.display = "block";
-
   if(!apiKey) {
-    logEl.innerHTML = "⚠ <strong>Configura tu API Key de API-Football en la sección Config primero.</strong>";
+    logEl.innerHTML = "⚠ <strong>Configura tu API Key primero en Config.</strong>";
     return;
   }
-
   logEl.innerHTML = "<i class='fa-solid fa-spinner spin'></i> Consultando API-Football...";
-
   const ligas = [
-    { id: 1,   nombre: "World Cup" },
     { id: 2,   nombre: "Champions League" },
     { id: 3,   nombre: "Europa League" },
     { id: 39,  nombre: "Premier League" },
@@ -993,80 +989,39 @@ async function importarPartidos() {
     { id: 262, nombre: "Liga MX" },
     { id: 13,  nombre: "Copa Libertadores" },
     { id: 11,  nombre: "Copa Sudamericana" }
-];
-
-  const season = new Date().getFullYear();
-  const hoy    = new Date().toISOString().slice(0,10);
-  const en7    = new Date(Date.now() + 7*864e5).toISOString().slice(0,10);
-
+  ];
+  const season = 2024;
+  const hoy = new Date().toISOString().slice(0,10);
+  const en7 = new Date(Date.now() + 7*864e5).toISOString().slice(0,10);
   let importados = 0, lineas = [];
-
   for(const liga of ligas) {
     try {
       const ctrl = new AbortController();
-      const to   = setTimeout(() => ctrl.abort(), 12000);
-      const res  = await fetch(
-      `https://v3.football.api-sports.io/fixtures?league=${liga.id}&season=${season}&from=${hoy}&to=${en7}&status=NS-1H-2H-HT`,
-        { headers: {"x-apisports-key": apiKey}, signal: ctrl.signal }
-      );
+      const to = setTimeout(() => ctrl.abort(), 12000);
+      const url = "https://v3.football.api-sports.io/fixtures?league=" + liga.id + "&season=" + season + "&from=" + hoy + "&to=" + en7 + "&status=NS-1H-2H-HT";
+      const res = await fetch(url, { headers: {"x-apisports-key": apiKey}, signal: ctrl.signal });
       clearTimeout(to);
-
-      if(!res.ok) { lineas.push(`⚠ ${liga.nombre}: HTTP ${res.status}`); continue; }
-
-      const data     = await res.json();
+      if(!res.ok) { lineas.push("⚠ " + liga.nombre + ": HTTP " + res.status); continue; }
+      const data = await res.json();
+      if(data.errors && Object.keys(data.errors).length) { lineas.push("⚠ " + liga.nombre + ": " + JSON.stringify(data.errors)); continue; }
       const fixtures = (data.response||[]).slice(0,5);
-
-      if(!fixtures.length) { lineas.push(`— ${liga.nombre}: sin partidos próximos`); continue; }
-
+      if(!fixtures.length) { lineas.push("— " + liga.nombre + ": sin partidos"); continue; }
       let count = 0;
       fixtures.forEach(f => {
-        const idEvt  = String(f.fixture.id);
-        const nombre = `${f.teams.home.name} vs ${f.teams.away.name}`;
-        const ya     = eventosList.some(e => String(e.id) === idEvt);
-        if(!ya) {
-          eventosList.push({id: idEvt, nombre, reproductores:[""]});
-          importados++; count++;
-        }
+        const idEvt = String(f.fixture.id);
+        const nombre = f.teams.home.name + " vs " + f.teams.away.name;
+        const ya = eventosList.some(e => String(e.id) === idEvt);
+        if(!ya) { eventosList.push({id: idEvt, nombre, reproductores: [""]}); importados++; count++; }
       });
-      lineas.push(`✓ ${liga.nombre}: ${count} nuevos`);
+      lineas.push("✓ " + liga.nombre + ": " + count + " nuevos");
     } catch(e) {
-      lineas.push(`✗ ${liga.nombre}: ${e.name==='AbortError'?'timeout':e.message}`);
+      lineas.push("✗ " + liga.nombre + ": " + (e.name==="AbortError"?"timeout":e.message));
     }
-    await new Promise(r => setTimeout(r, 600)); // rate limit
+    await new Promise(r => setTimeout(r, 600));
   }
-
   syncEventos();
   renderEventos();
-  logEl.innerHTML = `<strong style="color:var(--green)">✓ ${importados} partidos importados</strong><br><br>` + lineas.join("<br>");
-}
-  async function importarMundial() {
-  const logEl = document.getElementById("importLog");
-  logEl.style.display = "block";
-  logEl.innerHTML = "<i class='fa-solid fa-spinner spin'></i> Cargando partidos del Mundial...";
-
-  try {
-    const res = await fetch(
-      "https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4429",
-      { signal: AbortSignal.timeout(8000) }
-    );
-    const data = await res.json();
-    const eventos = (data.events || []).filter(f => f.strHomeTeam && f.strAwayTeam).slice(0, 10);
-
-    let importados = 0;
-    eventos.forEach(f => {
-      const ya = eventosList.some(e => String(e.id) === String(f.idEvent));
-      if (!ya) {
-        eventosList.push({ id: String(f.idEvent), nombre: `${f.strHomeTeam} vs ${f.strAwayTeam}`, reproductores: [""] });
-        importados++;
-      }
-    });
-
-    syncEventos();
-    renderEventos();
-    logEl.innerHTML = `<strong style="color:var(--green)">✓ ${importados} partidos del Mundial importados</strong>`;
-  } catch(e) {
-    logEl.innerHTML = `<span style="color:var(--red)">✗ Error: ${e.message}</span>`;
-  }
+  logEl.innerHTML = "<strong style='color:var(--green)'>✓ " + importados + " partidos importados</strong><br><br>" + lineas.join("<br>");
 }
 
 /* ════════════════════════════════════
