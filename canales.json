@@ -192,6 +192,13 @@
       "reproductores": [
         "https://moviedays.top/embed-live1.php?v=espn"
       ]
+    },
+    {
+      "id": "",
+      "nombre": "Nuevo partido",
+      "reproductores": [
+        ""
+      ]
     }
   ]
 }
