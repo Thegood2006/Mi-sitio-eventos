@@ -206,6 +206,13 @@
       "reproductores": [
         "https://theygoodtv-server.onrender.com/live/teleamazonas/player"
       ]
+    },
+    {
+      "id": "",
+      "nombre": "Nuevo partido",
+      "reproductores": [
+        "https://theygoodtv-server.onrender.com/live/teleamazonas/player"
+      ]
     }
   ]
 }
