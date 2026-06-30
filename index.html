@@ -1223,7 +1223,7 @@ async function cargarProximosEventos() {
   // TheSportsDB liga 4429 = FIFA World Cup, temporada 2026
   let todos = [];
   try {
-    const res = await fetch("https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4429&s=2026", { signal: AbortSignal.timeout(10000) });
+   const res = await fetch("https://www.thesportsdb.com/api/v1/json/123/eventsseason.php?id=4429&s=2026", { signal: AbortSignal.timeout(10000) });
     if (res.ok) {
       const data = await res.json();
       const events = data.events || [];
