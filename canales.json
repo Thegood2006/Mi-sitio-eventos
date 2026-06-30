@@ -201,15 +201,8 @@
       ]
     },
     {
-      "id": "México vs. Ecuador",
-      "nombre": "2052788",
-      "reproductores": [
-        "https://theygoodtv-server.onrender.com/live/teleamazonas/player"
-      ]
-    },
-    {
-      "id": "",
-      "nombre": "Nuevo partido",
+      "id": "2052788",
+      "nombre": "México vs. Ecuador",
       "reproductores": [
         "https://theygoodtv-server.onrender.com/live/teleamazonas/player"
       ]
