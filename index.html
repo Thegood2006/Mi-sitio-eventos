@@ -1206,60 +1206,47 @@ function initBannerSeries(series) { bsItems = (series || []).slice(0, 6); if (!b
 function goBannerSeries(i) { bsIdx = i; const t = document.getElementById('bannerSeriesTrack'); if (t) t.style.transform = `translateX(-${i*100}%)`; document.querySelectorAll('#bannerSeries .banner-dot').forEach((d, j) => d.classList.toggle('active', j === i)); }
 function bannerSeriesMove(d) { goBannerSeries((bsIdx + d + bsItems.length) % bsItems.length); clearInterval(bsTimer); bsTimer = setInterval(() => goBannerSeries((bsIdx+1) % bsItems.length), 5000); }
 
-/* ════ PRÓXIMOS EVENTOS ════ */
+/* ════ PRÓXIMOS EVENTOS — SOLO MUNDIAL 2026 ════ */
 async function cargarProximosEventos() {
   const grid = document.getElementById("proximosGrid");
   if (!grid) return;
-  grid.innerHTML = '<div class="proximos-loading"><i class="fa-solid fa-spinner fa-spin"></i> Cargando partidos...</div>';
+  grid.innerHTML = '<div class="proximos-loading"><i class="fa-solid fa-spinner fa-spin"></i> Cargando partidos del Mundial...</div>';
 
-  const ligas = [
-    { id: "4328", nombre: "Premier League" },
-    { id: "4335", nombre: "La Liga" },
-    { id: "4331", nombre: "Bundesliga" },
-    { id: "4332", nombre: "Serie A" },
-    { id: "4334", nombre: "Ligue 1" },
-    { id: "4346", nombre: "Champions League" },
-    { id: "4429", nombre: "Copa del Mundo 2026" },
-    { id: "4407", nombre: "Copa América" },
-    { id: "4399", nombre: "Eurocopa" },
-    { id: "4443", nombre: "Nations League" },
-    { id: "4377", nombre: "MLS" },
-    { id: "4397", nombre: "Liga MX" },
-  ];
-
-  const hoy = new Date();
+  // Trae los links que guardaste en el admin (canales.json -> eventos[])
   let eventosLinks = {};
   try {
-    const cd = await fetch(URL_CANALES + "?nocache=" + Date.now(), { signal: AbortSignal.timeout(5000) });
+    const cd = await fetch(URL_CANALES + "?nocache=" + Date.now(), { signal: AbortSignal.timeout(8000) });
     const cj = await cd.json();
     if (cj.eventos) cj.eventos.forEach(ev => { eventosLinks[String(ev.id)] = ev; });
   } catch(e) {}
 
-  async function fetchLiga(liga) {
-    try {
-      const res = await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${liga.id}`, { signal: AbortSignal.timeout(8000) });
-      if (!res.ok) return [];
-      const data = await res.json();
-      return (data.events || []).filter(f => f.strHomeTeam && f.strAwayTeam).slice(0, 4).map(f => ({
-        idEvent: f.idEvent, strHomeTeam: f.strHomeTeam, strAwayTeam: f.strAwayTeam,
-        thumbHome: f.strHomeTeamBadge, thumbAway: f.strAwayTeamBadge,
-        dateEvent: f.dateEvent, strTime: f.strTime || "00:00:00",
-        status: f.strStatus || "NS", _liga: liga.nombre,
-      }));
-    } catch(e) { return []; }
-  }
-
-  const results = await Promise.allSettled(ligas.map(l => fetchLiga(l)));
+  // TheSportsDB liga 4429 = FIFA World Cup, temporada 2026
   let todos = [];
-  results.forEach(r => { if (r.status === "fulfilled") todos.push(...r.value); });
-
-  todos = todos
-    .filter(ev => { const f = new Date(ev.dateEvent + "T" + ev.strTime); return f >= new Date(hoy.getTime() - 3600000); })
-    .sort((a, b) => new Date(a.dateEvent + "T" + a.strTime) - new Date(b.dateEvent + "T" + b.strTime))
-    .slice(0, 12);
+  try {
+    const res = await fetch("https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4429&s=2026", { signal: AbortSignal.timeout(10000) });
+    if (res.ok) {
+      const data = await res.json();
+      const events = data.events || [];
+      const ahora = new Date();
+      todos = events
+        .filter(f => f.strHomeTeam && f.strAwayTeam)
+        .map(f => ({
+          idEvent: f.idEvent, strHomeTeam: f.strHomeTeam, strAwayTeam: f.strAwayTeam,
+          thumbHome: f.strHomeTeamBadge, thumbAway: f.strAwayTeamBadge,
+          dateEvent: f.dateEvent, strTime: f.strTime || "00:00:00",
+          _liga: "Copa del Mundo 2026",
+        }))
+        .filter(ev => {
+          const f = new Date(ev.dateEvent + "T" + ev.strTime);
+          return f >= new Date(ahora.getTime() - 3 * 3600000); // solo futuros (con margen de 3h)
+        })
+        .sort((a, b) => new Date(a.dateEvent + "T" + a.strTime) - new Date(b.dateEvent + "T" + b.strTime))
+        .slice(0, 20);
+    }
+  } catch(e) {}
 
   if (!todos.length) {
-    grid.innerHTML = `<div class="proximos-loading"><i class="fa-solid fa-calendar-check" style="color:var(--cyan)"></i><br>No hay partidos próximos.
+    grid.innerHTML = `<div class="proximos-loading"><i class="fa-solid fa-calendar-check" style="color:var(--cyan)"></i><br>No hay partidos del Mundial próximos todavía.
       <br><button onclick="cargarProximosEventos()" style="margin-top:8px;background:linear-gradient(90deg,var(--cyan),var(--cyan2));border:none;color:#fff;font-family:'Orbitron',sans-serif;font-size:.48rem;padding:6px 14px;border-radius:8px;cursor:pointer;">
       <i class="fa-solid fa-rotate-right"></i> REINTENTAR</button></div>`;
     return;
@@ -1277,7 +1264,8 @@ async function cargarProximosEventos() {
     else if (fev.toDateString() === manana.toDateString()) fechaStr = "MAÑANA " + fev.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" });
     else fechaStr = fev.toLocaleDateString("es", { weekday: "short", day: "2-digit", month: "short" }) + " " + fev.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" });
 
-    const ld = eventosLinks[ev.idEvent] || Object.values(eventosLinks).find(e => e.nombre && (e.nombre.toLowerCase().includes((ev.strHomeTeam || "").toLowerCase().slice(0, 6)) || e.nombre.toLowerCase().includes((ev.strAwayTeam || "").toLowerCase().slice(0, 6))));
+    // Cruce por ID exacto (el mismo idEvent que guardas en el admin al importar el Mundial)
+    const ld = eventosLinks[String(ev.idEvent)];
 
     const hB = ev.thumbHome ? `<img src="${ev.thumbHome}" style="${bs}" onerror="this.style.display='none'">` : `<span style="${bs}background:rgba(0,229,255,.07);display:inline-block;border-radius:3px;"></span>`;
     const aB = ev.thumbAway ? `<img src="${ev.thumbAway}" style="${bs}" onerror="this.style.display='none'">` : `<span style="${bs}background:rgba(0,229,255,.07);display:inline-block;border-radius:3px;"></span>`;
@@ -1294,7 +1282,7 @@ async function cargarProximosEventos() {
         </div>
         <div class="evento-proximo-fecha">${fechaStr}</div>
       </div>
-      ${ld?.reproductores?.length
+      ${ld?.reproductores?.length && ld.reproductores[0]
         ? `<button class="evento-ver-btn" onclick="loadStream('${ld.reproductores[0].replace(/'/g, "\\'")}')">
             <i class="fa-solid fa-play"></i> VER PARTIDO</button>`
         : `<div class="evento-sin-link"><i class="fa-solid fa-clock"></i> Link próximamente</div>`}`;
