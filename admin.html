@@ -1046,7 +1046,8 @@ async function importarMundial() {
   logEl.innerHTML = "<i class='fa-solid fa-spinner spin'></i> Consultando TheSportsDB — Copa del Mundo 2026...";
 
   // TheSportsDB league ID 4429 = FIFA World Cup
-  const url = "https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4429&s=2026";
+ // TheSportsDB league ID 4429 = FIFA World Cup
+const url = "https://www.thesportsdb.com/api/v1/json/123/eventsseason.php?id=4429&s=2026";
 
   try {
     const res  = await fetch(url, { signal: AbortSignal.timeout(15000) });
@@ -1060,12 +1061,11 @@ async function importarMundial() {
     }
 
     const ahora     = Date.now();
-    const en8dias   = ahora + 8 * 86400000;
-    let importados  = 0;
+let importados  = 0;
 
-    events.forEach(ev => {
-      const fecha  = new Date((ev.strTimestamp || ev.dateEvent + "T" + (ev.strTime||"00:00:00") + "Z")).getTime();
-      if(fecha < ahora - 3*3600000 || fecha > en8dias) return;  // solo próximos 8 días
+events.forEach(ev => {
+  const fecha  = new Date((ev.strTimestamp || ev.dateEvent + "T" + (ev.strTime||"00:00:00") + "Z")).getTime();
+  if(fecha < ahora - 3*3600000) return;  // solo descarta partidos ya jugados
       const idEvt  = String(ev.idEvent);
       const nombre = ev.strHomeTeam + " vs " + ev.strAwayTeam;
       const ya     = eventosList.some(e => String(e.id) === idEvt);
