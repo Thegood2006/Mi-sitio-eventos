@@ -947,30 +947,54 @@ function getApiFootballKey() {
 /* ════ LOAD ALL DATA ════ */
 async function cargarTodo() {
   try {
-    let canales;
+    let canales = null;
+
     try {
       const r = await fetch(RENDER_SERVER + "/streams", { signal: AbortSignal.timeout(8000) });
-      if (r.ok) canales = await r.json(); else throw new Error();
-    } catch {
+      if (r.ok) {
+        const data = await r.json();
+        // Solo la usamos si trae al menos una de las categorías esperadas
+        if (data && (data.futbol || data.ciclismo || data.ufc || data.ecuador || data.internacional)) {
+          canales = data;
+        } else {
+          console.warn("Respuesta de /streams no tiene el formato esperado, usando fallback.");
+        }
+      }
+    } catch (e) {
+      console.warn("Fallo /streams:", e);
+    }
+
+    if (!canales) {
       canales = await (await fetch(URL_CANALES + "?nocache=" + Date.now())).json();
     }
+
     const contenido = await (await fetch(URL_CONTENIDO + "?nocache=" + Date.now())).json();
+
     renderCategoria("futbolMenu",        canales.futbol);
     renderCategoria("cyclingMenu",       canales.ciclismo);
     renderCategoria("ufcMenu",           canales.ufc);
     renderCategoria("ecuadorMenu",       canales.ecuador);
     renderCategoria("internacionalMenu", canales.internacional);
+
     contenidoGlobal = contenido;
     renderCards("peliculasGrid", contenido.peliculas, false);
     renderCards("seriesGrid",    contenido.series,    true);
+
     if (canales.ultima_verificacion) {
       const d = document.createElement("div"); d.className = "ultima-verificacion";
       d.innerHTML = `<i class="fa-solid fa-clock"></i> Verificado: ${canales.ultima_verificacion}`;
       document.querySelector(".sidebar").appendChild(d);
     }
+
     initBanner(contenido.peliculas);
     initBannerSeries(contenido.series);
-  } catch(e) { console.error("Error cargando datos:", e); }
+  } catch (e) {
+    console.error("Error cargando datos:", e);
+    document.querySelector(".sidebar").insertAdjacentHTML("afterbegin",
+      `<div style="color:#ff3d5a;font-family:var(--font-hud);font-size:.55rem;padding:8px;text-align:center;">
+        ⚠ Error cargando canales. Revisa la consola (F12).
+      </div>`);
+  }
 }
 
 /* ════ RENDER CHANNELS ════ */
