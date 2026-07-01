@@ -1,40 +1,7 @@
 {
-  "futbol": [
-    {
-      "nombre": "🇨🇭 Suiza vs 🇨🇦 Canadá",
-      "liga": "23:00",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://moviedays.top/embed-live2.php"
-      ]
-    },
-    {
-      "nombre": "Nuevo evento",
-      "liga": "",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://moviedays.top/embed-live1.php?v=espn"
-      ]
-    }
-  ],
-  "ciclismo": [
-    {
-      "nombre": "Tour de Francia",
-      "liga": "Etapa Final",
-      "reproductores": [
-        "https://11231data.com/live/tv-6.0.php?id=espn&token=6928820ad8395df37afc20adc2b7951e"
-      ]
-    }
-  ],
-  "ufc": [
-    {
-      "nombre": "UFC Main Event",
-      "liga": "Fight Night",
-      "reproductores": [
-        "TU_LINK_HOY"
-      ]
-    }
-  ],
+  "futbol": [],
+  "ciclismo": [],
+  "ufc": [],
   "ecuador": [
     {
       "nombre": "Teleamazonas",
