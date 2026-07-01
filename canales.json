@@ -165,7 +165,9 @@
       "liga": "Estados Unidos",
       "tipo": "m3u8",
       "reproductores": [
-        "TU_LINK_ESPN_HOY"
+        "https://moviedays.top/embed-live1.php?v=espnmexico",
+        "https://moviedays.top/embed-live2.php?v=espnmexico",
+        "https://moviedays.top/embed-live3.php?v=espnmexico"
       ]
     },
     {
@@ -173,7 +175,9 @@
       "liga": "México",
       "tipo": "m3u8",
       "reproductores": [
-        "TU_LINK_FOX_MX"
+        "https://moviedays.top/embed-live1.php?v=foxsports",
+        "https://moviedays.top/embed-live2.php?v=foxsports",
+        "https://moviedays.top/embed-live3.php?v=foxsports"
       ]
     },
     {
@@ -182,6 +186,50 @@
       "tipo": "iframe",
       "reproductores": [
         "https://theygoodtv-server.onrender.com/live/star/player"
+      ]
+    },
+    {
+      "nombre": "STUDIOUNIVERSAL",
+      "liga": "",
+      "tipo": "iframe",
+      "reproductores": [
+        "https://moviedays.top/embed-live2.php?v=studiouniversal",
+        "https://moviedays.top/embed-live1.php?v=studiouniversal",
+        "https://moviedays.top/embed-live3.php?v=studiouniversal"
+      ]
+    },
+    {
+      "nombre": "Nuevo canal",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "FOXSPORTSPREMIUM",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://moviedays.top/embed-live1.php?v=foxsportspremium",
+        "https://moviedays.top/embed-live2.php?v=foxsportspremium",
+        "https://moviedays.top/embed-live3.php?v=foxsportspremium"
+      ]
+    },
+    {
+      "nombre": "Nuevo canal",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
+      ]
+    },
+    {
+      "nombre": "Nuevo canal",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        ""
       ]
     }
   ],
