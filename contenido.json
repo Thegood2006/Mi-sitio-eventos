@@ -88,20 +88,6 @@
       "portada": "https://m.media-amazon.com/images/M/MV5BZTI1YTBiNmEtYWUxZi00YzFkLWIzNjMtMmZjMmY2NzM0ZWMzXkEyXkFqcGc@._V1_.jpg",
       "tipo": "m3u8",
       "link": "https://hugh.cdn.rumble.cloud/video/fwe2/6d/s8/2/s/e/n/y/senyA.haa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=2780424704-2780479726"
-    },
-    {
-      "nombre": "Ecuador y México",
-      "genero": "martes 30 de junio de 2026",
-      "portada": "https://www.ole.com.ar/2026/06/28/TrBW4PkIp_400x400__1.jpg",
-      "tipo": "m3u8",
-      "link": "https://theygoodtv-server.onrender.com/live/teleamazonas/player"
-    },
-    {
-      "nombre": "ecuador",
-      "genero": "",
-      "portada": "https://www.ole.com.ar/2026/06/28/TrBW4PkIp_400x400__1.jpg",
-      "tipo": "m3u8",
-      "link": "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/fd4ab346-b4e3-4628-abf0-b5a1bc192428.m3u8"
     }
   ],
   "series": [
