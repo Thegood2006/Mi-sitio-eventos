@@ -217,11 +217,13 @@
       ]
     },
     {
-      "nombre": "Nuevo canal",
+      "nombre": "WARNER",
       "liga": "",
       "tipo": "m3u8",
       "reproductores": [
-        ""
+        "https://moviedays.top/embed-live1.php?v=warnerchannel",
+        "https://moviedays.top/embed-live2.php?v=warnerchannel",
+        "https://moviedays.top/embed-live3.php?v=warnerchannel"
       ]
     },
     {
