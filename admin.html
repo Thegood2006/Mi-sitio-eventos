@@ -238,20 +238,36 @@ select option { background: #1a1b2e; }
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 14px;
   margin-bottom: 10px;
   transition: border-color .2s;
+  overflow: hidden;
 }
 .item-card:hover { border-color: var(--border-hi); }
 .item-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 12px;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
 }
+.item-header:hover { background: rgba(0,225,255,.03); }
 .item-num {
   font-family: var(--font-head); font-size: .65rem; color: var(--cyan);
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 8px;
+  min-width: 0;
 }
-.item-actions { display: flex; gap: 6px; }
+.item-num .item-title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-num .chev { color: var(--text-dim); font-size: .6rem; transition: transform .2s; flex-shrink:0; }
+.item-card.open .item-num .chev { transform: rotate(90deg); color: var(--cyan); }
+.item-meta { display:flex; align-items:center; gap:6px; flex-shrink:0; flex-wrap: wrap; }
+.item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.item-body {
+  display: none;
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+.item-card.open .item-body { display: block; }
 
 /* TOAST */
 #toast {
@@ -298,10 +314,12 @@ select option { background: #1a1b2e; }
 .badge {
   display: inline-flex; align-items: center;
   font-size: .55rem; padding: 2px 8px; border-radius: 99px;
+  white-space: nowrap;
 }
 .badge-m3u8     { background: rgba(0,255,153,.1); border: 1px solid rgba(0,255,153,.3); color: var(--green); }
 .badge-iframe   { background: rgba(0,225,255,.1); border: 1px solid rgba(0,225,255,.3); color: var(--cyan); }
 .badge-dinamico { background: rgba(255,200,0,.1); border: 1px solid rgba(255,200,0,.3); color: var(--gold); }
+.badge-empty    { background: rgba(255,61,90,.08); border: 1px solid rgba(255,61,90,.25); color: var(--red); }
 
 /* SERVER CANAL CARD */
 .server-canal {
@@ -366,13 +384,14 @@ select option { background: #1a1b2e; }
 .url-bar input { flex: 1; background: transparent; border: none; padding: 4px 0; font-size: .8rem; }
 .url-bar input:focus { box-shadow: none; border: none; }
 
-/* CANAL EDITOR */
-.canal-edit-item {
-  background: var(--bg-input); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 14px; margin-bottom: 8px;
+/* CANAL EDITOR (reuses .item-card / .item-header / .item-body accordion) */
+
+/* SECTION TOOLBAR (search + bulk actions) */
+.section-toolbar {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap;
 }
-.canal-edit-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.canal-edit-id { font-family: var(--font-head); font-size: .7rem; color: var(--cyan); font-weight: 700; }
+.section-toolbar input[type=text] { flex: 1; min-width: 160px; }
+.section-toolbar .btn-sm { flex-shrink: 0; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
@@ -383,6 +402,7 @@ select option { background: #1a1b2e; }
   .col-span-2, .col-span-3 { grid-column: auto; }
   .stats-row { grid-template-columns: 1fr 1fr; }
   .tipo-row { flex-direction: column; }
+  .item-header { flex-wrap: wrap; }
 }
 
 /* ANIMATIONS */
@@ -479,7 +499,10 @@ select option { background: #1a1b2e; }
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-futbol"></i> FÚTBOL</div>
-            <button class="btn-sm" onclick="addCanalCategoria('futbol')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm" onclick="toggleAllCat('futbol',false)"><i class="fa-solid fa-compress"></i></button>
+              <button class="btn-sm" onclick="addCanalCategoria('futbol')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            </div>
           </div>
           <div id="futbol-list"></div>
         </div>
@@ -487,7 +510,10 @@ select option { background: #1a1b2e; }
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-person-biking"></i> CICLISMO</div>
-            <button class="btn-sm" onclick="addCanalCategoria('ciclismo')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm" onclick="toggleAllCat('ciclismo',false)"><i class="fa-solid fa-compress"></i></button>
+              <button class="btn-sm" onclick="addCanalCategoria('ciclismo')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            </div>
           </div>
           <div id="ciclismo-list"></div>
         </div>
@@ -495,7 +521,10 @@ select option { background: #1a1b2e; }
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-fire"></i> UFC / MMA</div>
-            <button class="btn-sm" onclick="addCanalCategoria('ufc')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm" onclick="toggleAllCat('ufc',false)"><i class="fa-solid fa-compress"></i></button>
+              <button class="btn-sm" onclick="addCanalCategoria('ufc')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            </div>
           </div>
           <div id="ufc-list"></div>
         </div>
@@ -503,7 +532,10 @@ select option { background: #1a1b2e; }
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-map-marker-alt"></i> CANALES ECUADOR</div>
-            <button class="btn-sm" onclick="addCanalCategoria('ecuador')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm" onclick="toggleAllCat('ecuador',false)"><i class="fa-solid fa-compress"></i></button>
+              <button class="btn-sm" onclick="addCanalCategoria('ecuador')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            </div>
           </div>
           <div id="ecuador-list"></div>
         </div>
@@ -511,7 +543,10 @@ select option { background: #1a1b2e; }
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-globe"></i> INTERNACIONALES</div>
-            <button class="btn-sm" onclick="addCanalCategoria('internacional')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm" onclick="toggleAllCat('internacional',false)"><i class="fa-solid fa-compress"></i></button>
+              <button class="btn-sm" onclick="addCanalCategoria('internacional')"><i class="fa-solid fa-plus"></i> Agregar</button>
+            </div>
           </div>
           <div id="internacional-list"></div>
         </div>
@@ -541,6 +576,12 @@ select option { background: #1a1b2e; }
               </button>
             </div>
           </div>
+          <div class="section-toolbar">
+            <input type="text" id="eventosSearch" placeholder="Buscar evento por nombre..." oninput="renderEventos()"/>
+            <span style="font-size:.62rem;color:var(--text-dim);white-space:nowrap;">
+              <span id="eventosSinLinkCount">0</span> sin link
+            </span>
+          </div>
           <div id="eventos-list"></div>
           <div class="import-log" id="importLog"></div>
         </div>
@@ -552,7 +593,13 @@ select option { background: #1a1b2e; }
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-film"></i> CATÁLOGO</div>
-            <button class="btn-sm" onclick="addPelicula()"><i class="fa-solid fa-plus"></i> Agregar</button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm" onclick="toggleAllList('peliculas-list',false)"><i class="fa-solid fa-compress"></i></button>
+              <button class="btn-sm" onclick="addPelicula()"><i class="fa-solid fa-plus"></i> Agregar</button>
+            </div>
+          </div>
+          <div class="section-toolbar">
+            <input type="text" id="peliculasSearch" placeholder="Buscar película..." oninput="renderPeliculas()"/>
           </div>
           <div id="peliculas-list"></div>
         </div>
@@ -588,7 +635,13 @@ select option { background: #1a1b2e; }
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-tv"></i> SERIES AGREGADAS</div>
-            <button class="btn-sm" onclick="addSerie()"><i class="fa-solid fa-plus"></i> Manual</button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm" onclick="toggleAllList('series-list',false)"><i class="fa-solid fa-compress"></i></button>
+              <button class="btn-sm" onclick="addSerie()"><i class="fa-solid fa-plus"></i> Manual</button>
+            </div>
+          </div>
+          <div class="section-toolbar">
+            <input type="text" id="seriesSearch" placeholder="Buscar serie..." oninput="renderSeries()"/>
           </div>
           <div id="series-list"></div>
         </div>
@@ -610,9 +663,12 @@ select option { background: #1a1b2e; }
         <div class="card">
           <div class="card-header">
             <div class="card-title"><i class="fa-solid fa-code"></i> EDITOR — server.js en GitHub</div>
-            <button class="btn-sm green" id="btnSaveServer" onclick="guardarServerJs()" style="display:none">
-              <i class="fa-brands fa-github"></i> Guardar cambios
-            </button>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-sm" onclick="toggleAllList('canalEditorList',false)"><i class="fa-solid fa-compress"></i></button>
+              <button class="btn-sm green" id="btnSaveServer" onclick="guardarServerJs()" style="display:none">
+                <i class="fa-brands fa-github"></i> Guardar cambios
+              </button>
+            </div>
           </div>
           <div class="tip">
             <i class="fa-solid fa-lightbulb"></i>
@@ -737,6 +793,29 @@ let serverCanales = [];
 let serverJs      = "";
 let tipoActual    = "m3u8";
 
+// Recuerda qué acordeones están abiertos entre renders (por clave única)
+const openState = new Set();
+
+/* ═══════════════════════════════════
+   ACORDEÓN — helpers
+═══════════════════════════════════ */
+function toggleCard(key, el) {
+  const card = el.closest(".item-card");
+  if(!card) return;
+  const isOpen = card.classList.toggle("open");
+  if(isOpen) openState.add(key); else openState.delete(key);
+}
+function toggleAllList(containerId, open) {
+  const cont = document.getElementById(containerId);
+  if(!cont) return;
+  cont.querySelectorAll(".item-card").forEach(c => {
+    c.classList.toggle("open", open);
+    const key = c.dataset.key;
+    if(key) { if(open) openState.add(key); else openState.delete(key); }
+  });
+}
+function toggleAllCat(cat, open) { toggleAllList(cat + "-list", open); }
+
 /* ═══════════════════════════════════
    LOGIN
 ═══════════════════════════════════ */
@@ -815,6 +894,8 @@ async function cargarDatos() {
       fetch(base + "/canales.json?t=" + Date.now()),
       fetch(base + "/contenido.json?t=" + Date.now())
     ]);
+    if(!rc.ok)  throw new Error("canales.json → HTTP " + rc.status);
+    if(!rco.ok) throw new Error("contenido.json → HTTP " + rco.status);
     const rawCanales = await rc.json();
     contenido        = await rco.json();
 
@@ -856,7 +937,7 @@ function actualizarContadores() {
 }
 
 /* ═══════════════════════════════════
-   RENDER CANALES
+   RENDER CANALES (acordeón — colapsado por defecto)
 ═══════════════════════════════════ */
 function renderTodo() {
   ["futbol","ciclismo","ufc","ecuador","internacional"].forEach(renderCanales);
@@ -875,29 +956,38 @@ function renderCanales(cat) {
     return;
   }
   arr.forEach((ev, i) => {
+    const key = cat + "-" + i;
+    const nLinks = (ev.reproductores||[]).filter(l => l && l.trim()).length;
+    const tipoBadge = (ev.tipo||'m3u8') === 'iframe' ? 'badge-iframe' : 'badge-m3u8';
+    const tipoTxt   = (ev.tipo||'m3u8') === 'iframe' ? 'IFRAME' : 'M3U8';
+    const linkBadge = nLinks ? '<span class="badge badge-m3u8">' + nLinks + ' link' + (nLinks>1?'s':'') + '</span>' : '<span class="badge badge-empty">sin link</span>';
     const d = document.createElement("div");
-    d.className = "item-card";
+    d.className = "item-card" + (openState.has(key) ? " open" : "");
+    d.dataset.key = key;
     d.innerHTML =
-      '<div class="item-header">' +
-        '<span class="item-num"><i class="fa-solid fa-circle-dot"></i> #' + (i+1) + ' — ' + escH(ev.nombre||'Sin nombre') + '</span>' +
+      '<div class="item-header" onclick="toggleCard(\'' + key + '\',this)">' +
+        '<span class="item-num"><i class="fa-solid fa-chevron-right chev"></i><span class="item-title-text">' + escH(ev.nombre||'Sin nombre') + '</span></span>' +
+        '<div class="item-meta"><span class="badge ' + tipoBadge + '">' + tipoTxt + '</span>' + linkBadge + '</div>' +
         '<div class="item-actions">' +
-          '<button class="btn-sm red" onclick="delCanal(\'' + cat + '\',' + i + ')"><i class="fa-solid fa-trash"></i></button>' +
+          '<button class="btn-sm red" onclick="event.stopPropagation();delCanal(\'' + cat + '\',' + i + ')"><i class="fa-solid fa-trash"></i></button>' +
         '</div>' +
       '</div>' +
+      '<div class="item-body">' +
       '<div class="grid-2">' +
         '<div><label class="form-label">Nombre</label>' +
-          '<input type="text" value="' + escH(ev.nombre||'') + '" onchange="canales[\'' + cat + '\'][' + i + '].nombre=this.value"/></div>' +
+          '<input type="text" value="' + escH(ev.nombre||'') + '" onchange="canales[\'' + cat + '\'][' + i + '].nombre=this.value;renderCanales(\'' + cat + '\')"/></div>' +
         '<div><label class="form-label">Liga / Descripción</label>' +
           '<input type="text" value="' + escH(ev.liga||'') + '" onchange="canales[\'' + cat + '\'][' + i + '].liga=this.value"/></div>' +
         '<div><label class="form-label">Tipo</label>' +
-          '<select onchange="canales[\'' + cat + '\'][' + i + '].tipo=this.value">' +
+          '<select onchange="canales[\'' + cat + '\'][' + i + '].tipo=this.value;renderCanales(\'' + cat + '\')">' +
             '<option value="m3u8"'   + ((ev.tipo||'m3u8')==='m3u8'  ?' selected':'') + '>🎬 M3U8 / MP4</option>' +
             '<option value="iframe"' + (ev.tipo==='iframe'            ?' selected':'') + '>🖥️ iFrame</option>' +
           '</select></div>' +
         '<div><label class="form-label">Links (uno por línea)</label>' +
-          '<textarea onchange="canales[\'' + cat + '\'][' + i + '].reproductores=this.value.split(\'\\n\').filter(l=>l.trim())">' +
+          '<textarea onchange="canales[\'' + cat + '\'][' + i + '].reproductores=this.value.split(\'\\n\').filter(l=>l.trim());renderCanales(\'' + cat + '\')">' +
             escH((ev.reproductores||[]).join('\n')) +
           '</textarea></div>' +
+      '</div>' +
       '</div>';
     list.appendChild(d);
   });
@@ -909,47 +999,69 @@ function renderCanales(cat) {
 function addCanalCategoria(cat) {
   if(!canales[cat]) canales[cat] = [];
   canales[cat].push({ nombre: "Nuevo canal", liga: "", tipo: "m3u8", reproductores: [""] });
+  openState.add(cat + "-" + (canales[cat].length - 1));
   renderCanales(cat);
   actualizarContadores();
 }
 
 function delCanal(cat, i) {
   canales[cat].splice(i, 1);
+  openState.clear();
   renderCanales(cat);
   actualizarContadores();
 }
 
 /* ═══════════════════════════════════
-   EVENTOS CON LINKS
+   EVENTOS CON LINKS (acordeón + búsqueda)
    FIX: se guarda en canales.eventos y
    el index puede leerlo directamente
 ═══════════════════════════════════ */
 function renderEventos() {
   const list = document.getElementById("eventos-list");
   if(!list) return;
+  const q = (document.getElementById("eventosSearch")?.value || "").toLowerCase().trim();
   list.innerHTML = "";
+  const sinLink = eventosList.filter(e => !(e.reproductores && e.reproductores[0] && e.reproductores[0].trim())).length;
+  const cEl = document.getElementById("eventosSinLinkCount");
+  if(cEl) cEl.textContent = sinLink;
+
   if(!eventosList.length) {
     list.innerHTML = '<p style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:16px;">Sin eventos — agrega manualmente o importa</p>';
     return;
   }
-  eventosList.forEach((ev, i) => {
-    const link0 = (ev.reproductores && ev.reproductores[0]) ? escH(ev.reproductores[0]) : "";
+  const filtered = eventosList
+    .map((ev, i) => ({ ev, i }))
+    .filter(({ev}) => !q || (ev.nombre||'').toLowerCase().includes(q));
+
+  if(!filtered.length) {
+    list.innerHTML = '<p style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:16px;">Sin resultados para "' + escH(q) + '"</p>';
+    return;
+  }
+
+  filtered.forEach(({ev, i}) => {
+    const key    = "evt-" + i;
+    const link0  = (ev.reproductores && ev.reproductores[0]) ? escH(ev.reproductores[0]) : "";
+    const hasLnk = !!(ev.reproductores && ev.reproductores[0] && ev.reproductores[0].trim());
     const d = document.createElement("div");
-    d.className = "item-card";
+    d.className = "item-card" + (openState.has(key) ? " open" : "");
+    d.dataset.key = key;
     d.innerHTML =
-      '<div class="item-header">' +
-        '<span class="item-num"><i class="fa-solid fa-calendar"></i> ' + escH(ev.nombre || ('Evento ' + (i+1))) + '</span>' +
+      '<div class="item-header" onclick="toggleCard(\'' + key + '\',this)">' +
+        '<span class="item-num"><i class="fa-solid fa-chevron-right chev"></i><span class="item-title-text">' + escH(ev.nombre || ('Evento ' + (i+1))) + '</span></span>' +
+        '<div class="item-meta">' + (hasLnk ? '<span class="badge badge-m3u8">✓ link</span>' : '<span class="badge badge-empty">sin link</span>') + '</div>' +
         '<div class="item-actions">' +
-          '<button class="btn-sm red" onclick="delEventoLink(' + i + ')"><i class="fa-solid fa-trash"></i></button>' +
+          '<button class="btn-sm red" onclick="event.stopPropagation();delEventoLink(' + i + ')"><i class="fa-solid fa-trash"></i></button>' +
         '</div>' +
       '</div>' +
+      '<div class="item-body">' +
       '<div class="grid-3">' +
         '<div><label class="form-label">ID partido (TheSportsDB)</label>' +
           '<input type="text" value="' + escH(String(ev.id||'')) + '" onchange="eventosList[' + i + '].id=this.value;syncEventos()"/></div>' +
         '<div><label class="form-label">Nombre del partido</label>' +
-          '<input type="text" value="' + escH(ev.nombre||'') + '" onchange="eventosList[' + i + '].nombre=this.value;syncEventos()"/></div>' +
+          '<input type="text" value="' + escH(ev.nombre||'') + '" onchange="eventosList[' + i + '].nombre=this.value;syncEventos();renderEventos()"/></div>' +
         '<div><label class="form-label">Link del stream</label>' +
-          '<input type="text" value="' + link0 + '" onchange="eventosList[' + i + '].reproductores=[this.value];syncEventos()"/></div>' +
+          '<input type="text" value="' + link0 + '" onchange="eventosList[' + i + '].reproductores=[this.value];syncEventos();renderEventos()"/></div>' +
+      '</div>' +
       '</div>';
     list.appendChild(d);
   });
@@ -962,19 +1074,33 @@ function syncEventos() {
 
 function addEventoLink() {
   eventosList.push({ id: "", nombre: "Nuevo partido", reproductores: [""] });
+  openState.add("evt-" + (eventosList.length - 1));
   syncEventos();
   renderEventos();
 }
 
 function delEventoLink(i) {
   eventosList.splice(i, 1);
+  openState.clear();
   syncEventos();
   renderEventos();
 }
 
 /* ═══════════════════════════════════
    IMPORTAR PARTIDOS (API-Football)
+   FIX: temporada calculada dinámicamente
+   (el plan gratuito solo permite ver la
+   temporada "actual" vigente — antes estaba
+   fijo en 2024 y dejaba de funcionar)
 ═══════════════════════════════════ */
+function temporadaActual() {
+  // Convención europea: la temporada "2025" cubre ago-2025 → jun-2026.
+  // A partir de julio se considera que ya inició la temporada del año en curso.
+  const hoy = new Date();
+  const mes = hoy.getMonth() + 1; // 1-12
+  return mes >= 7 ? hoy.getFullYear() : hoy.getFullYear() - 1;
+}
+
 async function importarPartidos() {
   const apiKey = localStorage.getItem("tgtv_api_football") || "";
   const logEl  = document.getElementById("importLog");
@@ -997,7 +1123,7 @@ async function importarPartidos() {
     { id: 13,  nombre: "Copa Libertadores" },
     { id: 11,  nombre: "Copa Sudamericana" }
   ];
-  const season = 2024;
+  const season = temporadaActual();
   const hoy  = new Date().toISOString().slice(0,10);
   const en7  = new Date(Date.now() + 7*864e5).toISOString().slice(0,10);
   let importados = 0, lineas = [];
@@ -1032,13 +1158,15 @@ async function importarPartidos() {
   }
   syncEventos();
   renderEventos();
-  logEl.innerHTML = "<strong style='color:var(--green)'>✓ " + importados + " partidos importados</strong><br><br>" + lineas.join("<br>");
+  logEl.innerHTML = "<strong style='color:var(--green)'>✓ " + importados + " partidos importados</strong> (temporada " + season + ")<br><br>" + lineas.join("<br>");
 }
 
 /* ═══════════════════════════════════
    IMPORTAR MUNDIAL 2026 (TheSportsDB)
    FIX: función que faltaba — antes el
-   botón existía pero la función no
+   botón existía pero la función no.
+   FIX 2: fallback de endpoint por si
+   eventsseason.php no trae nada todavía.
 ═══════════════════════════════════ */
 async function importarMundial() {
   const logEl = document.getElementById("importLog");
@@ -1046,74 +1174,97 @@ async function importarMundial() {
   logEl.innerHTML = "<i class='fa-solid fa-spinner spin'></i> Consultando TheSportsDB — Copa del Mundo 2026...";
 
   // TheSportsDB league ID 4429 = FIFA World Cup
-  const url = "https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4429&s=2026";
+  const urls = [
+    "https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4429&s=2026",
+    "https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4429"
+  ];
 
-  try {
-    const res  = await fetch(url, { signal: AbortSignal.timeout(15000) });
-    if(!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
-    const events = data.events || [];
-
-    if(!events.length) {
-      logEl.innerHTML = "⚠ No se encontraron partidos del Mundial 2026 en TheSportsDB todavía.";
-      return;
-    }
-
-    const ahora     = Date.now();
-    const en8dias   = ahora + 8 * 86400000;
-    let importados  = 0;
-
-    events.forEach(ev => {
-      const fecha  = new Date((ev.strTimestamp || ev.dateEvent + "T" + (ev.strTime||"00:00:00") + "Z")).getTime();
-      if(fecha < ahora - 3*3600000 || fecha > en8dias) return;  // solo próximos 8 días
-      const idEvt  = String(ev.idEvent);
-      const nombre = ev.strHomeTeam + " vs " + ev.strAwayTeam;
-      const ya     = eventosList.some(e => String(e.id) === idEvt);
-      if(!ya) {
-        eventosList.push({ id: idEvt, nombre, reproductores: [""] });
-        importados++;
-      }
-    });
-
-    syncEventos();
-    renderEventos();
-    logEl.innerHTML =
-      "<strong style='color:var(--green)'>✓ " + importados + " partidos del Mundial 2026 importados</strong><br>" +
-      "<span style='color:var(--text-dim)'>(Total en temporada: " + events.length + " — se filtraron los próximos 8 días)</span>";
-  } catch(e) {
-    logEl.innerHTML = "✗ Error al consultar TheSportsDB: " + e.message;
+  let events = [];
+  let lastErr = null;
+  for(const url of urls) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+      if(!res.ok) { lastErr = new Error("HTTP " + res.status); continue; }
+      const data = await res.json();
+      events = data.events || [];
+      if(events.length) break;
+    } catch(e) { lastErr = e; }
   }
+
+  if(!events.length) {
+    logEl.innerHTML = "⚠ No se encontraron partidos del Mundial 2026 en TheSportsDB todavía." +
+      (lastErr ? "<br><span style='color:var(--text-dim)'>(" + lastErr.message + ")</span>" : "");
+    return;
+  }
+
+  const ahora     = Date.now();
+  const en8dias   = ahora + 8 * 86400000;
+  let importados  = 0;
+
+  events.forEach(ev => {
+    const fecha  = new Date((ev.strTimestamp || ev.dateEvent + "T" + (ev.strTime||"00:00:00") + "Z")).getTime();
+    if(fecha < ahora - 3*3600000 || fecha > en8dias) return;  // solo próximos 8 días
+    const idEvt  = String(ev.idEvent);
+    const nombre = ev.strHomeTeam + " vs " + ev.strAwayTeam;
+    const ya     = eventosList.some(e => String(e.id) === idEvt);
+    if(!ya) {
+      eventosList.push({ id: idEvt, nombre, reproductores: [""] });
+      importados++;
+    }
+  });
+
+  syncEventos();
+  renderEventos();
+  logEl.innerHTML =
+    "<strong style='color:var(--green)'>✓ " + importados + " partidos del Mundial 2026 importados</strong><br>" +
+    "<span style='color:var(--text-dim)'>(Total en temporada: " + events.length + " — se filtraron los próximos 8 días)</span>";
 }
 
 /* ═══════════════════════════════════
-   PELÍCULAS
+   PELÍCULAS (acordeón + búsqueda)
 ═══════════════════════════════════ */
 function renderPeliculas() {
   const list = document.getElementById("peliculas-list");
+  const q = (document.getElementById("peliculasSearch")?.value || "").toLowerCase().trim();
   list.innerHTML = "";
   const arr = contenido.peliculas || [];
   if(!arr.length) {
     list.innerHTML = '<p style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:16px;">Sin películas — haz clic en Agregar</p>';
     return;
   }
-  arr.forEach((p, i) => {
+  const filtered = arr.map((p,i)=>({p,i})).filter(({p}) => !q || (p.nombre||'').toLowerCase().includes(q));
+  if(!filtered.length) {
+    list.innerHTML = '<p style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:16px;">Sin resultados para "' + escH(q) + '"</p>';
+    return;
+  }
+  filtered.forEach(({p, i}) => {
+    const key = "pel-" + i;
+    const tipoBadge = (p.tipo||'m3u8') === 'iframe' ? 'badge-iframe' : 'badge-m3u8';
+    const tipoTxt   = (p.tipo||'m3u8') === 'iframe' ? 'IFRAME' : 'M3U8';
+    const hasLink   = !!(p.link && p.link.trim());
     const d = document.createElement("div");
-    d.className = "item-card";
+    d.className = "item-card" + (openState.has(key) ? " open" : "");
+    d.dataset.key = key;
     d.innerHTML =
-      '<div class="item-header">' +
-        '<span class="item-num"><i class="fa-solid fa-film"></i> ' + escH(p.nombre || ('Película '+(i+1))) + '</span>' +
-        '<button class="btn-sm red" onclick="delPelicula(' + i + ')"><i class="fa-solid fa-trash"></i></button>' +
+      '<div class="item-header" onclick="toggleCard(\'' + key + '\',this)">' +
+        '<span class="item-num"><i class="fa-solid fa-chevron-right chev"></i><span class="item-title-text">' + escH(p.nombre || ('Película '+(i+1))) + '</span></span>' +
+        '<div class="item-meta"><span class="badge ' + tipoBadge + '">' + tipoTxt + '</span>' + (hasLink?'':'<span class="badge badge-empty">sin link</span>') + '</div>' +
+        '<div class="item-actions">' +
+          '<button class="btn-sm red" onclick="event.stopPropagation();delPelicula(' + i + ')"><i class="fa-solid fa-trash"></i></button>' +
+        '</div>' +
       '</div>' +
+      '<div class="item-body">' +
       '<div class="grid-2">' +
-        '<div><label class="form-label">Nombre</label><input type="text" value="' + escH(p.nombre||'') + '" onchange="contenido.peliculas[' + i + '].nombre=this.value"/></div>' +
+        '<div><label class="form-label">Nombre</label><input type="text" value="' + escH(p.nombre||'') + '" onchange="contenido.peliculas[' + i + '].nombre=this.value;renderPeliculas()"/></div>' +
         '<div><label class="form-label">Género • Año</label><input type="text" value="' + escH(p.genero||'') + '" onchange="contenido.peliculas[' + i + '].genero=this.value"/></div>' +
         '<div><label class="form-label">URL Portada</label><input type="text" value="' + escH(p.portada||'') + '" onchange="contenido.peliculas[' + i + '].portada=this.value"/></div>' +
         '<div><label class="form-label">Tipo</label>' +
-          '<select onchange="contenido.peliculas[' + i + '].tipo=this.value">' +
+          '<select onchange="contenido.peliculas[' + i + '].tipo=this.value;renderPeliculas()">' +
             '<option value="m3u8"'  + ((p.tipo||'m3u8')==='m3u8' ?' selected':'') + '>🎬 M3U8</option>' +
             '<option value="iframe"' + (p.tipo==='iframe'          ?' selected':'') + '>🖥️ iFrame</option>' +
           '</select></div>' +
-        '<div class="col-span-2"><label class="form-label">Link</label><input type="text" value="' + escH(p.link||'') + '" onchange="contenido.peliculas[' + i + '].link=this.value"/></div>' +
+        '<div class="col-span-2"><label class="form-label">Link</label><input type="text" value="' + escH(p.link||'') + '" onchange="contenido.peliculas[' + i + '].link=this.value;renderPeliculas()"/></div>' +
+      '</div>' +
       '</div>';
     list.appendChild(d);
   });
@@ -1121,26 +1272,38 @@ function renderPeliculas() {
 function addPelicula() {
   if(!contenido.peliculas) contenido.peliculas = [];
   contenido.peliculas.push({ nombre:"Nueva película", genero:"", portada:"", tipo:"m3u8", link:"" });
+  openState.add("pel-" + (contenido.peliculas.length - 1));
   renderPeliculas(); actualizarContadores();
 }
-function delPelicula(i) { contenido.peliculas.splice(i,1); renderPeliculas(); actualizarContadores(); }
+function delPelicula(i) { contenido.peliculas.splice(i,1); openState.clear(); renderPeliculas(); actualizarContadores(); }
 
 /* ═══════════════════════════════════
-   SERIES
+   SERIES (acordeón + búsqueda)
 ═══════════════════════════════════ */
 function renderSeries() {
   const list = document.getElementById("series-list");
+  const q = (document.getElementById("seriesSearch")?.value || "").toLowerCase().trim();
   list.innerHTML = "";
   const arr = contenido.series || [];
   if(!arr.length) {
     list.innerHTML = '<p style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:16px;">Sin series — usa el generador de arriba o agrega manualmente</p>';
     return;
   }
-  arr.forEach((s, i) => {
+  const filtered = arr.map((s,i)=>({s,i})).filter(({s}) => !q || (s.nombre||'').toLowerCase().includes(q));
+  if(!filtered.length) {
+    list.innerHTML = '<p style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:16px;">Sin resultados para "' + escH(q) + '"</p>';
+    return;
+  }
+  filtered.forEach(({s, i}) => {
+    const key = "ser-" + i;
+    const numTemp = (s.temporadas||[]).length;
+    const numEps  = (s.temporadas||[]).reduce((a,t)=>a+((t.episodios||[]).length),0);
     const d = document.createElement("div");
-    d.className = "item-card";
+    d.className = "item-card" + (openState.has(key) ? " open" : "");
+    d.dataset.key = key;
     let tempHTML = "";
     (s.temporadas||[]).forEach((t, ti) => {
+      const tKey = key + "-t" + ti;
       let epHTML = "";
       (t.episodios||[]).forEach((ep, ei) => {
         epHTML +=
@@ -1151,39 +1314,50 @@ function renderSeries() {
           '</div>';
       });
       tempHTML +=
-        '<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin:8px 0;">' +
-          '<label class="form-label" style="margin-top:0;">Temporada</label>' +
-          '<input type="text" value="' + escH(t.nombre||'') + '" onchange="contenido.series[' + i + '].temporadas[' + ti + '].nombre=this.value" style="margin-bottom:8px;"/>' +
-          epHTML +
-          '<button class="btn-sm" style="margin-top:4px;width:100%;justify-content:center;" onclick="addEpisodio(' + i + ',' + ti + ')">' +
-            '<i class="fa-solid fa-plus"></i> Agregar episodio</button>' +
+        '<div class="item-card' + (openState.has(tKey) ? ' open' : '') + '" data-key="' + tKey + '" style="background:var(--bg);margin-bottom:8px;">' +
+          '<div class="item-header" onclick="toggleCard(\'' + tKey + '\',this)" style="padding:8px 10px;">' +
+            '<span class="item-num" style="font-size:.6rem;"><i class="fa-solid fa-chevron-right chev"></i>' + escH(t.nombre||('Temporada '+(ti+1))) + '</span>' +
+            '<span class="badge badge-m3u8">' + (t.episodios||[]).length + ' ep.</span>' +
+          '</div>' +
+          '<div class="item-body" style="padding:0 10px 10px;">' +
+            '<input type="text" value="' + escH(t.nombre||'') + '" onchange="contenido.series[' + i + '].temporadas[' + ti + '].nombre=this.value" style="margin-bottom:8px;"/>' +
+            epHTML +
+            '<button class="btn-sm" style="margin-top:4px;width:100%;justify-content:center;" onclick="addEpisodio(' + i + ',' + ti + ')">' +
+              '<i class="fa-solid fa-plus"></i> Agregar episodio</button>' +
+          '</div>' +
         '</div>';
     });
     d.innerHTML =
-      '<div class="item-header">' +
-        '<span class="item-num"><i class="fa-solid fa-tv"></i> ' + escH(s.nombre||('Serie '+(i+1))) + '</span>' +
-        '<button class="btn-sm red" onclick="delSerie(' + i + ')"><i class="fa-solid fa-trash"></i></button>' +
+      '<div class="item-header" onclick="toggleCard(\'' + key + '\',this)">' +
+        '<span class="item-num"><i class="fa-solid fa-chevron-right chev"></i><span class="item-title-text">' + escH(s.nombre||('Serie '+(i+1))) + '</span></span>' +
+        '<div class="item-meta"><span class="badge badge-m3u8">' + numTemp + ' temp</span><span class="badge badge-iframe">' + numEps + ' eps</span></div>' +
+        '<div class="item-actions">' +
+          '<button class="btn-sm red" onclick="event.stopPropagation();delSerie(' + i + ')"><i class="fa-solid fa-trash"></i></button>' +
+        '</div>' +
       '</div>' +
+      '<div class="item-body">' +
       '<div class="grid-2">' +
-        '<div><label class="form-label">Nombre</label><input type="text" value="' + escH(s.nombre||'') + '" onchange="contenido.series[' + i + '].nombre=this.value"/></div>' +
+        '<div><label class="form-label">Nombre</label><input type="text" value="' + escH(s.nombre||'') + '" onchange="contenido.series[' + i + '].nombre=this.value;renderSeries()"/></div>' +
         '<div><label class="form-label">Género</label><input type="text" value="' + escH(s.genero||'') + '" onchange="contenido.series[' + i + '].genero=this.value"/></div>' +
         '<div class="col-span-2"><label class="form-label">Portada</label><input type="text" value="' + escH(s.portada||'') + '" onchange="contenido.series[' + i + '].portada=this.value"/></div>' +
       '</div>' +
       '<div style="margin-top:12px;">' + tempHTML + '</div>' +
       '<button class="btn-sm" style="width:100%;justify-content:center;margin-top:6px;" onclick="addTemporada(' + i + ')">' +
-        '<i class="fa-solid fa-plus"></i> Agregar temporada</button>';
+        '<i class="fa-solid fa-plus"></i> Agregar temporada</button>' +
+      '</div>';
     list.appendChild(d);
   });
 }
 function addSerie() {
   if(!contenido.series) contenido.series = [];
   contenido.series.push({ nombre:"Nueva serie", genero:"", portada:"", temporadas:[] });
+  openState.add("ser-" + (contenido.series.length - 1));
   renderSeries(); actualizarContadores();
 }
-function delSerie(i)           { contenido.series.splice(i,1); renderSeries(); actualizarContadores(); }
-function addTemporada(si)      { contenido.series[si].temporadas.push({ nombre:"Temporada "+(contenido.series[si].temporadas.length+1), episodios:[] }); renderSeries(); }
-function addEpisodio(si,ti)    { contenido.series[si].temporadas[ti].episodios.push({ nombre:"Episodio "+(contenido.series[si].temporadas[ti].episodios.length+1), link:"" }); renderSeries(); }
-function delEpisodio(si,ti,ei) { contenido.series[si].temporadas[ti].episodios.splice(ei,1); renderSeries(); }
+function delSerie(i)           { contenido.series.splice(i,1); openState.clear(); renderSeries(); actualizarContadores(); }
+function addTemporada(si)      { contenido.series[si].temporadas.push({ nombre:"Temporada "+(contenido.series[si].temporadas.length+1), episodios:[] }); openState.add("ser-"+si); renderSeries(); }
+function addEpisodio(si,ti)    { contenido.series[si].temporadas[ti].episodios.push({ nombre:"Episodio "+(contenido.series[si].temporadas[ti].episodios.length+1), link:"" }); openState.add("ser-"+si); openState.add("ser-"+si+"-t"+ti); renderSeries(); }
+function delEpisodio(si,ti,ei) { contenido.series[si].temporadas[ti].episodios.splice(ei,1); openState.add("ser-"+si); openState.add("ser-"+si+"-t"+ti); renderSeries(); }
 
 /* ═══════════════════════════════════
    GENERADOR SERIES
@@ -1257,11 +1431,13 @@ async function conectarServidor() {
   document.getElementById("sEstado").style.color = "var(--gold)";
   try {
     const hRes   = await fetch(url + "/health", { signal: AbortSignal.timeout(8000) });
+    if(!hRes.ok) throw new Error("/health → HTTP " + hRes.status);
     const health = await hRes.json();
     document.getElementById("sEstado").textContent = "ONLINE";
     document.getElementById("sEstado").style.color  = "var(--green)";
     document.getElementById("sUptime").textContent  = health.time ? new Date(health.time).toLocaleTimeString("es") : "OK";
     const cRes = await fetch(url + "/canales", { signal: AbortSignal.timeout(8000) });
+    if(!cRes.ok) throw new Error("/canales → HTTP " + cRes.status);
     const data = await cRes.json();
     serverCanales = data.canales || [];
     document.getElementById("sTotal").textContent = serverCanales.length;
@@ -1270,7 +1446,7 @@ async function conectarServidor() {
   } catch(e) {
     document.getElementById("sEstado").textContent = "OFFLINE";
     document.getElementById("sEstado").style.color  = "var(--red)";
-    document.getElementById("serverList").innerHTML = '<p style="color:var(--red);font-size:.72rem;text-align:center;padding:20px;"><i class="fa-solid fa-triangle-exclamation"></i> No se pudo conectar: ' + e.message + '</p>';
+    document.getElementById("serverList").innerHTML = '<p style="color:var(--red);font-size:.72rem;text-align:center;padding:20px;"><i class="fa-solid fa-triangle-exclamation"></i> No se pudo conectar: ' + escH(e.message) + '<br><span style="color:var(--text-dim);font-size:.65rem;">Verifica la URL y que el servidor de Render esté despierto (el plan free se duerme tras inactividad — la primera petición puede tardar ~30s).</span></p>';
   }
 }
 
@@ -1321,7 +1497,7 @@ function copiarLink(id) {
 }
 
 /* ═══════════════════════════════════
-   EDITOR server.js
+   EDITOR server.js (acordeón)
 ═══════════════════════════════════ */
 async function cargarServerJs() {
   if(!ghToken) return;
@@ -1366,15 +1542,22 @@ function renderCanalEditor() {
   }
   list.innerHTML = "";
   parsed.forEach((c, i) => {
+    const key = "srv-" + c.id;
     const d = document.createElement("div");
-    d.className = "canal-edit-item";
+    d.className = "item-card" + (openState.has(key) ? " open" : "");
+    d.dataset.key = key;
     const color = c.tieneEmbed ? "var(--green)" : "var(--gold)";
-    const badge = c.tieneEmbed ? "● STREAM FIJO" : "◌ SIN EMBED";
+    const badgeClass = c.tieneEmbed ? "badge-m3u8" : "badge-dinamico";
+    const badgeTxt = c.tieneEmbed ? "● FIJO" : "◌ SIN EMBED";
     d.innerHTML =
-      '<div class="canal-edit-header">' +
-        '<div class="canal-edit-id">' + escH(c.id) + ' <span style="color:' + color + ';font-size:.58rem;font-weight:400">' + badge + '</span></div>' +
-        '<button class="btn-sm red" onclick="eliminarCanalServerJs(\'' + c.id + '\')"><i class="fa-solid fa-trash"></i> Eliminar</button>' +
+      '<div class="item-header" onclick="toggleCard(\'' + key + '\',this)">' +
+        '<span class="item-num"><i class="fa-solid fa-chevron-right chev"></i><span class="item-title-text">' + escH(c.id) + ' — ' + escH(c.nombre) + '</span></span>' +
+        '<div class="item-meta"><span class="badge ' + badgeClass + '">' + badgeTxt + '</span></div>' +
+        '<div class="item-actions">' +
+          '<button class="btn-sm red" onclick="event.stopPropagation();eliminarCanalServerJs(\'' + c.id + '\')"><i class="fa-solid fa-trash"></i></button>' +
+        '</div>' +
       '</div>' +
+      '<div class="item-body">' +
       '<div class="grid-2">' +
         '<div><label class="form-label">Nombre</label><input type="text" id="ce-n-' + i + '" value="' + escH(c.nombre) + '"/></div>' +
         '<div><label class="form-label">Tipo</label>' +
@@ -1384,6 +1567,7 @@ function renderCanalEditor() {
           '</select></div>' +
         '<div class="col-span-2"><label class="form-label">URL página oficial</label><input type="text" id="ce-u-' + i + '" value="' + escH(c.url) + '"/></div>' +
         '<div class="col-span-2"><label class="form-label">Embed / Stream directo</label><input type="text" id="ce-e-' + i + '" value="' + escH(c.embed) + '" placeholder="https://...m3u8 o https://player.../embed"/></div>' +
+      '</div>' +
       '</div>';
     list.appendChild(d);
   });
