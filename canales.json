@@ -207,24 +207,10 @@
   ],
   "eventos": [
     {
-      "id": "2052786",
-      "nombre": "Costa de Marfil vs. Noruega",
+      "id": "2052803",
+      "nombre": "Estados Unidos vs. Bosnia y Herzegovina",
       "reproductores": [
-        "https://theygoodtv-server.onrender.com/live/teleamazonas/player"
-      ]
-    },
-    {
-      "id": "2052787",
-      "nombre": "Francia vs. Suecia",
-      "reproductores": [
-        "https://theygoodtv-server.onrender.com/live/teleamazonas/player"
-      ]
-    },
-    {
-      "id": "2052788",
-      "nombre": "México vs. Ecuador",
-      "reproductores": [
-        "https://teleamazonas-live.cdn.vustreams.com/live/fd4ab346-b4e3-4628-abf0-b5a1bc192428/live.isml/fd4ab346-b4e3-4628-abf0-b5a1bc192428.m3u8"
+        ""
       ]
     }
   ]
