@@ -122,9 +122,9 @@
       "liga": "Internacional",
       "tipo": "iframe",
       "reproductores": [
-        "https://moviedays.top/embed-live3.php",
-        "https://moviedays.top/embed-live2.php",
-        "https://theygoodtv-server.onrender.com/live/disney/player"
+        "https://moviedays.top/embed-live3.php?v=disneychannel",
+        "https://moviedays.top/embed-live1.php?v=disneychannel",
+        "https://moviedays.top/embed-live2.php?v=disneychannel"
       ]
     },
     {
