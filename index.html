@@ -259,6 +259,7 @@ let activeIframeUrl = "";
 let ifrCtrlTimer    = null;
 let ifrShieldActive = true;
 let audioUnlocked   = false;
+let shieldHideTimer = null;
 
 const RENDER_SERVER = "https://theygoodtv-server.onrender.com";
 const URL_CANALES   = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/canales.json";
@@ -526,14 +527,16 @@ function _crearIframe(container, url) {
   shield.id = "ifrShield";
   shield.addEventListener("click", (e) => {
     e.preventDefault(); e.stopPropagation();
-    /* El primer toque, además de abrir los controles, cuenta como el "gesto del usuario"
-       que el navegador exige para permitir audio. Aprovechamos ese mismo toque para
-       intentar destapar el sonido antes de mostrar el panel. */
-    if (!audioUnlocked) intentarAudioIframe();
+    /* Cada toque cuenta como el "gesto del usuario" que el navegador exige para
+       permitir audio, y además destapa el shield unos segundos para que el
+       SIGUIENTE toque le llegue de verdad al botón de mute del reproductor real
+       (antes solo pasaba la primera vez, y si el usuario no acertaba el botón
+       en esa ventana quedaba trabado). */
+    intentarAudioIframe();
     toggleControlesIframe();
   });
   shield.addEventListener("touchstart", () => {
-    if (!audioUnlocked) intentarAudioIframe();
+    intentarAudioIframe();
     toggleControlesIframe();
   }, { passive: true });
 
@@ -636,11 +639,12 @@ function intentarAudioIframe() {
   const shield = document.getElementById("ifrShield");
   if (shield) {
     shield.style.display = "none";
-    mostrarToast("👆 Shield pausado 8s — haz clic en el video para audio");
-    setTimeout(() => {
+    mostrarToast("👆 Shield pausado 10s — toca el botón de audio del video");
+    clearTimeout(shieldHideTimer);
+    shieldHideTimer = setTimeout(() => {
       if (shield) shield.style.display = "block";
       mostrarToast("🛡️ Shield reactivado");
-    }, 8000);
+    }, 10000);
   }
 }
 
