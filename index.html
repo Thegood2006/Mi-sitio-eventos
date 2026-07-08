@@ -258,6 +258,7 @@ let currentIframe   = null;
 let activeIframeUrl = "";
 let ifrCtrlTimer    = null;
 let ifrShieldActive = true;
+let audioUnlocked   = false;
 
 const RENDER_SERVER = "https://theygoodtv-server.onrender.com";
 const URL_CANALES   = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/canales.json";
@@ -389,45 +390,51 @@ function volverABrowse() {
 
 /* ════ LOAD STREAM — MAIN ENTRY POINT ════ */
 function loadStream(url, tipo) {
-  if (!url || url.startsWith("TU_LINK") || !url.trim()) {
-    mostrarToast("⚠️ Este canal no tiene link asignado todavía.");
-    return;
+  try {
+    if (!url || url.startsWith("TU_LINK") || !url.trim()) {
+      mostrarToast("⚠️ Este canal no tiene link asignado todavía.");
+      return;
+    }
+    currentLink = url; currentTipo = tipo || 'm3u8';
+    castLinkIframe = null; currentIframe = null;
+    window._skipWarnShown = false;
+    audioUnlocked = false;
+
+    irAPlayer();
+
+    /* Reset iframe mode */
+    document.body.classList.remove("iframe-active", "ifr-ctrl-visible");
+    ifrShieldActive = true;
+    _resetShieldUI();
+
+    /* Kill HLS */
+    if (window.hls) { window.hls.destroy(); window.hls = null; }
+
+    /* Clear container (preserve ifrBar + castIndicator) */
+    const container = document.getElementById("videoContainer");
+    const ifrBar = document.getElementById("ifrBar");
+    const ci0 = document.getElementById("castIndicator");
+    container.innerHTML = "";
+    if (ci0) container.appendChild(ci0);
+    if (ifrBar) container.appendChild(ifrBar);
+
+    const esIframe = tipo === 'iframe' ||
+      (!url.includes(".m3u8") && !url.includes("chunklist") && !url.endsWith(".mp4") && !url.includes(".mp4?") &&
+       (url.includes("fastream") || url.includes("embed") || url.includes("vidsrc") ||
+        url.includes("2embed") || url.includes("dood") || url.includes(".html") || tipo === 'iframe'));
+
+    if (esIframe) {
+      activeIframeUrl = url;
+      _crearIframe(container, url);
+      return;
+    }
+
+    /* ── NATIVE VIDEO ── */
+    _crearVideoNativo(container, url, tipo);
+  } catch (e) {
+    console.error("Error en loadStream:", e);
+    mostrarToast("⚠️ No se pudo cargar este canal. Intenta con otro servidor.");
   }
-  currentLink = url; currentTipo = tipo || 'm3u8';
-  castLinkIframe = null; currentIframe = null;
-  window._skipWarnShown = false;
-
-  irAPlayer();
-
-  /* Reset iframe mode */
-  document.body.classList.remove("iframe-active", "ifr-ctrl-visible");
-  ifrShieldActive = true;
-  _resetShieldUI();
-
-  /* Kill HLS */
-  if (window.hls) { window.hls.destroy(); window.hls = null; }
-
-  /* Clear container (preserve ifrBar + castIndicator) */
-  const container = document.getElementById("videoContainer");
-  const ifrBar = document.getElementById("ifrBar");
-  const ci0 = document.getElementById("castIndicator");
-  container.innerHTML = "";
-  if (ci0) container.appendChild(ci0);
-  if (ifrBar) container.appendChild(ifrBar);
-
-  const esIframe = tipo === 'iframe' ||
-    (!url.includes(".m3u8") && !url.includes("chunklist") && !url.endsWith(".mp4") && !url.includes(".mp4?") &&
-     (url.includes("fastream") || url.includes("embed") || url.includes("vidsrc") ||
-      url.includes("2embed") || url.includes("dood") || url.includes(".html") || tipo === 'iframe'));
-
-  if (esIframe) {
-    activeIframeUrl = url;
-    _crearIframe(container, url);
-    return;
-  }
-
-  /* ── NATIVE VIDEO ── */
-  _crearVideoNativo(container, url, tipo);
 }
 
 /* ════ NATIVE VIDEO ════ */
@@ -440,6 +447,9 @@ function _crearVideoNativo(container, url, tipo) {
   video.addEventListener("timeupdate", actualizarBarraTV);
   video.addEventListener("pause", () => { const b = document.getElementById("tvPlayPauseBtn"); if(b) b.innerHTML='<i class="fa-solid fa-play"></i>'; });
   video.addEventListener("play",  () => { const b = document.getElementById("tvPlayPauseBtn"); if(b) b.innerHTML='<i class="fa-solid fa-pause"></i>'; });
+  video.addEventListener("error", () => {
+    mostrarToast("⚠️ Este servidor falló. Prueba otro servidor del mismo canal.");
+  });
 
   const esM3U8 = url.includes(".m3u8") || url.includes("chunklist") || url.includes("playlist") || tipo === 'm3u8';
   if (esM3U8 && typeof Hls !== 'undefined' && Hls.isSupported()) {
@@ -450,7 +460,7 @@ function _crearVideoNativo(container, url, tipo) {
       if (data.fatal) {
         if (data.type === Hls.ErrorTypes.NETWORK_ERROR) window.hls.startLoad();
         else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) window.hls.recoverMediaError();
-        else window.hls.destroy();
+        else { window.hls.destroy(); mostrarToast("⚠️ El canal no respondió. Prueba otro servidor."); }
       }
     });
     return;
@@ -481,8 +491,12 @@ function _crearIframe(container, url) {
   iframe.src = url;
   iframe.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:none;background:#000;z-index:1;";
   iframe.setAttribute("allowfullscreen", "");
-  iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen; picture-in-picture; gyroscope; accelerometer; microphone; camera");
-  iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation allow-modals");
+  iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen; picture-in-picture; gyroscope; accelerometer");
+  /* Se quitó "allow-popups-to-escape-sandbox" y "allow-modals": eran la causa principal de que
+     los anuncios de los reproductores (sobre todo en series) abrieran pestañas nuevas o
+     redirigieran la página completa. Con el sandbox así, esos popups quedan bloqueados
+     dentro del iframe y no molestan al usuario. */
+  iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-presentation allow-popups");
   iframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
   currentIframe = iframe;
 
@@ -503,6 +517,7 @@ function _crearIframe(container, url) {
     loader.style.opacity = "0"; loader.style.transition = "opacity .3s";
     setTimeout(() => { if (loader.parentNode) loader.remove(); }, 350);
     _intentarAutoAudio();
+    _mostrarOverlayAudio();
   });
 
   /* Shield — intercepta clicks, muestra panel */
@@ -511,9 +526,16 @@ function _crearIframe(container, url) {
   shield.id = "ifrShield";
   shield.addEventListener("click", (e) => {
     e.preventDefault(); e.stopPropagation();
+    /* El primer toque, además de abrir los controles, cuenta como el "gesto del usuario"
+       que el navegador exige para permitir audio. Aprovechamos ese mismo toque para
+       intentar destapar el sonido antes de mostrar el panel. */
+    if (!audioUnlocked) intentarAudioIframe();
     toggleControlesIframe();
   });
-  shield.addEventListener("touchstart", () => { toggleControlesIframe(); }, { passive: true });
+  shield.addEventListener("touchstart", () => {
+    if (!audioUnlocked) intentarAudioIframe();
+    toggleControlesIframe();
+  }, { passive: true });
 
   /* AD badge */
   const badge = document.createElement("div");
@@ -528,6 +550,30 @@ function _crearIframe(container, url) {
   document.body.classList.add("iframe-active");
   ifrShieldActive = true;
   _resetShieldUI();
+}
+
+/* ════ OVERLAY GRANDE "TOCA PARA ACTIVAR SONIDO" ════
+   Los reproductores de canales externos casi siempre están en otro dominio, y por
+   política de todos los navegadores, NINGÚN script de la página puede activar el
+   sonido de un iframe de otro origen sin que el usuario haga un toque real dentro
+   de ese iframe. Los mensajes postMessage/JS de abajo funcionan solo si el propio
+   reproductor los escucha; como red de seguridad mostramos este aviso grande UNA
+   vez por canal para que el usuario sepa exactamente qué hacer. */
+function _mostrarOverlayAudio() {
+  if (audioUnlocked) return;
+  const container = document.getElementById("videoContainer");
+  if (!container || document.getElementById("audioUnlockOverlay")) return;
+  const ov = document.createElement("div");
+  ov.id = "audioUnlockOverlay";
+  ov.style.cssText = "position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(6,6,26,.55);";
+  ov.innerHTML = `<button style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));border:none;color:#fff;font-family:'Orbitron',sans-serif;font-size:.65rem;padding:14px 22px;border-radius:12px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 0 20px rgba(0,229,255,.4);">
+      <i class="fa-solid fa-volume-high"></i> TOCA PARA ACTIVAR SONIDO</button>`;
+  ov.addEventListener("click", () => {
+    intentarAudioIframe();
+    ov.remove();
+  }, { once: true });
+  container.appendChild(ov);
+  setTimeout(() => { if (ov.parentNode) ov.remove(); }, 9000);
 }
 
 /* ════ AUTO AUDIO ════ */
@@ -554,16 +600,20 @@ function _intentarAutoAudio() {
           if (p) p.catch(() => {});
         }
       }
-    } catch(_) {}
+    } catch(_) {
+      /* Normal: la mayoría de canales son de otro dominio y el navegador bloquea
+         este acceso por seguridad (cross-origin). Por eso existe el overlay y el
+         botón ACTIVAR AUDIO: requieren un toque real del usuario. */
+    }
   } catch(_) {}
-
-  setTimeout(() => {
-    mostrarToast("▶ Toca ACTIVAR AUDIO si no escuchas sonido");
-  }, 2000);
 }
 
 function intentarAudioIframe() {
   if (!currentIframe) return;
+  audioUnlocked = true;
+  const overlay = document.getElementById("audioUnlockOverlay");
+  if (overlay) overlay.remove();
+
   const msgs = [
     { type: "command", command: "unMute" },
     { muted: false },
