@@ -852,9 +852,31 @@ function switchTab(tab) { document.querySelectorAll('.tab-section').forEach(s =>
 function filtrarTV(query) { const q = query.trim().toLowerCase(); const rd = document.getElementById('tvSearchGrid'), rl = document.getElementById('tvSearchResults'); if (!q) { rd.style.display = 'none'; rl.style.display = 'none'; return; } const found = []; document.querySelectorAll('#seccion-tv .event-item').forEach(item => { const n = item.querySelector('h4')?.textContent || '', l = item.querySelector('p')?.textContent || ''; if (n.toLowerCase().includes(q) || l.toLowerCase().includes(q)) found.push(item.cloneNode(true)); }); rd.innerHTML = ''; if (!found.length) rd.innerHTML = `<p style="color:#888;font-size:.62rem;padding:8px 0">Sin resultados para "${query}"</p>`; else found.forEach(el => rd.appendChild(el)); rd.style.display = 'block'; rl.style.display = 'block'; }
 function filtrarSeries(query) { const q = query.trim().toLowerCase(); const grid = document.getElementById('seriesSearchGrid'), label = document.getElementById('seriesSearchLabel'), mg = document.getElementById('seriesGrid'); if (!q) { grid.style.display = 'none'; label.style.display = 'none'; mg.style.display = 'grid'; return; } const items = (contenidoGlobal.series || []).filter(s => s.nombre.toLowerCase().includes(q) || (s.genero || '').toLowerCase().includes(q)); mg.style.display = 'none'; label.style.display = 'block'; grid.style.display = 'grid'; grid.innerHTML = ''; if (!items.length) { grid.innerHTML = '<p style="color:#888;font-size:.62rem;grid-column:1/-1">Sin resultados</p>'; return; } renderCards('seriesSearchGrid', items, true); }
 
-/* ════ BANNERS ════ */
+/* ════ BANNERS ════
+   El banner de "ESTRENOS" ahora usa el campo `destacada` que se marca desde el
+   Admin (pestaña Películas → estrella ⭐). Solo se muestran películas marcadas
+   como destacadas, máx. 6. Si por algún motivo no hay ninguna marcada todavía
+   (ej. contenido.json antiguo sin ese campo), se usa como respaldo temporal
+   las primeras 6 películas del catálogo para que el banner nunca quede vacío. */
 let bIdx = 0, bItems = [], bTimer = null;
-function initBanner(pels) { bItems = (pels || []).slice(0, 6); if (!bItems.length) { document.getElementById('bannerEstrenos').style.display = 'none'; return; } const track = document.getElementById('bannerTrack'), dots = document.getElementById('bannerDots'); track.innerHTML = ''; dots.innerHTML = ''; bItems.forEach((item, i) => { const slide = document.createElement('div'); slide.className = 'banner-slide'; const poster = item.portada || `https://placehold.co/400x168/06061a/00e5ff?text=${encodeURIComponent(item.nombre)}`; const ac = item.link && !item.link.startsWith('TU_LINK') ? `onclick="loadStream('${item.link.replace(/'/g, "\\'")}');switchTab('peliculas');"` : ''; slide.innerHTML = `<img src="${poster}" alt="${item.nombre}" loading="lazy" onerror="this.src='https://placehold.co/400x168/06061a/00e5ff?text=${encodeURIComponent(item.nombre)}'"><div class="banner-slide-info"><div class="banner-slide-title">${item.nombre}</div><div class="banner-slide-meta"><span>${item.genero||''}</span>${item.año?'<span>· '+item.año+'</span>':''}</div>${ac?`<button class="banner-slide-play" ${ac}><i class="fa-solid fa-play"></i> REPRODUCIR</button>`:''}</div>`; track.appendChild(slide); const dot = document.createElement('button'); dot.className = 'banner-dot' + (i === 0 ? ' active' : ''); dot.onclick = () => goBanner(i); dots.appendChild(dot); }); clearInterval(bTimer); bTimer = setInterval(() => goBanner((bIdx+1) % bItems.length), 4500); }
+function initBanner(pels) {
+  const todas = pels || [];
+  const destacadas = todas.filter(p => p.destacada);
+  bItems = (destacadas.length ? destacadas : todas).slice(0, 6);
+  if (!bItems.length) { document.getElementById('bannerEstrenos').style.display = 'none'; return; }
+  document.getElementById('bannerEstrenos').style.display = '';
+  const track = document.getElementById('bannerTrack'), dots = document.getElementById('bannerDots');
+  track.innerHTML = ''; dots.innerHTML = '';
+  bItems.forEach((item, i) => {
+    const slide = document.createElement('div'); slide.className = 'banner-slide';
+    const poster = item.portada || `https://placehold.co/400x168/06061a/00e5ff?text=${encodeURIComponent(item.nombre)}`;
+    const ac = item.link && !item.link.startsWith('TU_LINK') ? `onclick="loadStream('${item.link.replace(/'/g, "\\'")}');switchTab('peliculas');"` : '';
+    slide.innerHTML = `<img src="${poster}" alt="${item.nombre}" loading="lazy" onerror="this.src='https://placehold.co/400x168/06061a/00e5ff?text=${encodeURIComponent(item.nombre)}'"><div class="banner-slide-info"><div class="banner-slide-title">${item.nombre}</div><div class="banner-slide-meta"><span>${item.genero||''}</span>${item.año?'<span>· '+item.año+'</span>':''}</div>${ac?`<button class="banner-slide-play" ${ac}><i class="fa-solid fa-play"></i> REPRODUCIR</button>`:''}</div>`;
+    track.appendChild(slide);
+    const dot = document.createElement('button'); dot.className = 'banner-dot' + (i === 0 ? ' active' : ''); dot.onclick = () => goBanner(i); dots.appendChild(dot);
+  });
+  clearInterval(bTimer); bTimer = setInterval(() => goBanner((bIdx+1) % bItems.length), 4500);
+}
 function goBanner(i) { bIdx = i; document.getElementById('bannerTrack').style.transform = `translateX(-${i*100}%)`; document.querySelectorAll('#bannerEstrenos .banner-dot').forEach((d, j) => d.classList.toggle('active', j === i)); }
 function bannerMove(d) { goBanner((bIdx + d + bItems.length) % bItems.length); clearInterval(bTimer); bTimer = setInterval(() => goBanner((bIdx+1) % bItems.length), 4500); }
 let bsIdx = 0, bsItems = [], bsTimer = null;
