@@ -1095,11 +1095,19 @@ function delEventoLink(i) {
 
 /* ═══════════════════════════════════
    IMPORTAR PARTIDOS (API-Football)
+   FIX: la temporada ahora se calcula POR LIGA.
+   Liga MX / Copa Libertadores / Copa Sudamericana usan año
+   calendario completo (no cruzan agosto-mayo como las ligas
+   europeas), así que antes recibían el año equivocado entre
+   enero y junio y no traían partidos.
 ═══════════════════════════════════ */
-function temporadaActual() {
-  const hoy = new Date();
+function temporadaActual(ligaId) {
+  const hoy  = new Date();
+  const anio = hoy.getFullYear();
+  const LIGAS_ANIO_CALENDARIO = [262, 13, 11]; // Liga MX, Copa Libertadores, Copa Sudamericana
+  if (LIGAS_ANIO_CALENDARIO.includes(ligaId)) return anio;
   const mes = hoy.getMonth() + 1;
-  return mes >= 7 ? hoy.getFullYear() : hoy.getFullYear() - 1;
+  return mes >= 7 ? anio : anio - 1;
 }
 
 async function importarPartidos() {
@@ -1124,13 +1132,13 @@ async function importarPartidos() {
     { id: 13,  nombre: "Copa Libertadores" },
     { id: 11,  nombre: "Copa Sudamericana" }
   ];
-  const season = temporadaActual();
   const hoy  = new Date().toISOString().slice(0,10);
   const en7  = new Date(Date.now() + 7*864e5).toISOString().slice(0,10);
   let importados = 0, lineas = [];
 
   for(const liga of ligas) {
     try {
+      const season = temporadaActual(liga.id);
       const ctrl = new AbortController();
       const to   = setTimeout(() => ctrl.abort(), 12000);
       const url  = "https://v3.football.api-sports.io/fixtures?league=" + liga.id +
@@ -1143,7 +1151,7 @@ async function importarPartidos() {
         lineas.push("⚠ " + liga.nombre + ": " + JSON.stringify(data.errors)); continue;
       }
       const fixtures = (data.response||[]).slice(0,5);
-      if(!fixtures.length) { lineas.push("— " + liga.nombre + ": sin partidos"); continue; }
+      if(!fixtures.length) { lineas.push("— " + liga.nombre + " (temp. " + season + "): sin partidos"); continue; }
       let count = 0;
       fixtures.forEach(f => {
         const idEvt  = String(f.fixture.id);
@@ -1151,7 +1159,7 @@ async function importarPartidos() {
         const ya     = eventosList.some(e => String(e.id) === idEvt);
         if(!ya) { eventosList.push({ id: idEvt, nombre, reproductores: [""] }); importados++; count++; }
       });
-      lineas.push("✓ " + liga.nombre + ": " + count + " nuevos");
+      lineas.push("✓ " + liga.nombre + " (temp. " + season + "): " + count + " nuevos");
     } catch(e) {
       lineas.push("✗ " + liga.nombre + ": " + (e.name === "AbortError" ? "timeout" : e.message));
     }
@@ -1159,7 +1167,7 @@ async function importarPartidos() {
   }
   syncEventos();
   renderEventos();
-  logEl.innerHTML = "<strong style='color:var(--green)'>✓ " + importados + " partidos importados</strong> (temporada " + season + ")<br><br>" + lineas.join("<br>");
+  logEl.innerHTML = "<strong style='color:var(--green)'>✓ " + importados + " partidos importados</strong><br><br>" + lineas.join("<br>");
 }
 
 /* ═══════════════════════════════════
