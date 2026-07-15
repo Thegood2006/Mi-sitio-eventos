@@ -391,6 +391,43 @@ select option { background: #1a1b2e; }
 .section-toolbar input[type=text] { flex: 1; min-width: 160px; }
 .section-toolbar .btn-sm { flex-shrink: 0; }
 
+/* MULTI-LINK MANAGER (estabilidad) */
+.link-manager {
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px; margin-top: 8px;
+}
+.link-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.link-row:last-child { margin-bottom: 0; }
+.link-row input[type=text] { flex: 1; }
+.link-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-head); font-size: .55rem;
+  padding: 6px 9px; border-radius: var(--radius-xs);
+  white-space: nowrap; min-width: 84px; justify-content: center;
+  background: rgba(255,255,255,.03); border: 1px solid var(--border); color: var(--text-dim);
+}
+.link-status.testing { color: var(--gold); border-color: rgba(255,200,0,.3); background: rgba(255,200,0,.06); }
+.link-status.ok      { color: var(--green); border-color: rgba(0,255,153,.3); background: rgba(0,255,153,.06); }
+.link-status.fail     { color: var(--red); border-color: rgba(255,61,90,.3); background: rgba(255,61,90,.06); }
+.link-status.best     { color: #000; border-color: var(--green); background: var(--green); }
+.link-row.is-active input[type=text] { border-color: var(--green); box-shadow: 0 0 0 2px rgba(0,255,153,.12); }
+.link-star {
+  cursor: pointer; font-size: .8rem; color: var(--text-dim); flex-shrink: 0;
+  width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-xs); border: 1px solid var(--border); transition: .2s;
+}
+.link-star:hover { color: var(--gold); border-color: rgba(255,200,0,.35); }
+.link-star.active { color: var(--gold); border-color: rgba(255,200,0,.5); background: rgba(255,200,0,.08); }
+.link-manager-foot {
+  display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap;
+}
+.stability-summary {
+  font-size: .68rem; color: var(--text-dim); margin-top: 8px; line-height: 1.6;
+}
+.stability-summary strong { color: var(--green); }
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .sidebar { display: none; }
@@ -401,6 +438,7 @@ select option { background: #1a1b2e; }
   .stats-row { grid-template-columns: 1fr 1fr; }
   .tipo-row { flex-direction: column; }
   .item-header { flex-wrap: wrap; }
+  .link-row { flex-wrap: wrap; }
 }
 
 /* ANIMATIONS */
@@ -671,6 +709,8 @@ select option { background: #1a1b2e; }
           <div class="tip">
             <i class="fa-solid fa-lightbulb"></i>
             Los cambios se guardan en <code>server.js</code> de GitHub. Render redeploya en ~1 min automáticamente.
+            Cada canal puede tener <strong>varios links de respaldo</strong>: usa <strong>PROBAR TODOS</strong> para medir
+            cuál responde más rápido y estable, y ese se vuelve automáticamente el link activo (★) que reproduce el sitio.
           </div>
           <div id="canalEditorList">
             <p style="color:var(--text-dim);font-size:.72rem;text-align:center;padding:20px;">
@@ -710,10 +750,18 @@ select option { background: #1a1b2e; }
             </div>
           </div>
           <div id="embedSec" style="margin-top:12px;">
-            <label class="form-label">Link del stream / embed</label>
-            <input type="text" id="newEmbed" placeholder="https://....m3u8"/>
-            <p style="color:var(--text-dim);font-size:.68rem;margin-top:5px;line-height:1.6;">
-              💡 M3U8: URL que termina en <code>.m3u8</code> · iFrame: URL del reproductor · Búscalo en F12 → Network
+            <label class="form-label">Links del stream / embed (agrega varios para comparar estabilidad)</label>
+            <div class="link-manager">
+              <div id="newLinksList"></div>
+              <div class="link-manager-foot">
+                <button class="btn-sm" type="button" onclick="addLinkNuevoCanal()"><i class="fa-solid fa-plus"></i> Agregar otro link</button>
+                <button class="btn-sm gold" type="button" onclick="probarLinksNuevoCanal()"><i class="fa-solid fa-bolt"></i> PROBAR TODOS</button>
+              </div>
+              <div class="stability-summary" id="newLinksSummary"></div>
+            </div>
+            <p style="color:var(--text-dim);font-size:.68rem;margin-top:8px;line-height:1.6;">
+              💡 M3U8: URL que termina en <code>.m3u8</code> · iFrame: URL del reproductor · Búscalo en F12 → Network.
+              El link marcado con ★ es el que se guardará como principal (el más estable tras probar).
             </p>
           </div>
           <div id="addCanalMsg" style="display:none;margin-top:10px;padding:10px;border-radius:8px;font-size:.72rem;"></div>
@@ -722,7 +770,7 @@ select option { background: #1a1b2e; }
               <i class="fa-brands fa-github"></i> AGREGAR Y GUARDAR EN GITHUB
             </button>
             <button class="btn btn-ghost" onclick="probarLink()">
-              <i class="fa-solid fa-play"></i> PROBAR LINK
+              <i class="fa-solid fa-play"></i> PROBAR LINK ACTIVO
             </button>
           </div>
         </div>
@@ -1423,11 +1471,125 @@ function setTipo(tipo) {
     document.getElementById("t-"+t).classList.toggle("active", t === tipo);
   });
   document.getElementById("embedSec").style.display = tipo === "dinamico" ? "none" : "block";
-  const emb = document.getElementById("newEmbed");
-  if(tipo==="m3u8")   emb.placeholder = "https://stream.servidor.com/live/canal.m3u8";
-  if(tipo==="iframe") emb.placeholder = "https://player.ejemplo.com/embed/canal";
+  actualizarPlaceholdersNuevo();
 }
 
+/* ═══════════════════════════════════
+   PROBADOR DE ESTABILIDAD DE LINKS
+   Mide si un link responde y en cuánto tiempo. Debido a CORS,
+   muchos streams/iframes de terceros no permiten leer el status
+   real desde el navegador, así que se usa fetch en modo "no-cors":
+   si el navegador logra iniciar/cerrar la conexión sin que salte
+   un error de red o timeout, se considera "alcanzable". El tiempo
+   de respuesta sirve para comparar cuál candidato es más rápido/estable.
+═══════════════════════════════════ */
+async function probarEstabilidadLink(url, timeoutMs) {
+  if(!url || !url.trim()) return { ok:false, ms:null, error:"vacío" };
+  const t0 = performance.now();
+  try {
+    await fetch(url, { mode:"no-cors", cache:"no-store", signal: AbortSignal.timeout(timeoutMs || 8000) });
+    const ms = Math.round(performance.now() - t0);
+    return { ok:true, ms, error:null };
+  } catch(e) {
+    const ms = Math.round(performance.now() - t0);
+    return { ok:false, ms, error: e.name === "AbortError" ? "timeout" : (e.message || "error de red") };
+  }
+}
+
+// Corre la prueba sobre una lista de {url} y va actualizando el DOM en vivo.
+// containerSelector: función que recibe el índice y devuelve el elemento .link-status
+async function probarListaLinks(urls, onResult) {
+  const resultados = new Array(urls.length).fill(null);
+  await Promise.all(urls.map(async (url, i) => {
+    if(!url || !url.trim()) { resultados[i] = { ok:false, ms:null, error:"vacío" }; onResult(i, resultados[i]); return; }
+    const r = await probarEstabilidadLink(url, 8000);
+    resultados[i] = r;
+    onResult(i, r);
+  }));
+  return resultados;
+}
+
+// Determina el índice del mejor link entre los resultados (ok=true y menor ms)
+function mejorLinkIndex(resultados) {
+  let best = -1, bestMs = Infinity;
+  resultados.forEach((r, i) => {
+    if(r && r.ok && r.ms < bestMs) { best = i; bestMs = r.ms; }
+  });
+  return best;
+}
+
+/* ── Multi-link manager para "AGREGAR NUEVO CANAL" ── */
+let nuevoCanalLinks = [{ url:"", activo:true }, { url:"", activo:false }, { url:"", activo:false }];
+
+function actualizarPlaceholdersNuevo() {
+  renderLinksNuevoCanal();
+}
+
+function renderLinksNuevoCanal() {
+  const cont = document.getElementById("newLinksList");
+  if(!cont) return;
+  const placeholder = tipoActual === "iframe" ? "https://player.ejemplo.com/embed/canal" : "https://stream.servidor.com/live/canal.m3u8";
+  cont.innerHTML = "";
+  nuevoCanalLinks.forEach((link, i) => {
+    const row = document.createElement("div");
+    row.className = "link-row" + (link.activo ? " is-active" : "");
+    row.innerHTML =
+      '<span class="link-star' + (link.activo ? ' active' : '') + '" title="Marcar como link principal" onclick="setLinkActivoNuevo(' + i + ')"><i class="fa-solid fa-star"></i></span>' +
+      '<input type="text" placeholder="' + placeholder + ' (link ' + (i+1) + ')" value="' + escH(link.url) + '" oninput="nuevoCanalLinks[' + i + '].url=this.value"/>' +
+      '<span class="link-status" id="newLinkStatus-' + i + '">sin probar</span>' +
+      (nuevoCanalLinks.length > 1 ? '<button class="btn-sm red" type="button" onclick="quitarLinkNuevo(' + i + ')"><i class="fa-solid fa-xmark"></i></button>' : '');
+    cont.appendChild(row);
+  });
+}
+
+function addLinkNuevoCanal() {
+  nuevoCanalLinks.push({ url:"", activo:false });
+  renderLinksNuevoCanal();
+}
+function quitarLinkNuevo(i) {
+  const eraActivo = nuevoCanalLinks[i].activo;
+  nuevoCanalLinks.splice(i, 1);
+  if(eraActivo && nuevoCanalLinks.length) nuevoCanalLinks[0].activo = true;
+  renderLinksNuevoCanal();
+}
+function setLinkActivoNuevo(i) {
+  nuevoCanalLinks.forEach((l, idx) => l.activo = (idx === i));
+  renderLinksNuevoCanal();
+}
+
+async function probarLinksNuevoCanal() {
+  const urls = nuevoCanalLinks.map(l => l.url.trim());
+  if(!urls.some(u => u)) { toast("⚠ Agrega al menos un link para probar", true); return; }
+  const summary = document.getElementById("newLinksSummary");
+  summary.textContent = "";
+  urls.forEach((u, i) => {
+    const el = document.getElementById("newLinkStatus-" + i);
+    if(!el) return;
+    if(!u) { el.className = "link-status"; el.textContent = "vacío"; return; }
+    el.className = "link-status testing";
+    el.innerHTML = '<i class="fa-solid fa-spinner spin"></i> probando';
+  });
+  const resultados = await probarListaLinks(urls, (i, r) => {
+    const el = document.getElementById("newLinkStatus-" + i);
+    if(!el) return;
+    if(!urls[i]) return;
+    if(r.ok) { el.className = "link-status ok"; el.textContent = "✓ " + r.ms + "ms"; }
+    else     { el.className = "link-status fail"; el.textContent = "✗ " + (r.error || "falló"); }
+  });
+  const best = mejorLinkIndex(resultados);
+  if(best !== -1) {
+    setLinkActivoNuevo(best);
+    const bestEl = document.getElementById("newLinkStatus-" + best);
+    if(bestEl) { bestEl.className = "link-status best"; bestEl.innerHTML = '<i class="fa-solid fa-star"></i> ' + resultados[best].ms + 'ms'; }
+    summary.innerHTML = "✓ El link más estable es el <strong>#" + (best+1) + "</strong> (" + resultados[best].ms + "ms). Se marcó como principal ★.";
+  } else {
+    summary.innerHTML = "⚠ Ningún link respondió. Revisa las URLs o pruébalas manualmente en una pestaña nueva (algunas bloquean el modo de prueba por CORS aunque sí funcionen en el reproductor).";
+  }
+}
+
+/* ═══════════════════════════════════
+   CONEXIÓN AL SERVIDOR
+═══════════════════════════════════ */
 async function conectarServidor() {
   const url = getServerUrl();
   document.getElementById("serverList").innerHTML = '<p style="color:var(--gold);font-size:.72rem;text-align:center;padding:20px;"><i class="fa-solid fa-spinner spin"></i> Conectando...</p>';
@@ -1502,6 +1664,10 @@ function copiarLink(id) {
 
 /* ═══════════════════════════════════
    EDITOR server.js (acordeón)
+   Ahora cada canal soporta múltiples links de respaldo
+   (embedFijo.embeds[]) y un link activo (embedFijo.embed),
+   que es el que el sitio reproduce. El botón "PROBAR TODOS"
+   mide cuál responde más rápido y lo marca como activo.
 ═══════════════════════════════════ */
 async function cargarServerJs() {
   if(!ghToken) return;
@@ -1532,7 +1698,23 @@ function parsearCanales() {
     if(!body.includes("nombre")) continue;
     if(["const","module","exports","app","router","require"].includes(id)) continue;
     const get = k => { const r = new RegExp(k + "\\s*:\\s*[\"'\`]([^\"'\`\\n]*)[\"'\`]"); const x = body.match(r); return x ? x[1] : ""; };
-    result.push({ id, nombre:get("nombre"), url:get("url"), embed:get("embed"), tipo:get("tipo")||"m3u8", tieneEmbed:body.includes("embedFijo")||body.includes("embed:") });
+    // Extrae el array embeds: [ "...", "..." ] si existe
+    let embeds = [];
+    const embedsMatch = body.match(/embeds\s*:\s*\[([\s\S]*?)\]/);
+    if(embedsMatch) {
+      const inner = embedsMatch[1];
+      const strRe = /["'\`]([^"'\`]*)["'\`]/g;
+      let sm;
+      while((sm = strRe.exec(inner)) !== null) embeds.push(sm[1]);
+    }
+    const embedPrincipal = get("embed");
+    if(!embeds.length && embedPrincipal) embeds = [embedPrincipal];
+    result.push({
+      id, nombre:get("nombre"), url:get("url"),
+      embed: embedPrincipal, embeds,
+      tipo:get("tipo")||"m3u8",
+      tieneEmbed: body.includes("embedFijo")||body.includes("embed:")
+    });
   }
   return result;
 }
@@ -1550,13 +1732,25 @@ function renderCanalEditor() {
     const d = document.createElement("div");
     d.className = "item-card" + (openState.has(key) ? " open" : "");
     d.dataset.key = key;
-    const color = c.tieneEmbed ? "var(--green)" : "var(--gold)";
     const badgeClass = c.tieneEmbed ? "badge-m3u8" : "badge-dinamico";
     const badgeTxt = c.tieneEmbed ? "● FIJO" : "◌ SIN EMBED";
+    const nLinks = (c.embeds||[]).filter(l=>l&&l.trim()).length;
+    const linksBadge = nLinks > 1 ? '<span class="badge badge-iframe">' + nLinks + ' links</span>' : '';
+    let linkRowsHTML = "";
+    (c.embeds.length ? c.embeds : [""]).forEach((url, li) => {
+      const isActive = url === c.embed && url !== "";
+      linkRowsHTML +=
+        '<div class="link-row' + (isActive ? ' is-active' : '') + '">' +
+          '<span class="link-star' + (isActive ? ' active' : '') + '" title="Marcar como link principal" onclick="setLinkActivoEditor(' + i + ',' + li + ')"><i class="fa-solid fa-star"></i></span>' +
+          '<input type="text" id="ce-link-' + i + '-' + li + '" value="' + escH(url) + '" placeholder="https://... (link ' + (li+1) + ')"/>' +
+          '<span class="link-status" id="ce-status-' + i + '-' + li + '">sin probar</span>' +
+          '<button class="btn-sm red" type="button" onclick="quitarLinkEditor(' + i + ',' + li + ')"><i class="fa-solid fa-xmark"></i></button>' +
+        '</div>';
+    });
     d.innerHTML =
       '<div class="item-header" onclick="toggleCard(\'' + key + '\',this)">' +
         '<span class="item-num"><i class="fa-solid fa-chevron-right chev"></i><span class="item-title-text">' + escH(c.id) + ' — ' + escH(c.nombre) + '</span></span>' +
-        '<div class="item-meta"><span class="badge ' + badgeClass + '">' + badgeTxt + '</span></div>' +
+        '<div class="item-meta"><span class="badge ' + badgeClass + '">' + badgeTxt + '</span>' + linksBadge + '</div>' +
         '<div class="item-actions">' +
           '<button class="btn-sm red" onclick="event.stopPropagation();eliminarCanalServerJs(\'' + c.id + '\')"><i class="fa-solid fa-trash"></i></button>' +
         '</div>' +
@@ -1570,12 +1764,80 @@ function renderCanalEditor() {
             '<option value="iframe"' + (c.tipo==='iframe' ?' selected':'') + '>iFrame</option>' +
           '</select></div>' +
         '<div class="col-span-2"><label class="form-label">URL página oficial</label><input type="text" id="ce-u-' + i + '" value="' + escH(c.url) + '"/></div>' +
-        '<div class="col-span-2"><label class="form-label">Embed / Stream directo</label><input type="text" id="ce-e-' + i + '" value="' + escH(c.embed) + '" placeholder="https://...m3u8 o https://player.../embed"/></div>' +
+      '</div>' +
+      '<label class="form-label">Links de respaldo (el ★ es el que reproduce el sitio)</label>' +
+      '<div class="link-manager" id="ce-linkmgr-' + i + '">' +
+        linkRowsHTML +
+        '<div class="link-manager-foot">' +
+          '<button class="btn-sm" type="button" onclick="agregarLinkEditor(' + i + ')"><i class="fa-solid fa-plus"></i> Agregar link</button>' +
+          '<button class="btn-sm gold" type="button" onclick="probarLinksEditor(' + i + ')"><i class="fa-solid fa-bolt"></i> PROBAR TODOS</button>' +
+        '</div>' +
+        '<div class="stability-summary" id="ce-summary-' + i + '"></div>' +
       '</div>' +
       '</div>';
     list.appendChild(d);
   });
   window._editorParsed = parsed;
+}
+
+function agregarLinkEditor(ci) {
+  window._editorParsed[ci].embeds.push("");
+  renderCanalEditor();
+  openState.add("srv-" + window._editorParsed[ci].id);
+  document.querySelectorAll(".item-card").forEach(c => { if(c.dataset.key === "srv-"+window._editorParsed[ci].id) c.classList.add("open"); });
+}
+function quitarLinkEditor(ci, li) {
+  const c = window._editorParsed[ci];
+  const eraActivo = c.embeds[li] === c.embed;
+  c.embeds.splice(li, 1);
+  if(eraActivo) c.embed = c.embeds[0] || "";
+  const key = "srv-" + c.id;
+  openState.add(key);
+  renderCanalEditor();
+}
+function setLinkActivoEditor(ci, li) {
+  const inputEl = document.getElementById("ce-link-" + ci + "-" + li);
+  const c = window._editorParsed[ci];
+  if(inputEl) c.embeds[li] = inputEl.value;
+  c.embed = c.embeds[li] || "";
+  const key = "srv-" + c.id;
+  openState.add(key);
+  renderCanalEditor();
+}
+
+async function probarLinksEditor(ci) {
+  const c = window._editorParsed[ci];
+  // sincroniza valores actuales de los inputs antes de probar
+  c.embeds = c.embeds.map((url, li) => {
+    const el = document.getElementById("ce-link-" + ci + "-" + li);
+    return el ? el.value.trim() : url;
+  });
+  const urls = c.embeds;
+  if(!urls.some(u => u)) { toast("⚠ Este canal no tiene links para probar", true); return; }
+  urls.forEach((u, li) => {
+    const el = document.getElementById("ce-status-" + ci + "-" + li);
+    if(!el) return;
+    if(!u) { el.className = "link-status"; el.textContent = "vacío"; return; }
+    el.className = "link-status testing";
+    el.innerHTML = '<i class="fa-solid fa-spinner spin"></i> probando';
+  });
+  const resultados = await probarListaLinks(urls, (li, r) => {
+    const el = document.getElementById("ce-status-" + ci + "-" + li);
+    if(!el || !urls[li]) return;
+    if(r.ok) { el.className = "link-status ok"; el.textContent = "✓ " + r.ms + "ms"; }
+    else     { el.className = "link-status fail"; el.textContent = "✗ " + (r.error || "falló"); }
+  });
+  const best = mejorLinkIndex(resultados);
+  const summary = document.getElementById("ce-summary-" + ci);
+  const key = "srv-" + c.id;
+  openState.add(key);
+  if(best !== -1) {
+    c.embed = urls[best];
+    if(summary) summary.innerHTML = "✓ Link más estable: <strong>#" + (best+1) + "</strong> (" + resultados[best].ms + "ms). Se marcó ★ como principal — presiona <strong>Guardar cambios</strong> para aplicarlo en el servidor.";
+    renderCanalEditor();
+  } else {
+    if(summary) summary.innerHTML = "⚠ Ninguno respondió a la prueba desde el navegador (puede ser por CORS aunque el link funcione). Puedes marcar el ★ manualmente.";
+  }
 }
 
 function leerEditorYActualizar() {
@@ -1584,8 +1846,14 @@ function leerEditorYActualizar() {
   parsed.forEach((c, i) => {
     const nombre = document.getElementById("ce-n-"+i)?.value ?? c.nombre;
     const url    = document.getElementById("ce-u-"+i)?.value ?? c.url;
-    const embed  = document.getElementById("ce-e-"+i)?.value ?? c.embed;
     const tipo   = document.getElementById("ce-t-"+i)?.value ?? c.tipo;
+    // recolecta los links tal como quedaron en los inputs
+    const embeds = (c.embeds||[]).map((val, li) => {
+      const el = document.getElementById("ce-link-" + i + "-" + li);
+      return (el ? el.value : val || "").trim();
+    }).filter(u => u);
+    const embed = embeds.includes(c.embed) ? c.embed : (embeds[0] || "");
+
     const escId  = c.id.replace(/[-[\]{}()*+?.,\\^$|#\s]/g,"\\$&");
     const rep    = (campo, valor) => {
       const re = new RegExp("([\"']?" + escId + "[\"']?\\s*:\\s*\\{[\\s\\S]*?)(" + campo + "\\s*:\\s*)[\"'\`][^\"'\`\\n]*[\"'\`]",'m');
@@ -1593,7 +1861,24 @@ function leerEditorYActualizar() {
     };
     nuevo = rep("nombre", nombre);
     nuevo = rep("url",    url);
-    if(embed) { nuevo = rep("embed", embed); nuevo = rep("tipo", tipo); }
+    if(embed) {
+      nuevo = rep("embed", embed);
+      nuevo = rep("tipo", tipo);
+      // reemplaza (o agrega) el array embeds: [...] dentro del bloque embedFijo del canal
+      const embedsLit = "[" + embeds.map(u => JSON.stringify(u)).join(", ") + "]";
+      const blockRe = new RegExp("([\"']?" + escId + "[\"']?\\s*:\\s*\\{[\\s\\S]*?embedFijo\\s*:\\s*\\{)([\\s\\S]*?)(\\}\\s*\\})");
+      if(blockRe.test(nuevo)) {
+        nuevo = nuevo.replace(blockRe, (all, pre, body, post) => {
+          let nuevoBody = body;
+          if(/embeds\s*:\s*\[[\s\S]*?\]/.test(nuevoBody)) {
+            nuevoBody = nuevoBody.replace(/embeds\s*:\s*\[[\s\S]*?\]/, "embeds: " + embedsLit);
+          } else {
+            nuevoBody = nuevoBody.replace(/(embed\s*:\s*[\"'\`][^\"'\`\n]*[\"'\`],?)/, "$1\n      embeds: " + embedsLit + ",");
+          }
+          return pre + nuevoBody + post;
+        });
+      }
+    }
   });
   return nuevo;
 }
@@ -1615,7 +1900,9 @@ async function agregarCanalAServerJs() {
   const id     = document.getElementById("newId").value.trim().toLowerCase().replace(/\s+/g,"-");
   const nombre = document.getElementById("newNombre").value.trim();
   const url    = document.getElementById("newUrl").value.trim();
-  const embed  = document.getElementById("newEmbed").value.trim();
+  const links  = nuevoCanalLinks.map(l => l.url.trim()).filter(u => u);
+  const activoObj = nuevoCanalLinks.find(l => l.activo && l.url.trim());
+  const embed  = (activoObj && activoObj.url.trim()) || links[0] || "";
   const msgEl  = document.getElementById("addCanalMsg");
 
   const setMsg = (html, tipo) => {
@@ -1636,9 +1923,10 @@ async function agregarCanalAServerJs() {
 
   setMsg("<i class='fa-solid fa-spinner spin'></i> Agregando canal...", "warn");
 
+  const embedsLit = "[" + links.map(u => JSON.stringify(u)).join(", ") + "]";
   const nuevoBloque = (tipoActual === "dinamico" || !embed)
     ? '  "' + id + '": {\n    nombre: "' + nombre + '",\n    url: "' + url + '",\n  },'
-    : '  "' + id + '": {\n    nombre: "' + nombre + '",\n    url: "' + url + '",\n    embedFijo: {\n      tipo: "' + tipoActual + '",\n      embed: "' + embed + '",\n      fuente: "manual"\n    }\n  },';
+    : '  "' + id + '": {\n    nombre: "' + nombre + '",\n    url: "' + url + '",\n    embedFijo: {\n      tipo: "' + tipoActual + '",\n      embed: "' + embed + '",\n      embeds: ' + embedsLit + ',\n      fuente: "manual"\n    }\n  },';
 
   let nuevo = serverJs, insertado = false;
   const cierres = ["};\n", "};\r\n"];
@@ -1655,8 +1943,11 @@ async function agregarCanalAServerJs() {
   try {
     await pushFileARepo(ghRepoServer, "server.js", nuevo);
     serverJs = nuevo;
-    setMsg("<i class='fa-solid fa-check'></i> Canal <strong>" + nombre + "</strong> agregado. Render redeploya en ~1 min.<br><span style='opacity:.7'>Link: " + getServerUrl() + "/live/" + id + "/player</span>", "ok");
-    ["newId","newNombre","newUrl","newEmbed"].forEach(f => document.getElementById(f).value = "");
+    setMsg("<i class='fa-solid fa-check'></i> Canal <strong>" + nombre + "</strong> agregado con " + links.length + " link(s) (activo: " + (embed || "ninguno") + "). Render redeploya en ~1 min.<br><span style='opacity:.7'>Link: " + getServerUrl() + "/live/" + id + "/player</span>", "ok");
+    ["newId","newNombre","newUrl"].forEach(f => document.getElementById(f).value = "");
+    nuevoCanalLinks = [{ url:"", activo:true }, { url:"", activo:false }, { url:"", activo:false }];
+    renderLinksNuevoCanal();
+    document.getElementById("newLinksSummary").textContent = "";
     renderCanalEditor();
     setTimeout(conectarServidor, 3000);
   } catch(e) {
@@ -1689,7 +1980,8 @@ async function eliminarCanalServerJs(id) {
 }
 
 function probarLink() {
-  const t = document.getElementById("newEmbed").value.trim() || document.getElementById("newUrl").value.trim();
+  const activoObj = nuevoCanalLinks.find(l => l.activo && l.url.trim());
+  const t = (activoObj && activoObj.url.trim()) || nuevoCanalLinks.map(l=>l.url.trim()).find(u=>u) || document.getElementById("newUrl").value.trim();
   if(!t) { toast("⚠ Pon un link para probar", true); return; }
   window.open(t, "_blank", "width=900,height=600");
 }
@@ -1762,7 +2054,10 @@ function toast(text, isErr=false) {
   if(!isErr) _toastTimer = setTimeout(() => el.style.display = "none", 4000);
 }
 
-window.addEventListener("load", actualizarFilasTemp);
+window.addEventListener("load", () => {
+  actualizarFilasTemp();
+  renderLinksNuevoCanal();
+});
 </script>
 </body>
 </html>
