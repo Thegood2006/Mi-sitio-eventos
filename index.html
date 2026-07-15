@@ -131,6 +131,7 @@
     </div>
 
     <div class="player-box">
+      <div class="player-main">
       <div class="video-container" id="videoContainer">
         <!-- Cast indicator (nativo) -->
         <div id="castIndicator"><span class="cast-dot"></span><i class="fa-solid fa-tv"></i> TRANSMITIENDO</div>
@@ -163,6 +164,16 @@
           </div>
         </div>
       </div><!-- /video-container -->
+
+      <!-- Native controls -->
+      <div class="controls">
+        <button class="ctrl-btn" onclick="fullscreenPlayer()"><i class="fa-solid fa-expand"></i> FULLSCREEN</button>
+        <button class="ctrl-btn" id="castBtn" onclick="toggleCast()"><i class="fa-solid fa-tv"></i> CAST</button>
+        <button class="ctrl-btn" id="tvModeBtn" onclick="toggleTVMode()"><i class="fa-solid fa-display"></i> MODO TV</button>
+        <button class="ctrl-btn" onclick="copyLink()"><i class="fa-solid fa-link"></i> LINK</button>
+        <button class="ctrl-btn" onclick="shareTV()"><i class="fa-solid fa-share"></i> COMPARTIR</button>
+      </div>
+      </div><!-- /player-main -->
 
       <!-- ═══ VENTANA LATERAL DE CAMBIO RÁPIDO ═══ -->
       <aside class="quick-switch" id="quickSwitch">
