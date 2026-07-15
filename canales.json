@@ -76,6 +76,14 @@
       "reproductores": [
         "https://dwamdstream104.akamaized.net/hls/live/2015530/dwstream104/index.m3u8"
       ]
+    },
+    {
+      "nombre": "directvsports2",
+      "liga": "",
+      "tipo": "iframe",
+      "reproductores": [
+        "https://embed.saohgdasregions.fun/embed/directvsports2.php"
+      ]
     }
   ],
   "eventos": []
