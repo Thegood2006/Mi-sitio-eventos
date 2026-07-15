@@ -84,6 +84,14 @@
       "reproductores": [
         "https://embed.saohgdasregions.fun/embed/directvsports2.php"
       ]
+    },
+    {
+      "nombre": "pasiones",
+      "liga": "",
+      "tipo": "iframe",
+      "reproductores": [
+        "https://embed.saohgdasregions.fun/embed/lasestrellas.php"
+      ]
     }
   ],
   "eventos": []
