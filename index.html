@@ -127,6 +127,7 @@
     <div class="player-topbar">
       <button class="back-btn" onclick="volverABrowse()"><i class="fa-solid fa-arrow-left"></i> VOLVER</button>
       <div class="player-now-playing" id="nowPlayingLabel"><i class="fa-solid fa-signal"></i> REPRODUCIENDO</div>
+      <button class="qs-toggle-btn" id="qsToggleBtn" onclick="toggleQuickSwitch()"><i class="fa-solid fa-layer-group"></i> <span id="qsToggleLabel">CANALES</span></button>
     </div>
 
     <div class="player-box">
@@ -163,14 +164,15 @@
         </div>
       </div><!-- /video-container -->
 
-      <!-- Native controls -->
-      <div class="controls">
-        <button class="ctrl-btn" onclick="fullscreenPlayer()"><i class="fa-solid fa-expand"></i> FULLSCREEN</button>
-        <button class="ctrl-btn" id="castBtn" onclick="toggleCast()"><i class="fa-solid fa-tv"></i> CAST</button>
-        <button class="ctrl-btn" id="tvModeBtn" onclick="toggleTVMode()"><i class="fa-solid fa-display"></i> MODO TV</button>
-        <button class="ctrl-btn" onclick="copyLink()"><i class="fa-solid fa-link"></i> LINK</button>
-        <button class="ctrl-btn" onclick="shareTV()"><i class="fa-solid fa-share"></i> COMPARTIR</button>
-      </div>
+      <!-- ═══ VENTANA LATERAL DE CAMBIO RÁPIDO ═══ -->
+      <aside class="quick-switch" id="quickSwitch">
+        <div class="qs-header">
+          <span class="qs-header-title" id="quickSwitchTitle"><i class="fa-solid fa-bolt"></i> CAMBIO RÁPIDO</span>
+          <button class="qs-close-btn" onclick="toggleQuickSwitch(false)"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="qs-chips" id="qsChips"></div>
+        <div class="qs-list" id="quickSwitchList"></div>
+      </aside>
     </div><!-- /player-box -->
   </section>
 
@@ -261,6 +263,19 @@ let ifrShieldActive = true;
 let audioUnlocked   = false;
 let shieldHideTimer = null;
 
+/* Quick switch (ventana lateral) state */
+let canalesGlobal      = null;
+let quickSwitchTipo     = 'tv';     // 'tv' | 'pelicula' | 'serie'
+let quickSwitchCategoria = 'futbol';
+let quickSwitchIsOpen   = window.innerWidth > 900; /* abierto por defecto en escritorio */
+const CATEGORIA_INFO = {
+  futbol:        { nombre: 'FÚTBOL',        icon: 'fa-futbol' },
+  ciclismo:      { nombre: 'CICLISMO',      icon: 'fa-person-biking' },
+  ufc:           { nombre: 'UFC / MMA',     icon: 'fa-fire' },
+  ecuador:       { nombre: 'ECUADOR',       icon: 'fa-satellite-dish' },
+  internacional: { nombre: 'INTERNACIONAL', icon: 'fa-earth-americas' },
+};
+
 const RENDER_SERVER = "https://theygoodtv-server.onrender.com";
 const URL_CANALES   = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/canales.json";
 const URL_CONTENIDO = "https://raw.githubusercontent.com/Thegood2006/MI-sitio-eventos/main/contenido.json";
@@ -297,11 +312,13 @@ async function cargarTodo() {
 
     const contenido = await (await fetch(URL_CONTENIDO + "?nocache=" + Date.now())).json();
 
-    renderCategoria("futbolMenu",        canales.futbol);
-    renderCategoria("cyclingMenu",       canales.ciclismo);
-    renderCategoria("ufcMenu",           canales.ufc);
-    renderCategoria("ecuadorMenu",       canales.ecuador);
-    renderCategoria("internacionalMenu", canales.internacional);
+    canalesGlobal = canales;
+
+    renderCategoria("futbolMenu",        canales.futbol,        "futbol");
+    renderCategoria("cyclingMenu",       canales.ciclismo,      "ciclismo");
+    renderCategoria("ufcMenu",           canales.ufc,            "ufc");
+    renderCategoria("ecuadorMenu",       canales.ecuador,        "ecuador");
+    renderCategoria("internacionalMenu", canales.internacional,  "internacional");
 
     contenidoGlobal = contenido;
     renderCards("peliculasGrid", contenido.peliculas, false);
@@ -315,6 +332,7 @@ async function cargarTodo() {
 
     initBanner(contenido.peliculas);
     initBannerSeries(contenido.series);
+    initQuickSwitchChips();
   } catch (e) {
     console.error("Error cargando datos:", e);
     document.getElementById("browseScreen").insertAdjacentHTML("afterbegin",
@@ -325,7 +343,7 @@ async function cargarTodo() {
 }
 
 /* ════ RENDER CHANNELS ════ */
-function renderCategoria(menuId, eventos) {
+function renderCategoria(menuId, eventos, categoriaKey) {
   const menu = document.getElementById(menuId);
   if (!menu || !eventos) return;
   menu.innerHTML = "";
@@ -335,7 +353,7 @@ function renderCategoria(menuId, eventos) {
     let btns = "";
     evento.reproductores.forEach((url, i) => {
       const safe = url.replace(/'/g, "\\'");
-      btns += `<button class="player-btn" onclick="loadStream('${safe}','${tipo}')">
+      btns += `<button class="player-btn" onclick="seleccionarCanal('${safe}','${tipo}','${categoriaKey}')">
         <i class="fa-solid fa-${tipo==='iframe'?'window-restore':'play'}"></i> Servidor ${i+1}</button>`;
     });
     div.innerHTML = `<div class="live">● EN VIVO</div><h4>${evento.nombre}</h4><p>${evento.liga||''}</p><div class="player-options">${btns}</div>`;
@@ -352,7 +370,7 @@ function renderCards(gridId, items, esSerie) {
     const div = document.createElement("div"); div.className = "card"; div.tabIndex = 0;
     const accion = esSerie
       ? `onclick="openSeriesModal(this)" data-serie='${JSON.stringify(item).replace(/'/g,"&#39;")}'`
-      : `onclick="loadStream(this.dataset.link)" data-link="${(item.link||'').replace(/"/g,'&quot;')}"`;
+      : `onclick="seleccionarPelicula(this.dataset.link)" data-link="${(item.link||'').replace(/"/g,'&quot;')}"`;
     div.innerHTML = `<img src="${item.portada}" alt="${item.nombre}" loading="lazy" onerror="this.src='https://placehold.co/120x180/06061a/00e5ff?text=SIN+IMG'">
       <div class="card-info"><h4>${item.nombre}</h4><p>${item.genero||''}</p>
       <button class="card-play" ${accion}><i class="fa-solid fa-${esSerie?'list':'play'}"></i> ${esSerie?'TEMPORADAS':'REPRODUCIR'}</button></div>`;
@@ -367,6 +385,7 @@ function irAPlayer(label) {
   document.body.classList.add("mode-player");
   const lbl = document.getElementById("nowPlayingLabel");
   if (lbl) lbl.innerHTML = `<i class="fa-solid fa-signal"></i> ${label || "REPRODUCIENDO"}`;
+  _aplicarEstadoQuickSwitch();
 }
 
 function volverABrowse() {
@@ -387,6 +406,17 @@ function volverABrowse() {
 
   document.body.classList.remove("mode-player");
   document.body.classList.add("mode-browse");
+}
+
+/* ════ SELECCIÓN DE CONTENIDO (para saber qué mostrar en la ventana lateral) ════ */
+function seleccionarCanal(url, tipo, categoria) {
+  quickSwitchTipo = 'tv';
+  quickSwitchCategoria = categoria;
+  loadStream(url, tipo);
+}
+function seleccionarPelicula(link) {
+  quickSwitchTipo = 'pelicula';
+  loadStream(link);
 }
 
 /* ════ LOAD STREAM — MAIN ENTRY POINT ════ */
@@ -427,11 +457,12 @@ function loadStream(url, tipo) {
     if (esIframe) {
       activeIframeUrl = url;
       _crearIframe(container, url);
-      return;
+    } else {
+      /* ── NATIVE VIDEO ── */
+      _crearVideoNativo(container, url, tipo);
     }
 
-    /* ── NATIVE VIDEO ── */
-    _crearVideoNativo(container, url, tipo);
+    renderQuickSwitch();
   } catch (e) {
     console.error("Error en loadStream:", e);
     mostrarToast("⚠️ No se pudo cargar este canal. Intenta con otro servidor.");
@@ -715,6 +746,96 @@ function recargarIframe() {
   if (activeIframeUrl) loadStream(activeIframeUrl, 'iframe');
 }
 
+/* ════════════════════════════════════════════════════════
+   VENTANA LATERAL DE CAMBIO RÁPIDO (canales / películas)
+   ════════════════════════════════════════════════════════ */
+function initQuickSwitchChips() {
+  const cont = document.getElementById("qsChips");
+  if (!cont) return;
+  cont.innerHTML = "";
+  Object.keys(CATEGORIA_INFO).forEach(key => {
+    const info = CATEGORIA_INFO[key];
+    const btn = document.createElement("button");
+    btn.className = "qs-chip" + (key === quickSwitchCategoria ? " active" : "");
+    btn.dataset.categoria = key;
+    btn.innerHTML = `<i class="fa-solid ${info.icon}"></i> ${info.nombre}`;
+    btn.onclick = () => cambiarCategoriaQuickSwitch(key);
+    cont.appendChild(btn);
+  });
+}
+
+function cambiarCategoriaQuickSwitch(categoria) {
+  quickSwitchTipo = 'tv';
+  quickSwitchCategoria = categoria;
+  renderQuickSwitch();
+}
+
+function toggleQuickSwitch(forzar) {
+  quickSwitchIsOpen = (typeof forzar === 'boolean') ? forzar : !quickSwitchIsOpen;
+  _aplicarEstadoQuickSwitch();
+}
+
+function _aplicarEstadoQuickSwitch() {
+  const panel = document.getElementById("quickSwitch");
+  const lbl = document.getElementById("qsToggleLabel");
+  if (!panel) return;
+  panel.classList.toggle("qs-active", quickSwitchIsOpen);
+  if (lbl) lbl.textContent = quickSwitchIsOpen ? "OCULTAR" : "CANALES";
+  if (quickSwitchIsOpen) renderQuickSwitch();
+}
+
+function renderQuickSwitch() {
+  const list  = document.getElementById("quickSwitchList");
+  const title = document.getElementById("quickSwitchTitle");
+  const chips = document.getElementById("qsChips");
+  if (!list || !title) return;
+
+  list.innerHTML = "";
+
+  if (quickSwitchTipo === 'tv' && canalesGlobal) {
+    const info = CATEGORIA_INFO[quickSwitchCategoria] || { nombre: 'CANALES', icon: 'fa-satellite-dish' };
+    title.innerHTML = `<i class="fa-solid ${info.icon}"></i> ${info.nombre}`;
+    if (chips) {
+      chips.style.display = "flex";
+      chips.querySelectorAll(".qs-chip").forEach(c => c.classList.toggle("active", c.dataset.categoria === quickSwitchCategoria));
+    }
+    const arr = canalesGlobal[quickSwitchCategoria] || [];
+    if (!arr.length) { list.innerHTML = '<p class="qs-empty">Sin canales en esta categoría.</p>'; return; }
+    arr.forEach(ev => {
+      const url0 = (ev.reproductores || [])[0] || "";
+      const activo = (ev.reproductores || []).includes(currentLink);
+      const item = document.createElement("div");
+      item.className = "qs-item" + (activo ? " active" : "");
+      item.innerHTML = `<div class="qs-item-top"><span class="qs-live">● EN VIVO</span>${activo ? '<span class="qs-now"><i class="fa-solid fa-play"></i> AHORA</span>' : ''}</div>
+        <div class="qs-name">${ev.nombre}</div><div class="qs-liga">${ev.liga || ''}</div>`;
+      item.onclick = () => seleccionarCanal(url0, ev.tipo || 'm3u8', quickSwitchCategoria);
+      list.appendChild(item);
+    });
+  } else if (quickSwitchTipo === 'pelicula') {
+    title.innerHTML = '<i class="fa-solid fa-film"></i> PELÍCULAS';
+    if (chips) chips.style.display = "none";
+    const items = contenidoGlobal.peliculas || [];
+    if (!items.length) { list.innerHTML = '<p class="qs-empty">No hay películas cargadas.</p>'; return; }
+    items.forEach(p => {
+      const activo = p.link && p.link === currentLink;
+      const card = document.createElement("div");
+      card.className = "qs-card" + (activo ? " active" : "");
+      card.innerHTML = `<img src="${p.portada}" alt="${p.nombre}" loading="lazy" onerror="this.src='https://placehold.co/70x104/06061a/00e5ff?text=?'">
+        <div class="qs-card-info"><span class="qs-card-name">${p.nombre}</span><span class="qs-card-genre">${p.genero || ''}</span></div>
+        ${activo ? '<span class="qs-now"><i class="fa-solid fa-play"></i></span>' : ''}`;
+      card.onclick = () => {
+        if (!p.link || p.link.startsWith("TU_LINK")) { mostrarToast("⚠️ Sin link asignado."); return; }
+        seleccionarPelicula(p.link);
+      };
+      list.appendChild(card);
+    });
+  } else {
+    title.innerHTML = '<i class="fa-solid fa-clapperboard"></i> SERIE';
+    if (chips) chips.style.display = "none";
+    list.innerHTML = '<p class="qs-empty">Usa el botón VOLVER para elegir otro episodio o serie.</p>';
+  }
+}
+
 /* ════ UTILITIES ════ */
 function mostrarError(msg) {
   document.getElementById("videoContainer").innerHTML =
@@ -755,7 +876,7 @@ function openSeriesModal(btn) {
   try { currentSerie = JSON.parse(sd.replace(/&#39;/g, "'")); } catch(e) { return; }
   document.getElementById("modalTitle").textContent = currentSerie.nombre;
   if (currentSerie.temporadas?.length > 0) { renderSeasonTabs(currentSerie.temporadas); selectSeason(0); }
-  else if (currentSerie.link) { loadStream(currentSerie.link); return; }
+  else if (currentSerie.link) { quickSwitchTipo = 'serie'; loadStream(currentSerie.link); return; }
   else { document.getElementById("episodesList").innerHTML = '<p style="color:#888;font-size:.75rem;text-align:center;padding:18px;">Sin episodios disponibles</p>'; document.getElementById("seasonTabs").innerHTML = ""; }
   document.getElementById("seriesModal").classList.add("open");
 }
@@ -785,6 +906,7 @@ function reproducirEpisodio(idx, link) {
   const item = document.getElementById(`ep-item-${idx}`);
   if (item) { item.classList.add("visto"); if (!item.querySelector(".ep-visto-badge")) { const b = document.createElement("span"); b.className = "ep-visto-badge"; b.innerHTML = '<i class="fa-solid fa-check"></i> VISTO'; item.insertBefore(b, item.querySelector(".episode-play")); } }
   actualizarNavEpisodios();
+  quickSwitchTipo = 'serie';
   loadStream(link);
   const lbl = document.getElementById("nowPlayingLabel");
   if (lbl) lbl.innerHTML = `<i class="fa-solid fa-signal"></i> ${currentSerie.nombre} · EP ${idx+1}`;
@@ -842,7 +964,7 @@ async function buscarTMDb() {
   catch(e) { grid.innerHTML = '<p style="color:var(--red);font-size:.62rem;grid-column:1/-1;padding:8px">Error al buscar</p>'; }
 }
 async function abrirDetalleTMDb(id, tipo) {
-  try { const item = await(await fetch(`${TMDB_BASE}/${tipo === "tv" ? "tv" : "movie"}/${id}?api_key=${TMDB_KEY}&language=es-ES`)).json(); const t = item.title || item.name || "Sin título"; document.getElementById("tmdbPoster").src = item.poster_path ? TMDB_IMG + item.poster_path : "https://placehold.co/120x180/06061a/00e5ff?text=SIN+IMG"; document.getElementById("tmdbTitle").textContent = t; document.getElementById("tmdbYear").textContent = (item.release_date || item.first_air_date || "").slice(0, 4); document.getElementById("tmdbGenre").textContent = (item.genres || []).map(g => g.name).slice(0, 2).join(", "); document.getElementById("tmdbRating").textContent = item.vote_average ? `⭐ ${item.vote_average.toFixed(1)}` : "Sin calificación"; document.getElementById("tmdbOverview").textContent = item.overview || "Sin sinopsis disponible."; const btns = document.getElementById("tmdbPlayBtns"), nl = document.getElementById("tmdbNoLink"); btns.innerHTML = ""; nl.style.display = "none"; const pm = (contenidoGlobal.peliculas || []).find(p => p.nombre.toLowerCase().includes(t.toLowerCase().slice(0, 8))); const sm = (contenidoGlobal.series || []).find(s => s.nombre.toLowerCase().includes(t.toLowerCase().slice(0, 8))); if (pm?.link && !pm.link.startsWith("TU_LINK")) { const b = document.createElement("button"); b.className = "tmdb-play-btn"; b.innerHTML = '<i class="fa-solid fa-play"></i> REPRODUCIR'; b.onclick = () => { loadStream(pm.link); cerrarTMDb(); }; btns.appendChild(b); } else if (sm) { const b = document.createElement("button"); b.className = "tmdb-play-btn"; b.innerHTML = '<i class="fa-solid fa-list"></i> VER TEMPORADAS'; b.onclick = () => { openSeriesModal({ dataset: { serie: JSON.stringify(sm) } }); cerrarTMDb(); }; btns.appendChild(b); } else nl.style.display = "block"; const cb = document.createElement("button"); cb.className = "tmdb-close-btn"; cb.innerHTML = '<i class="fa-solid fa-xmark"></i> CERRAR'; cb.onclick = cerrarTMDb; btns.appendChild(cb); document.getElementById("tmdbModal").classList.add("open"); }
+  try { const item = await(await fetch(`${TMDB_BASE}/${tipo === "tv" ? "tv" : "movie"}/${id}?api_key=${TMDB_KEY}&language=es-ES`)).json(); const t = item.title || item.name || "Sin título"; document.getElementById("tmdbPoster").src = item.poster_path ? TMDB_IMG + item.poster_path : "https://placehold.co/120x180/06061a/00e5ff?text=SIN+IMG"; document.getElementById("tmdbTitle").textContent = t; document.getElementById("tmdbYear").textContent = (item.release_date || item.first_air_date || "").slice(0, 4); document.getElementById("tmdbGenre").textContent = (item.genres || []).map(g => g.name).slice(0, 2).join(", "); document.getElementById("tmdbRating").textContent = item.vote_average ? `⭐ ${item.vote_average.toFixed(1)}` : "Sin calificación"; document.getElementById("tmdbOverview").textContent = item.overview || "Sin sinopsis disponible."; const btns = document.getElementById("tmdbPlayBtns"), nl = document.getElementById("tmdbNoLink"); btns.innerHTML = ""; nl.style.display = "none"; const pm = (contenidoGlobal.peliculas || []).find(p => p.nombre.toLowerCase().includes(t.toLowerCase().slice(0, 8))); const sm = (contenidoGlobal.series || []).find(s => s.nombre.toLowerCase().includes(t.toLowerCase().slice(0, 8))); if (pm?.link && !pm.link.startsWith("TU_LINK")) { const b = document.createElement("button"); b.className = "tmdb-play-btn"; b.innerHTML = '<i class="fa-solid fa-play"></i> REPRODUCIR'; b.onclick = () => { seleccionarPelicula(pm.link); cerrarTMDb(); }; btns.appendChild(b); } else if (sm) { const b = document.createElement("button"); b.className = "tmdb-play-btn"; b.innerHTML = '<i class="fa-solid fa-list"></i> VER TEMPORADAS'; b.onclick = () => { openSeriesModal({ dataset: { serie: JSON.stringify(sm) } }); cerrarTMDb(); }; btns.appendChild(b); } else nl.style.display = "block"; const cb = document.createElement("button"); cb.className = "tmdb-close-btn"; cb.innerHTML = '<i class="fa-solid fa-xmark"></i> CERRAR'; cb.onclick = cerrarTMDb; btns.appendChild(cb); document.getElementById("tmdbModal").classList.add("open"); }
   catch(e) { console.error(e); }
 }
 function cerrarTMDb() { document.getElementById("tmdbModal").classList.remove("open"); }
@@ -870,7 +992,7 @@ function initBanner(pels) {
   bItems.forEach((item, i) => {
     const slide = document.createElement('div'); slide.className = 'banner-slide';
     const poster = item.portada || `https://placehold.co/400x168/06061a/00e5ff?text=${encodeURIComponent(item.nombre)}`;
-    const ac = item.link && !item.link.startsWith('TU_LINK') ? `onclick="loadStream('${item.link.replace(/'/g, "\\'")}');switchTab('peliculas');"` : '';
+    const ac = item.link && !item.link.startsWith('TU_LINK') ? `onclick="seleccionarPelicula('${item.link.replace(/'/g, "\\'")}');switchTab('peliculas');"` : '';
     slide.innerHTML = `<img src="${poster}" alt="${item.nombre}" loading="lazy" onerror="this.src='https://placehold.co/400x168/06061a/00e5ff?text=${encodeURIComponent(item.nombre)}'"><div class="banner-slide-info"><div class="banner-slide-title">${item.nombre}</div><div class="banner-slide-meta"><span>${item.genero||''}</span>${item.año?'<span>· '+item.año+'</span>':''}</div>${ac?`<button class="banner-slide-play" ${ac}><i class="fa-solid fa-play"></i> REPRODUCIR</button>`:''}</div>`;
     track.appendChild(slide);
     const dot = document.createElement('button'); dot.className = 'banner-dot' + (i === 0 ? ' active' : ''); dot.onclick = () => goBanner(i); dots.appendChild(dot);
@@ -973,7 +1095,7 @@ async function cargarProximosEventos() {
         <div class="evento-proximo-fecha">${fechaStr}</div>
       </div>
       ${ld?.reproductores?.length
-        ? `<button class="evento-ver-btn" onclick="loadStream('${ld.reproductores[0].replace(/'/g, "\\'")}')">
+        ? `<button class="evento-ver-btn" onclick="seleccionarCanal('${ld.reproductores[0].replace(/'/g, "\\'")}','${ld.tipo||'m3u8'}','futbol')">
             <i class="fa-solid fa-play"></i> VER PARTIDO</button>`
         : `<div class="evento-sin-link"><i class="fa-solid fa-clock"></i> Link próximamente</div>`}`;
     grid.appendChild(div);
@@ -1017,7 +1139,7 @@ cargarProximosEventos();
   (function draw() {
     ctx.clearRect(0, 0, W, H);
     pts.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = `rgba(${p.c},${p.a*.45})`; ctx.fill(); });
-    for (let i = 0; i < pts.length; i++) for (let j = i+1; j < pts.length; j++) { const dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y, d = Math.sqrt(dx*dx+dy*dy); if (d < 80) { ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.strokeStyle = `rgba(0,229,255,${.04*(1-d/80)})`; ctx.lineWidth = .35; ctx.stroke(); } }
+    for (let i = 0; i < pts.length; i++) for (let j = i+1; j < pts.length; j++) { const dx = pts[i].x-pts[j].x, dy = pts[i].y-pts[j].y, d = Math.sqrt(dx*dx+dy*dy); if (d < 80) { ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.strokeStyle = `rgba(0,225,255,${.04*(1-d/80)})`; ctx.lineWidth = .35; ctx.stroke(); } }
     requestAnimationFrame(draw);
   })();
 })();
