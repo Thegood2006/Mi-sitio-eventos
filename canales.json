@@ -1,5 +1,14 @@
 {
-  "futbol": [],
+  "futbol": [
+    {
+      "nombre": "tnt",
+      "liga": "",
+      "tipo": "iframe",
+      "reproductores": [
+        "https://embed.saohgdasregions.fun/embed2/tudn.php"
+      ]
+    }
+  ],
   "ciclismo": [],
   "ufc": [],
   "ecuador": [
