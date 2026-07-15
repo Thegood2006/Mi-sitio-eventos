@@ -66,30 +66,6 @@
       "reproductores": [
         "https://video2.lhdserver.es/tvcisne/live.m3u8"
       ]
-    },
-    {
-      "nombre": "tvc2.0",
-      "liga": "ecu",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://samson.streamerr.co:8081/shogun/index.m3u8"
-      ]
-    },
-    {
-      "nombre": "tctelevison",
-      "liga": "ec",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://tctelevision.com/envivo/"
-      ]
-    },
-    {
-      "nombre": "tvc",
-      "liga": "",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://www.tvc.com.ec/envivo/"
-      ]
     }
   ],
   "internacional": [
@@ -99,101 +75,6 @@
       "tipo": "m3u8",
       "reproductores": [
         "https://dwamdstream104.akamaized.net/hls/live/2015530/dwstream104/index.m3u8"
-      ]
-    },
-    {
-      "nombre": "paiones",
-      "liga": "Internacional",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://moviedays.top/embed-live2.php"
-      ]
-    },
-    {
-      "nombre": "Euronews Español",
-      "liga": "Internacional",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://rakuten-euronews-1-es.samsung.wurl.tv/manifest/playlist.m3u8"
-      ]
-    },
-    {
-      "nombre": "DISNEY",
-      "liga": "Internacional",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://moviedays.top/embed-live3.php?v=disneychannel",
-        "https://moviedays.top/embed-live1.php?v=disneychannel",
-        "https://moviedays.top/embed-live2.php?v=disneychannel"
-      ]
-    },
-    {
-      "nombre": "ESPN USA",
-      "liga": "Estados Unidos",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://moviedays.top/embed-live1.php?v=espnmexico",
-        "https://moviedays.top/embed-live2.php?v=espnmexico",
-        "https://moviedays.top/embed-live3.php?v=espnmexico",
-        "https://latamvidzfy.org/tudnmx.php"
-      ]
-    },
-    {
-      "nombre": "Fox Sports México",
-      "liga": "México",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://moviedays.top/embed-live1.php?v=foxsports",
-        "https://moviedays.top/embed-live2.php?v=foxsports",
-        "https://moviedays.top/embed-live3.php?v=foxsports"
-      ]
-    },
-    {
-      "nombre": "STAR",
-      "liga": "Internacional",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://theygoodtv-server.onrender.com/live/star/player"
-      ]
-    },
-    {
-      "nombre": "STUDIOUNIVERSAL",
-      "liga": "",
-      "tipo": "iframe",
-      "reproductores": [
-        "https://moviedays.top/embed-live2.php?v=studiouniversal",
-        "https://moviedays.top/embed-live1.php?v=studiouniversal",
-        "https://moviedays.top/embed-live3.php?v=studiouniversal"
-      ]
-    },
-    {
-      "nombre": "FOXSPORTSPREMIUM",
-      "liga": "",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://moviedays.top/embed-live1.php?v=foxsportspremium",
-        "https://moviedays.top/embed-live2.php?v=foxsportspremium",
-        "https://moviedays.top/embed-live3.php?v=foxsportspremium"
-      ]
-    },
-    {
-      "nombre": "WARNER",
-      "liga": "",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://moviedays.top/embed-live1.php?v=warnerchannel",
-        "https://moviedays.top/embed-live2.php?v=warnerchannel",
-        "https://moviedays.top/embed-live3.php?v=warnerchannel"
-      ]
-    },
-    {
-      "nombre": "LAS ESTRELLAS",
-      "liga": "",
-      "tipo": "m3u8",
-      "reproductores": [
-        "https://moviedays.top/embed-live1.php?v=lasestrellas",
-        "https://moviedays.top/embed-live2.php?v=lasestrellas",
-        "https://moviedays.top/embed-live3.php?v=lasestrellas"
       ]
     }
   ],
