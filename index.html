@@ -147,10 +147,6 @@
               <div class="ifr-btn-icon cyan"><i class="fa-solid fa-expand"></i></div>
               <span class="ifr-btn-lbl">FULLSCREEN</span>
             </div>
-            <div class="ifr-btn" onclick="intentarAudioIframe()">
-              <div class="ifr-btn-icon green"><i class="fa-solid fa-volume-high"></i></div>
-              <span class="ifr-btn-lbl">ACTIVAR AUDIO</span>
-            </div>
             <div class="ifr-btn" onclick="toggleShield()">
               <div class="ifr-btn-icon" id="shieldBtnIcon"><i class="fa-solid fa-shield-halved"></i></div>
               <span class="ifr-btn-lbl" id="shieldBtnLbl">SHIELD</span>
@@ -169,7 +165,6 @@
       <div class="controls">
         <button class="ctrl-btn" onclick="fullscreenPlayer()"><i class="fa-solid fa-expand"></i> FULLSCREEN</button>
         <button class="ctrl-btn" id="castBtn" onclick="toggleCast()"><i class="fa-solid fa-tv"></i> CAST</button>
-        <button class="ctrl-btn" id="tvModeBtn" onclick="toggleTVMode()"><i class="fa-solid fa-display"></i> MODO TV</button>
         <button class="ctrl-btn" onclick="copyLink()"><i class="fa-solid fa-link"></i> LINK</button>
         <button class="ctrl-btn" onclick="shareTV()"><i class="fa-solid fa-share"></i> COMPARTIR</button>
       </div>
@@ -188,23 +183,6 @@
   </section>
 
 </div><!-- /app-shell -->
-
-<!-- TV Controls -->
-<div id="tvControls">
-  <div class="tv-progress" id="tvProgress" onclick="seekVideo(event)">
-    <div class="tv-progress-fill" id="tvProgressFill"></div>
-  </div>
-  <div class="tv-btn-row">
-    <span class="tv-time" id="tvTime">0:00 / 0:00</span>
-    <button class="tv-ctrl-btn" onclick="skipVideo(-30)"><i class="fa-solid fa-backward"></i></button>
-    <button class="tv-ctrl-btn" onclick="skipVideo(-10)"><i class="fa-solid fa-rotate-left"></i></button>
-    <button class="tv-ctrl-btn big" id="tvPlayPauseBtn" onclick="togglePlayPause()"><i class="fa-solid fa-pause"></i></button>
-    <button class="tv-ctrl-btn" onclick="skipVideo(10)"><i class="fa-solid fa-rotate-right"></i></button>
-    <button class="tv-ctrl-btn" onclick="skipVideo(30)"><i class="fa-solid fa-forward"></i></button>
-    <button class="tv-ctrl-btn" onclick="fullscreenPlayer()"><i class="fa-solid fa-expand"></i></button>
-    <button class="tv-ctrl-btn" id="tvMuteBtn" onclick="toggleMute()"><i class="fa-solid fa-volume-high"></i></button>
-  </div>
-</div>
 
 <!-- Series Modal -->
 <div id="seriesModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -260,9 +238,7 @@
 /* ════ GLOBALS ════ */
 let currentLink   = "";
 let currentTipo   = 'm3u8';
-let tvMode        = false;
 let currentSerie  = null, currentSeason = 0, currentEpisodeIndex = -1;
-let controlsTimer = null;
 let contenidoGlobal = { peliculas: [], series: [] };
 let castLinkIframe  = null;
 
@@ -271,8 +247,6 @@ let currentIframe   = null;
 let activeIframeUrl = "";
 let ifrCtrlTimer    = null;
 let ifrShieldActive = true;
-let audioUnlocked   = false;
-let shieldHideTimer = null;
 
 /* Quick switch (ventana lateral) state */
 let canalesGlobal      = null;
@@ -412,9 +386,6 @@ function volverABrowse() {
   /* Salir de pantalla completa si estaba activa */
   if (document.fullscreenElement) { document.exitFullscreen?.(); }
 
-  /* Salir de modo TV si estaba activo */
-  if (tvMode) toggleTVMode();
-
   document.body.classList.remove("mode-player");
   document.body.classList.add("mode-browse");
 }
@@ -440,7 +411,6 @@ function loadStream(url, tipo) {
     currentLink = url; currentTipo = tipo || 'm3u8';
     castLinkIframe = null; currentIframe = null;
     window._skipWarnShown = false;
-    audioUnlocked = false;
 
     irAPlayer();
 
@@ -487,9 +457,6 @@ function _crearVideoNativo(container, url, tipo) {
   video.setAttribute("webkit-playsinline", ""); video.crossOrigin = "anonymous";
   video.style.cssText = "width:100%;height:100%;background:#000;display:block;object-fit:contain;position:absolute;inset:0;";
   container.appendChild(video);
-  video.addEventListener("timeupdate", actualizarBarraTV);
-  video.addEventListener("pause", () => { const b = document.getElementById("tvPlayPauseBtn"); if(b) b.innerHTML='<i class="fa-solid fa-play"></i>'; });
-  video.addEventListener("play",  () => { const b = document.getElementById("tvPlayPauseBtn"); if(b) b.innerHTML='<i class="fa-solid fa-pause"></i>'; });
   video.addEventListener("error", () => {
     mostrarToast("⚠️ Este servidor falló. Prueba otro servidor del mismo canal.");
   });
@@ -559,8 +526,6 @@ function _crearIframe(container, url) {
     clearTimeout(loaderTO);
     loader.style.opacity = "0"; loader.style.transition = "opacity .3s";
     setTimeout(() => { if (loader.parentNode) loader.remove(); }, 350);
-    _intentarAutoAudio();
-    _mostrarOverlayAudio();
   });
 
   /* Shield — intercepta clicks, muestra panel */
@@ -590,106 +555,6 @@ function _crearIframe(container, url) {
   _resetShieldUI();
 }
 
-/* ════ OVERLAY GRANDE "TOCA PARA ACTIVAR SONIDO" ════
-   Los reproductores de canales externos casi siempre están en otro dominio, y por
-   política de todos los navegadores, NINGÚN script de la página puede activar el
-   sonido de un iframe de otro origen sin que el usuario haga un toque real dentro
-   de ese iframe. Los mensajes postMessage/JS de abajo funcionan solo si el propio
-   reproductor los escucha; como red de seguridad mostramos este aviso grande UNA
-   vez por canal para que el usuario sepa exactamente qué hacer. */
-function _mostrarOverlayAudio() {
-  if (audioUnlocked) return;
-  const container = document.getElementById("videoContainer");
-  if (!container || document.getElementById("audioUnlockOverlay")) return;
-  const ov = document.createElement("div");
-  ov.id = "audioUnlockOverlay";
-  ov.style.cssText = "position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(6,6,26,.55);";
-  ov.innerHTML = `<button style="background:linear-gradient(90deg,var(--cyan),var(--cyan2));border:none;color:#fff;font-family:'Orbitron',sans-serif;font-size:.65rem;padding:14px 22px;border-radius:12px;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 0 20px rgba(0,229,255,.4);">
-      <i class="fa-solid fa-volume-high"></i> TOCA PARA ACTIVAR SONIDO</button>`;
-  ov.addEventListener("click", () => {
-    intentarAudioIframe();
-  }, { once: true });
-  container.appendChild(ov);
-  setTimeout(() => { if (ov.parentNode) ov.remove(); }, 9000);
-}
-
-/* ════ AUTO AUDIO ════ */
-function _intentarAutoAudio() {
-  if (!currentIframe) return;
-  try {
-    const mensajes = [
-      { type: "command", command: "unMute" },
-      { muted: false },
-      "unmute",
-      { event: "command", func: "unMute", args: [] },
-    ];
-    mensajes.forEach(m => {
-      try { currentIframe.contentWindow.postMessage(m, "*"); } catch(_) {}
-    });
-    try {
-      const doc = currentIframe.contentDocument || currentIframe.contentWindow.document;
-      if (doc) {
-        const video = doc.querySelector("video");
-        if (video) {
-          video.muted = false;
-          video.volume = 1;
-          const p = video.play();
-          if (p) p.catch(() => {});
-        }
-      }
-    } catch(_) {
-      /* Normal: la mayoría de canales son de otro dominio y el navegador bloquea
-         este acceso por seguridad (cross-origin). Por eso existe el overlay y el
-         botón ACTIVAR AUDIO: requieren un toque real del usuario. */
-    }
-  } catch(_) {}
-}
-
-function intentarAudioIframe() {
-  if (!currentIframe) return;
-  audioUnlocked = true;
-  const overlay = document.getElementById("audioUnlockOverlay");
-  if (overlay) overlay.remove();
-
-  const msgs = [
-    { type: "command", command: "unMute" },
-    { muted: false },
-    "unmute",
-    { event: "command", func: "unMute", args: [] },
-    { type: "player:action", action: "unmute" },
-  ];
-  msgs.forEach(m => { try { currentIframe.contentWindow.postMessage(m, "*"); } catch(_) {} });
-
-  try {
-    const doc = currentIframe.contentDocument || currentIframe.contentWindow.document;
-    if (doc) {
-      doc.querySelectorAll("video, audio").forEach(el => {
-        el.muted = false; el.volume = 1;
-        const p = el.play(); if (p) p.catch(() => {});
-      });
-    }
-  } catch(_) {}
-
-  /* Oculta TODO lo nuestro (shield + nuestro propio panel de controles) para que
-     el toque real del usuario llegue sin obstáculos al botón de mute del
-     reproductor embebido. Antes el panel se volvía a abrir al mismo tiempo que
-     se ocultaba el shield y terminaba tapando igual el botón. */
-  const shield = document.getElementById("ifrShield");
-  if (shield) shield.style.display = "none";
-  clearTimeout(ifrCtrlTimer);
-  document.body.classList.remove("ifr-ctrl-visible");
-  _resetInteractBtn(false);
-
-  mostrarToast("👆 Tienes 15s — toca directo el ícono de volumen del video");
-
-  clearTimeout(shieldHideTimer);
-  shieldHideTimer = setTimeout(() => {
-    const s = document.getElementById("ifrShield");
-    if (s) s.style.display = "block";
-    mostrarToast("🛡️ Shield reactivado");
-  }, 15000);
-}
-
 /* ════ SHIELD TOGGLE ════ */
 function toggleShield() {
   const shield = document.getElementById("ifrShield");
@@ -699,7 +564,7 @@ function toggleShield() {
   _resetShieldUI();
   mostrarToast(ifrShieldActive
     ? "🛡️ Shield ACTIVO — anuncios bloqueados"
-    : "👆 Shield OFF — controla el reproductor directamente\nSe reactiva en 10 seg.");
+    : "👆 Shield OFF — controla el reproductor directamente (volumen, play, etc.)\nSe reactiva en 10 seg.");
   if (!ifrShieldActive) {
     setTimeout(() => {
       ifrShieldActive = true;
@@ -853,13 +718,6 @@ function mostrarError(msg) {
     `<div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:180px;background:var(--bg1);color:#ff4444;font-family:'Orbitron',sans-serif;font-size:.68rem;text-align:center;padding:20px;">${msg}</div>`;
 }
 
-function actualizarBarraTV() {
-  const v = document.getElementById("video"); if (!v || !v.duration) return;
-  const pct = (v.currentTime / v.duration) * 100;
-  const f = document.getElementById("tvProgressFill"); if (f) f.style.width = pct + "%";
-  const t = document.getElementById("tvTime"); if (t) { const fmt = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`; t.textContent = `${fmt(v.currentTime)} / ${fmt(v.duration)}`; }
-}
-
 function fullscreenPlayer() {
   const c = document.getElementById("videoContainer"), v = document.getElementById("video");
   if (document.fullscreenElement) { document.exitFullscreen?.(); return; }
@@ -870,15 +728,6 @@ function fullscreenPlayer() {
 function copyLink()  { if (!currentLink) { mostrarToast("⚠️ Selecciona un evento"); return; } navigator.clipboard.writeText(currentLink); mostrarToast("✓ Link copiado"); }
 async function shareTV() { if (!currentLink) { mostrarToast("⚠️ Selecciona un evento"); return; } if (navigator.share) await navigator.share({ title: "THEY GOOD TV", text: "Mira este contenido", url: currentLink }); else { navigator.clipboard.writeText(currentLink); mostrarToast("✓ Link copiado"); } }
 function toggleMenu(id) { const m = document.getElementById(id); m.style.display = m.style.display === "block" ? "none" : "block"; }
-
-/* TV Controls */
-function togglePlayPause() { const v = document.getElementById("video"); if (!v) return; const b = document.getElementById("tvPlayPauseBtn"); if (v.paused) { v.play(); if (b) b.innerHTML='<i class="fa-solid fa-pause"></i>'; } else { v.pause(); if (b) b.innerHTML='<i class="fa-solid fa-play"></i>'; } showTVControls(); }
-function skipVideo(s)  { const v = document.getElementById("video"); if (v) v.currentTime = Math.max(0, v.currentTime + s); showTVControls(); }
-function toggleMute()  { const v = document.getElementById("video"); if (!v) return; const b = document.getElementById("tvMuteBtn"); v.muted = !v.muted; if (b) b.innerHTML = v.muted ? '<i class="fa-solid fa-volume-xmark"></i>' : '<i class="fa-solid fa-volume-high"></i>'; showTVControls(); }
-function seekVideo(e)  { const v = document.getElementById("video"); if (!v || !v.duration) return; const bar = document.getElementById("tvProgress"); v.currentTime = (e.offsetX / bar.offsetWidth) * v.duration; showTVControls(); }
-function showTVControls() { const c = document.getElementById("tvControls"); c.classList.remove("hidden"); c.classList.add("visible"); clearTimeout(controlsTimer); controlsTimer = setTimeout(() => { c.classList.remove("visible"); c.classList.add("hidden"); }, 4000); }
-function toggleTVMode() { tvMode = !tvMode; document.body.classList.toggle("tv-mode", tvMode); document.getElementById("tvModeBtn").innerHTML = tvMode ? '<i class="fa-solid fa-display"></i> MODO NORMAL' : '<i class="fa-solid fa-display"></i> MODO TV'; }
-function detectarDispositivo() { const ua = navigator.userAgent.toLowerCase(); const esTV = !/windows|macintosh|cros/.test(ua) && !/android|iphone|ipad|ipod|mobile/i.test(ua) && /smarttv|smart-tv|androidtv|googletv|firetv|webos|tizen/.test(ua); if (esTV) { tvMode = true; document.body.classList.add("tv-mode"); } }
 
 /* ════ SERIES MODAL ════ */
 function openSeriesModal(btn) {
@@ -1120,23 +969,10 @@ document.addEventListener("keydown", e => {
     if (document.body.classList.contains("mode-player")) volverABrowse();
     return;
   }
-  if (tvMode) {
-    showTVControls();
-    switch(e.key) {
-      case " ": case "MediaPlayPause": togglePlayPause(); e.preventDefault(); return;
-      case "ArrowLeft":  e.shiftKey ? skipVideo(-30) : skipVideo(-10); e.preventDefault(); return;
-      case "ArrowRight": e.shiftKey ? skipVideo(30)  : skipVideo(10);  e.preventDefault(); return;
-      case "f": case "F": fullscreenPlayer(); return;
-      case "m": case "M": toggleMute(); return;
-    }
-  }
 });
-document.addEventListener("mousemove",  () => { if (tvMode) showTVControls(); });
-document.addEventListener("touchstart", () => { if (tvMode) showTVControls(); }, { passive: true });
 
 /* ════ INIT ════ */
 document.body.classList.add("mode-browse");
-detectarDispositivo();
 cargarTodo();
 cargarProximosEventos();
 
