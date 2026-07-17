@@ -135,30 +135,6 @@
       <div class="video-container" id="videoContainer">
         <!-- Cast indicator (nativo) -->
         <div id="castIndicator"><span class="cast-dot"></span><i class="fa-solid fa-tv"></i> TRANSMITIENDO</div>
-
-        <!-- IFRAME CONTROL BAR — always at bottom when iframe active -->
-        <div id="ifrBar">
-          <div class="ifr-actions" id="ifrActions">
-            <div class="ifr-btn" onclick="recargarIframe()">
-              <div class="ifr-btn-icon gold"><i class="fa-solid fa-rotate-right"></i></div>
-              <span class="ifr-btn-lbl">RECARGAR</span>
-            </div>
-            <div class="ifr-btn" onclick="fullscreenPlayer()">
-              <div class="ifr-btn-icon cyan"><i class="fa-solid fa-expand"></i></div>
-              <span class="ifr-btn-lbl">FULLSCREEN</span>
-            </div>
-            <div class="ifr-btn" onclick="toggleShield()">
-              <div class="ifr-btn-icon" id="shieldBtnIcon"><i class="fa-solid fa-shield-halved"></i></div>
-              <span class="ifr-btn-lbl" id="shieldBtnLbl">SHIELD</span>
-            </div>
-          </div>
-          <div class="ifr-interact-row">
-            <button id="ifrInteractBtn" onclick="toggleControlesIframe()">
-              <i class="fa-solid fa-hand-pointer"></i>
-              <span id="ifrInteractLabel">TOCA PARA CONTROLAR</span>
-            </button>
-          </div>
-        </div>
       </div><!-- /video-container -->
 
       <!-- Native controls -->
@@ -245,8 +221,6 @@ let castLinkIframe  = null;
 /* Iframe state */
 let currentIframe   = null;
 let activeIframeUrl = "";
-let ifrCtrlTimer    = null;
-let ifrShieldActive = true;
 
 /* Quick switch (ventana lateral) state */
 let canalesGlobal      = null;
@@ -381,7 +355,7 @@ function volverABrowse() {
 
   /* Detener iframe */
   if (currentIframe) { try { currentIframe.src = "about:blank"; } catch(e){} currentIframe = null; }
-  document.body.classList.remove("iframe-active", "ifr-ctrl-visible");
+  document.body.classList.remove("iframe-active");
 
   /* Salir de pantalla completa si estaba activa */
   if (document.fullscreenElement) { document.exitFullscreen?.(); }
@@ -415,20 +389,16 @@ function loadStream(url, tipo) {
     irAPlayer();
 
     /* Reset iframe mode */
-    document.body.classList.remove("iframe-active", "ifr-ctrl-visible");
-    ifrShieldActive = true;
-    _resetShieldUI();
+    document.body.classList.remove("iframe-active");
 
     /* Kill HLS */
     if (window.hls) { window.hls.destroy(); window.hls = null; }
 
-    /* Clear container (preserve ifrBar + castIndicator) */
+    /* Clear container (preserve castIndicator) */
     const container = document.getElementById("videoContainer");
-    const ifrBar = document.getElementById("ifrBar");
     const ci0 = document.getElementById("castIndicator");
     container.innerHTML = "";
     if (ci0) container.appendChild(ci0);
-    if (ifrBar) container.appendChild(ifrBar);
 
     const esIframe = tipo === 'iframe' ||
       (!url.includes(".m3u8") && !url.includes("chunklist") && !url.endsWith(".mp4") && !url.includes(".mp4?") &&
@@ -484,10 +454,16 @@ function _crearVideoNativo(container, url, tipo) {
   video.play().catch(() => { video.muted = true; video.play(); });
 }
 
-/* ════ CREATE IFRAME ════ */
+/* ════ CREATE IFRAME ════
+   Sin overlays ni botones encima del video: el usuario toca directamente
+   los controles nativos del reproductor (play, volumen, etc). La protección
+   contra anuncios/popups/redirecciones se mantiene, pero de forma invisible:
+   - sandbox sin "allow-popups" ni "allow-top-navigation" → ningún click dentro
+     del iframe puede abrir pestañas nuevas ni sacarte de la página.
+   - el script anti-ads del <head> sigue limpiando banners/popups que se inyecten
+     en el DOM principal.
+*/
 function _crearIframe(container, url) {
-  const ifrBar = document.getElementById("ifrBar");
-
   /* Loader */
   const loader = document.createElement("div");
   loader.className = "iframe-loader";
@@ -502,11 +478,12 @@ function _crearIframe(container, url) {
   iframe.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:none;background:#000;z-index:1;";
   iframe.setAttribute("allowfullscreen", "");
   iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen; picture-in-picture; gyroscope; accelerometer");
-  /* Se quitó "allow-popups-to-escape-sandbox" y "allow-modals": eran la causa principal de que
-     los anuncios de los reproductores (sobre todo en series) abrieran pestañas nuevas o
-     redirigieran la página completa. Con el sandbox así, esos popups quedan bloqueados
-     dentro del iframe y no molestan al usuario. */
-  iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-presentation allow-popups");
+  /* Sandbox SIN "allow-popups": esto es lo que bloquea que un click en el
+     reproductor (o en un anuncio disfrazado de botón de play) abra una
+     pestaña nueva o te redirija a otra página. Los controles nativos del
+     video (play, pausa, volumen, barra de progreso) siguen funcionando
+     porque allow-scripts + allow-same-origin no se tocan. */
+  iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-presentation");
   iframe.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
   currentIframe = iframe;
 
@@ -528,98 +505,18 @@ function _crearIframe(container, url) {
     setTimeout(() => { if (loader.parentNode) loader.remove(); }, 350);
   });
 
-  /* Shield — intercepta clicks, muestra panel */
-  const shield = document.createElement("div");
-  shield.className = "iframe-click-shield";
-  shield.id = "ifrShield";
-  shield.addEventListener("click", (e) => {
-    e.preventDefault(); e.stopPropagation();
-    toggleControlesIframe();
-  });
-  shield.addEventListener("touchstart", () => {
-    toggleControlesIframe();
-  }, { passive: true });
-
-  /* AD badge */
+  /* Badge discreto de protección — solo decorativo, no bloquea nada,
+     y se atenúa solo después de unos segundos para no estorbar la vista. */
   const badge = document.createElement("div");
   badge.className = "ad-badge";
-  badge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> AD SHIELD';
+  badge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ANUNCIOS BLOQUEADOS';
+  badge.style.cssText = "position:absolute;top:10px;right:10px;z-index:5;display:flex;align-items:center;gap:6px;background:rgba(6,6,26,.65);backdrop-filter:blur(6px);border:1px solid rgba(0,229,255,.35);color:#00e5ff;font-family:'Orbitron',sans-serif;font-size:.48rem;letter-spacing:.04em;padding:6px 10px;border-radius:20px;box-shadow:0 2px 10px rgba(0,0,0,.35);opacity:1;transition:opacity .6s ease;pointer-events:none;";
+  setTimeout(() => { badge.style.opacity = "0"; }, 3500);
 
   container.appendChild(iframe);
-  container.appendChild(shield);
   container.appendChild(badge);
-  if (ifrBar) container.appendChild(ifrBar); /* keep on top */
 
   document.body.classList.add("iframe-active");
-  ifrShieldActive = true;
-  _resetShieldUI();
-}
-
-/* ════ SHIELD TOGGLE ════ */
-function toggleShield() {
-  const shield = document.getElementById("ifrShield");
-  if (!shield) return;
-  ifrShieldActive = !ifrShieldActive;
-  shield.style.display = ifrShieldActive ? "block" : "none";
-  _resetShieldUI();
-  mostrarToast(ifrShieldActive
-    ? "🛡️ Shield ACTIVO — anuncios bloqueados"
-    : "👆 Shield OFF — controla el reproductor directamente (volumen, play, etc.)\nSe reactiva en 10 seg.");
-  if (!ifrShieldActive) {
-    setTimeout(() => {
-      ifrShieldActive = true;
-      const s = document.getElementById("ifrShield");
-      if (s) s.style.display = "block";
-      _resetShieldUI();
-      mostrarToast("🛡️ Shield reactivado automáticamente");
-    }, 10000);
-  }
-}
-
-function _resetShieldUI() {
-  const icon = document.getElementById("shieldBtnIcon");
-  const lbl  = document.getElementById("shieldBtnLbl");
-  if (icon) {
-    icon.className = "ifr-btn-icon " + (ifrShieldActive ? "cyan" : "red");
-    icon.innerHTML = ifrShieldActive
-      ? '<i class="fa-solid fa-shield-halved"></i>'
-      : '<i class="fa-solid fa-shield-slash" style="font-size:12px"></i>';
-  }
-  if (lbl) lbl.textContent = ifrShieldActive ? "SHIELD ON" : "SHIELD OFF";
-}
-
-/* ════ IFRAME CONTROL PANEL TOGGLE ════ */
-function toggleControlesIframe() {
-  const vis = document.body.classList.contains("ifr-ctrl-visible");
-  if (vis) {
-    document.body.classList.remove("ifr-ctrl-visible");
-    _resetInteractBtn(false);
-  } else {
-    document.body.classList.add("ifr-ctrl-visible");
-    _resetInteractBtn(true);
-    clearTimeout(ifrCtrlTimer);
-    ifrCtrlTimer = setTimeout(() => {
-      document.body.classList.remove("ifr-ctrl-visible");
-      _resetInteractBtn(false);
-    }, 5000);
-  }
-}
-
-function _resetInteractBtn(open) {
-  const btn = document.getElementById("ifrInteractBtn");
-  const lbl = document.getElementById("ifrInteractLabel");
-  if (!btn) return;
-  if (open) {
-    btn.classList.add("shield-off");
-    if (lbl) lbl.textContent = "OCULTAR CONTROLES";
-  } else {
-    btn.classList.remove("shield-off");
-    if (lbl) lbl.textContent = "TOCA PARA CONTROLAR";
-  }
-}
-
-function recargarIframe() {
-  if (activeIframeUrl) loadStream(activeIframeUrl, 'iframe');
 }
 
 /* ════════════════════════════════════════════════════════
