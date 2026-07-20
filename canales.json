@@ -117,6 +117,14 @@
       "reproductores": [
         "https://embed.saohgdasregions.fun/embed/starchannel.php"
       ]
+    },
+    {
+      "nombre": "DIRECTV SPORTS 2",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://embed.saohgdasregions.fun/embed/directvsports2.php"
+      ]
     }
   ],
   "eventos": []
