@@ -109,6 +109,14 @@
       "reproductores": [
         "https://embed.saohgdasregions.fun/embed/espnpremiumlat.php"
       ]
+    },
+    {
+      "nombre": "STAR CHANNEL",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://embed.saohgdasregions.fun/embed/starchannel.php"
+      ]
     }
   ],
   "eventos": []
