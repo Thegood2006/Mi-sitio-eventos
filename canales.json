@@ -221,6 +221,14 @@
       "reproductores": [
         "https://embed.saohgdasregions.fun/embed/tntnovelas.php"
       ]
+    },
+    {
+      "nombre": "discoverychannel'",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://embed.saohgdasregions.fun/embed/discoverychannel.php"
+      ]
     }
   ],
   "eventos": []
