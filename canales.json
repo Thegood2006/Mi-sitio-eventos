@@ -135,7 +135,7 @@
       ]
     },
     {
-      "nombre": "pasiones",
+      "nombre": "estrellas",
       "liga": "",
       "tipo": "iframe",
       "reproductores": [
@@ -196,6 +196,14 @@
       "tipo": "m3u8",
       "reproductores": [
         "https://embed.saohgdasregions.fun/embed/tlnovelas.php"
+      ]
+    },
+    {
+      "nombre": "pasiones",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://embed.saohgdasregions.fun/embed/pasiones.php"
       ]
     }
   ],
