@@ -181,6 +181,14 @@
       "reproductores": [
         "https://embed.saohgdasregions.fun/embed/disneychannel.php"
       ]
+    },
+    {
+      "nombre": "cinemax",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://embed.saohgdasregions.fun/embed/cinemax.php"
+      ]
     }
   ],
   "eventos": []
