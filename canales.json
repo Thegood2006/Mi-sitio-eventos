@@ -5,9 +5,7 @@
       "liga": "",
       "tipo": "iframe",
       "reproductores": [
-        "https://embed.saohgdasregions.fun/embed2/tudn.php",
-        "https://embed.saohgdasregions.fun/embed3/tudn.php",
-        "https://embed.saohgdasregions.fun/embed/tudn.php"
+        "https://embed.saohgdasregions.fun/embed2/tudn.php"
       ]
     },
     {
@@ -15,9 +13,7 @@
       "liga": "",
       "tipo": "m3u8",
       "reproductores": [
-        "https://embed.saohgdasregions.fun/embed1/foxsports.php",
-        "https://embed.saohgdasregions.fun/embed2/foxsports.php",
-        "https://embed.saohgdasregions.fun/embed3/foxsports.php"
+        "https://embed.saohgdasregions.fun/embed/foxsports.php"
       ]
     },
     {
@@ -25,9 +21,7 @@
       "liga": "",
       "tipo": "m3u8",
       "reproductores": [
-        "https://embed.saohgdasregions.fun/embed/foxsports2.php",
-        "https://embed.saohgdasregions.fun/embed2/foxsports2.php",
-        "https://embed.saohgdasregions.fun/embed3/foxsports2.php"
+        "https://embed.saohgdasregions.fun/embed/foxsports2.php"
       ]
     },
     {
@@ -35,9 +29,7 @@
       "liga": "",
       "tipo": "m3u8",
       "reproductores": [
-        "https://embed.saohgdasregions.fun/embed/foxsports3.php",
-        "https://embed.saohgdasregions.fun/embed2/foxsports3.php",
-        "https://embed.saohgdasregions.fun/embed3/foxsports3.php"
+        "https://embed.saohgdasregions.fun/embed/foxsports3.php"
       ]
     },
     {
@@ -171,7 +163,9 @@
       "liga": "",
       "tipo": "m3u8",
       "reproductores": [
-        "https://embed.saohgdasregions.fun/embed/directvsports2.php"
+        "https://embed.saohgdasregions.fun/embed/directvsports2.php",
+        "https://embed.saohgdasregions.fun/embed2/directvsports2.php",
+        "https://embed.saohgdasregions.fun/embed3/directvsports2.php"
       ]
     },
     {
