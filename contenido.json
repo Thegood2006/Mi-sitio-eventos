@@ -121,14 +121,14 @@
       "nombre": "Spider-Man: Brand New Day2",
       "genero": "",
       "portada": "https://m.media-amazon.com/images/M/MV5BYmYwNGUwZWQtMTcyZC00ZjAxLThmZWEtMTY1OTIwZmI5YjBmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-      "tipo": "m3u8",
+      "tipo": "iframe",
       "link": "https://dr0pstream.com/e/u80xu3klxu5u"
     },
     {
       "nombre": "Spider-Man: Brand New Day 1",
       "genero": "",
       "portada": "https://m.media-amazon.com/images/M/MV5BYmYwNGUwZWQtMTcyZC00ZjAxLThmZWEtMTY1OTIwZmI5YjBmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-      "tipo": "m3u8",
+      "tipo": "iframe",
       "link": "https://miiiixdrop.net/e/vknqn0p9bv6j3j"
     }
   ],
