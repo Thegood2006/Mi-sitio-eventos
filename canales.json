@@ -233,5 +233,13 @@
       ]
     }
   ],
-  "eventos": []
+  "eventos": [
+    {
+      "id": "",
+      "nombre": "Nuevo partido",
+      "reproductores": [
+        ""
+      ]
+    }
+  ]
 }
