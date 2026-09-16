@@ -49,11 +49,20 @@
       ]
     },
     {
-      "nombre": "LIGA DE QUITO VS PALMEIRAS",
+      "nombre": "ligadequito222",
       "liga": "",
       "tipo": "m3u8",
       "reproductores": [
-        "https://bmf0aw9u.fubo18.com/disney18/mono.m3u8?token=e7301206367071f1b40aa68d99c6b18135c29895-17-1789613506-1789595506"
+        "https://7.tvlibre.pe/espn/mono.m3u8?token=c7c54873904a4d27faeb4b37258678266cb771b3-c9-1786675874-1786657874"
+      ]
+    },
+    {
+      "nombre": "LIGA",
+      "liga": "",
+      "tipo": "m3u8",
+      "reproductores": [
+        "https://y2fzdgxl.fubo18.com/espn/mono.m3u8?token=8ced0e094c7e856f77a4d87378e27cb9357ce4a3-80-1789615193-1789597193",
+        "https://bmf0aw9u.fubo18.com/foxsports/mono.m3u8?token=f6d8f622ee2d2c47aec2ca077ae8165cbcd3725c-d5-1789615271-1789597271"
       ]
     }
   ],
@@ -244,9 +253,9 @@
   "eventos": [
     {
       "id": "",
-      "nombre": "liga de quito",
+      "nombre": "Nuevo partido",
       "reproductores": [
-        "https://bmf0aw9u.fubo18.com/disney18/mono.m3u8?token=e7301206367071f1b40aa68d99c6b18135c29895-17-1789613506-1789595506"
+        ""
       ]
     }
   ]
