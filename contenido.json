@@ -144,6 +144,13 @@
       "portada": "",
       "tipo": "m3u8",
       "link": "https://edge1-madrid-sprintcdn.r66nv9ed.com/hls2/01/11909/ptd488lrkt3p_x/master.m3u8?t=KfiMjxxRH0fc1UHaNTYfullaRpj01RwiFzkGXQxypvg&s=1788230529&e=10800&f=59548511&srv=1055&asn=27947&sp=5500&p=0"
+    },
+    {
+      "nombre": "Resident Evil: Noche cero",
+      "genero": "Sep. 16, 2026-93 Min.",
+      "portada": "https://image.tmdb.org/t/p/w185/ntmaNFJ7O60n45E1E6HZlXeSV5e.jpg",
+      "tipo": "m3u8",
+      "link": "https://hugh.cdn.rumble.cloud/video/fww1/30/s8/2/M/2/Y/Z/M2YZA.haa.tar?r_file=chunklist.m3u8&r_type=application%2Fvnd.apple.mpegurl&r_range=2661099008-2661151804"
     }
   ],
   "series": [
