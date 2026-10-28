@@ -567,22 +567,22 @@
     {
       "nombre": "Dragon Ball Super: Beerus",
       "genero": "Acción, Animación, Fantástico",
-      "portada": "https://m.media-amazon.com/images/M/MV5BMGZlN2Q4ODgtYjZiNC00MTU4LWFkMmUtNmFhOTdjMjQ3YTQwXkEyXkFqcGc@._V1_.jpg",
+      "portada": "",
       "temporadas": [
         {
           "nombre": "Temporada 1",
           "episodios": [
             {
               "nombre": "Episodio 1",
-              "link": "https://morencius.com/file/r7m2kxsagljr"
+              "link": "https://morencius.com/download/r7m2kxsagljr"
             },
             {
               "nombre": "Episodio 2",
-              "link": "https://morencius.com/file/tt0kfyaze59m"
+              "link": "https://morencius.com/download/tt0kfyaze59m"
             },
             {
               "nombre": "Episodio 3",
-              "link": "https://morencius.com/file/uyi6sg4di2h0"
+              "link": "https://morencius.com/download/uyi6sg4di2h0"
             }
           ]
         }
