@@ -565,14 +565,8 @@
       ]
     },
     {
-      "nombre": "Nueva serie",
-      "genero": "",
-      "portada": "",
-      "temporadas": []
-    },
-    {
-      "nombre": "Dragon Ball Super: Beerus 2026 ‧",
-      "genero": "Género fantástico ‧ 1 temporada",
+      "nombre": "Dragon Ball Super: Beerus",
+      "genero": "Acción, Animación, Fantástico",
       "portada": "",
       "temporadas": [
         {
@@ -581,14 +575,6 @@
             {
               "nombre": "Episodio 1",
               "link": "https://t.me/DragonBallSuperBeerusEspanolLat/41"
-            },
-            {
-              "nombre": "Episodio 2",
-              "link": "https://2embed.cc/embedtv/tt4661060&s=1&e=2"
-            },
-            {
-              "nombre": "Episodio 3",
-              "link": "https://2embed.cc/embedtv/tt4661060&s=1&e=3"
             }
           ]
         }
