@@ -565,8 +565,14 @@
       ]
     },
     {
-      "nombre": "Dragon Ball Super: Beerus",
-      "genero": "2026 ‧ Género fantástico ‧ 1 temporada",
+      "nombre": "Nueva serie",
+      "genero": "",
+      "portada": "",
+      "temporadas": []
+    },
+    {
+      "nombre": "Dragon Ball Super: Beerus 2026 ‧",
+      "genero": "Género fantástico ‧ 1 temporada",
       "portada": "",
       "temporadas": [
         {
@@ -574,15 +580,15 @@
           "episodios": [
             {
               "nombre": "Episodio 1",
-              "link": "https://vidsrc.to/embed/tv/tt4661060/1/1"
+              "link": "https://2embed.cc/embedtv/tt4661060&s=1&e=1"
             },
             {
               "nombre": "Episodio 2",
-              "link": "https://vidsrc.to/embed/tv/tt4661060/1/2"
+              "link": "https://2embed.cc/embedtv/tt4661060&s=1&e=2"
             },
             {
               "nombre": "Episodio 3",
-              "link": "https://vidsrc.to/embed/tv/tt4661060/1/3"
+              "link": "https://2embed.cc/embedtv/tt4661060&s=1&e=3"
             }
           ]
         }
